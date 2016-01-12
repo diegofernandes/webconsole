@@ -19,7 +19,7 @@ angular.module('meccanoAdminApp')
 
 
     $scope.deviceStatusHistory = {
-      labels:["January", "February", "March", "April", "May", "June", "July"],
+      labels:['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       series:['Ok', 'Warning', 'Error'],
       data: [
         [65, 59, 80, 81, 56, 55, 40],

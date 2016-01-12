@@ -37,5 +37,14 @@ Distribute
 grunt dist
 ```
 
+Install on Distribute folder
+```
+npm install --production
+```
+
+Run on Distribute folder
+```
+NODE_ENV=production node server/app.js
+```
 
 ## Configuration
