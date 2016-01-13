@@ -1,5 +1,5 @@
 {
-  "name": "meccano-admin",
+  "name": "meccano-webadmin",
   "version": "0.0.0",
   "main": "server/app.js",
   "dependencies": {

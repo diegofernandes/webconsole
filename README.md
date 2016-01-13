@@ -1,8 +1,8 @@
-# Meccano IoT Web Admin
+# Meccano IoT Web Console
 
-![](https://david-dm.org/meccano-iot/meccano-admin.svg)
+![](https://david-dm.org/meccano-iot/meccano-webconsole.svg)
 
-Meccano IoT Web Admin is a web console to administrate the devices. With this admin you can:
+Meccano IoT Web Console is a web console to administrate the devices. With this admin you can:
 - Register new devices.
 - Send commands to devices.
 - Find the device status.

@@ -1,8 +1,4 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
-
-
 <div class="container">
-
   <div class="panel panel-default">
   <div class="panel-heading">
     <h2 class="panel-title">Registered devices</h2>
@@ -17,7 +13,6 @@
       <th>Date</th>
       <th>Status</th>
     </thead>
-
     <tbody>
       <tr ng-repeat="device in registeredDevices">
         <td>{{device.device}}</td>
@@ -26,16 +21,6 @@
         <td>{{device.status}}</td>
       </tr>
     </tbody>
-
   </table>
 </div>
 </div>
-<footer class="footer">
-  <div class="container">
-    <p>
-      <a href="https://github.com/meccano-iot/meccano-admin/">Meccano IoT</a>
-      |
-      <a href="https://github.com/meccano-iot/meccano-admin/issues?state=open">Issues</a>
-    </p>
-  </div>
-</footer>
