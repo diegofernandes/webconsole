@@ -101,6 +101,7 @@ function getRegistration(device, res) {
         'operation': 'GET',
         'device' : 'UNKNOWN',
         'device_group' :  'UNKNOWN',
+        'memo' : 'UNKOWN',
         'status' : 'UNKNOWN_DEVICE'
       });
     } else {
@@ -111,6 +112,7 @@ function getRegistration(device, res) {
           'operation' : 'GET',
           'device' : r.device,
           'device_group' : r.device_group,
+          'memo': r.memo,
           'submissionDate': r.creationDate,
           'registrationDate' : r.registrationDate,
           'status' : 'REGISTERED'
