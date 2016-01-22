@@ -19,10 +19,7 @@
 
 'use strict';
 
-var mysql = require('../../config/mysql');
-var util = require('util');
-
-var pool = mysql.createPool(config.mysql);
+var pool = require('../../config/mysql');
 
 /*
 * Submit registration
