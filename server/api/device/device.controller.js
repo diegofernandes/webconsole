@@ -2,6 +2,8 @@
 
 var _ = require('lodash');
 
+var mysql = require('../../config/mysql');
+
 // Get list of devices
 exports.index = function(req, res) {
   res.json([
