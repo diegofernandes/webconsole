@@ -1,26 +1,10 @@
 <div class="container">
   <div class="panel panel-default">
-  <div class="panel-heading">
-    <h2 class="panel-title">Registered devices</h2>
+    <div class="panel-heading">
+      <h2 class="panel-title">Devices</h2>
+    </div>
+    <div class="panel-body">
+      <div ui-view></div>
+    </div>
   </div>
-  <div class="panel-body">
-    <button type="button" class="btn btn-success" aria-label="Register new device"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-  </div>
-  <table class="table table-striped">
-    <thead>
-      <th>Device</th>
-      <th>Group</th>
-      <th>Date</th>
-      <th>Status</th>
-    </thead>
-    <tbody>
-      <tr ng-repeat="device in registeredDevices">
-        <td>{{device.device}}</td>
-        <td>{{device.device_group}}</td>
-        <td>{{device.date}}</td>
-        <td>{{device.status}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 </div>
