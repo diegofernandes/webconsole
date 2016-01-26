@@ -25,9 +25,9 @@ var controller = require('./messages.controller');
 var router = express.Router();
 
 // Routes for /api/messages/
-router.get('/messages/:id', controller.get);
-router.post('/messages/', controller.post);
-router.delete('/messages/:id', controller.delete);
-router.get('/messages/device/:device', controller.getByDevice);
+router.get('/:id', controller.get);
+router.post('/', controller.post);
+router.delete('/:id', controller.delete);
+router.get('/device/:device', controller.getByDevice);
 
 module.exports = router;
