@@ -79,8 +79,7 @@ exports.status = function(req, res) {
   } else {
     res.status(500).json({
       'operation': 'GET',
-      'status': 'INVALID_PARAMETER',
-      'cause': error
+      'status': 'INVALID_PARAMETER'
     });
     return;
   }
