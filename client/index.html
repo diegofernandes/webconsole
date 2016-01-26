@@ -24,6 +24,7 @@
       <link rel="stylesheet" href="app/device/device.css">
       <link rel="stylesheet" href="app/main/main.css">
       <link rel="stylesheet" href="components/modal/modal.css">
+      <link rel="stylesheet" href="components/registration-status/registration-status.css">
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
@@ -35,6 +36,7 @@
     <div ng-include="'components/navbar/navbar.html'"></div>
     <!-- Add your site or application content here -->
     <div ui-view=""></div>
+
     <footer class="footer">
       <div class="container">
         <p>
@@ -82,8 +84,11 @@
           <script src="app/device/device.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="components/devices/devices.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/registration-status/registration-status.directive.js"></script>
+          <script src="components/registration/registration.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 </body>

@@ -7,39 +7,11 @@
 </header>
 
 <div class="container">
+  <div class="row" style="margin-bottom:5px;">
   <div class="row">
-    <div class="col-lg-6 col-sm-12">
-      <canvas id="doughnut" class="chart chart-doughnut" chart-data="deviceStatus.data" chart-legend="true" chart-labels="deviceStatus.labels" chart-colours="deviceStatus.colours"></canvas>
-    </div>
-    <div class="col-lg-6 col-sm-12">
-      <canvas id="line" class="chart chart-line" chart-data="deviceStatusHistory.data" chart-labels="deviceStatusHistory.labels" chart-legend="true" chart-series="deviceStatusHistory.series" chart-colours="deviceStatusHistory.colours"></canvas>
-    </div>
+    <div ui-view="charts"></div>
   </div>
   <div class="row">
-
-    <div class="panel panel-default">
-      <div class="panel-heading">Latest devices announcements</div>
-      <table class="table table-striped">
-        <thead>
-          <th>Device</th>
-          <th>Group</th>
-          <th>Channel</th>
-          <th>Date</th>
-          <th>Sensor</th>
-          <th>Data</th>
-        </thead>
-        <tbody>
-          <tr ng-repeat="announcement in lastAnnouncements">
-            <td>{{announcement.device}}</td>
-            <td>{{announcement.device_group}}</td>
-            <td>{{announcement.channel}}</td>
-            <td>{{announcement.date}}</td>
-            <td>{{announcement.sensor}}</td>
-            <td>{{announcement.data}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
+   <div ui-view="data"></div>
   </div>
 </div>
