@@ -21,6 +21,8 @@
 var _ = require('lodash');
 var pool = require('../../config/mysql');
 
+console.log(pool);
+
 exports.find = function(req, res) {
   var size = parseInt(req.query.size || req.query.s || 10);
   delete req.query.size;
@@ -74,7 +76,7 @@ function count(params, cb) {
 function _query(count, params, offset, limit, cb) {
 
   var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
-  sql += ' from `Registration`' + ((_.isEmpty(params)) ? '' : ' where ?');
+  sql += ' from `IOTDB`.`Registration`' + ((_.isEmpty(params)) ? '' : ' where ?');
   sql += (count ? '' : ' limit ? offset ?');
 
   var queryParamns = [];
@@ -93,7 +95,7 @@ function _query(count, params, offset, limit, cb) {
  */
 exports.saveRegistration = function(req, res) {
   console.log("Persisting registration information to the database...");
-  var op = pool.query('insert into Registration set ?', req.body, function(error, result) {
+  var op = pool.query('insert into `IOTDB`.`Registration` set ?', req.body, function(error, result) {
     if (error) {
       console.error('Error persisting object:', error);
       res.status(500).json({
@@ -151,7 +153,7 @@ exports.update = function(req, res) {
  */
 exports.load = function(req, res) {
   var device = req.params.device;
-  var op = pool.query('select * from `Registration` where `device` = ?', device, function(error, result, fields) {
+  var op = pool.query('select * from `IOTDB`.`Registration` where `device` = ?', device, function(error, result, fields) {
     if (error) {
       res.status(500).json({
         'operation': 'GET',
