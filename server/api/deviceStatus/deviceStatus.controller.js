@@ -28,10 +28,10 @@ var pool = require('../../config/mysql');
 **/
 exports.count = function(req, res) {
 
-  var sql = "select 'NORMAL' as `status`, count(*) as `count` from `IOTDB`.`Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
-  " union select 'WARNING' as `status`, count(*) as `count` from `IOTDB`.`Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
-  " union select 'FAIL' as `status`, count(*) as `count` from `IOTDB`.`Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
-  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `IOTDB`.`Registration` where `registrationDate` is null ";
+  var sql = "select 'NORMAL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
+  " union select 'WARNING' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
+  " union select 'FAIL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
+  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `registrationDate` is null ";
 
   pool.query(sql,
             [
@@ -69,13 +69,13 @@ exports.count = function(req, res) {
 exports.status = function(req, res) {
   var sql = "";
   if(req.params.status === "NORMAL") {
-    sql = "select r.* from `IOTDB`.`Announcement` a, `IOTDB`.`Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < " + config.timeouts.warning + " and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < " + config.timeouts.warning + " and a.device = r.device ";
   } else if (req.params.status === "WARNING") {
-    sql = "select r.* from `IOTDB`.`Announcement` a, `IOTDB`.`Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between " + (config.timeouts.warning + 1) + " and " + config.timeouts.fail + "  and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between " + (config.timeouts.warning + 1) + " and " + config.timeouts.fail + "  and a.device = r.device ";
   } else if (req.params.status === "FAIL") {
-    sql = "select r.* from `IOTDB`.`Announcement` a, `IOTDB`.`Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > " + config.timeouts.fail + " and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > " + config.timeouts.fail + " and a.device = r.device ";
   } else if (req.params.status === "WAITING_APPROVE") {
-    sql = "select * from `IOTDB`.`Registration` where `registrationDate` is null ";
+    sql = "select * from `Registration` where `registrationDate` is null ";
   } else {
     res.status(500).json({
       'operation': 'GET',
@@ -84,9 +84,19 @@ exports.status = function(req, res) {
     });
     return;
   }
-  pool.query(sql, [],
-            function(error, result, fields) {
-              if (error) {
+
+  // Calculates the parameters of pagination
+  var size = parseInt(req.query.size || req.query.s || 10);
+  delete req.query.size;
+  delete req.query.s;
+  var page = parseInt(req.query.page || req.query.p || 1);
+  delete req.query.page;
+  delete req.query.p;
+  var offset = (page -1) * size;
+
+  // Execute the query
+  query(sql, offset, size, function(error, result, fields) {
+      if (error) {
                 console.error(error);
                 res.status(500).json({
                   'operation': 'GET',
@@ -105,4 +115,24 @@ exports.status = function(req, res) {
                 }
               });
   });
+}
+
+function query(sql, offset, limit, cb) {
+  _query(sql, false, offset, limit, cb);
+}
+
+function count(sql, cb) {
+  _query(sql, true, null, null, cb);
+}
+
+function _query(sql, count, offset, limit, cb) {
+  var queryParams = [];
+
+  sql += (count ? '' : ' limit ? offset ?');
+
+  if (!count) {
+    queryParams.push(limit,offset);
+  }
+
+  pool.query(sql, queryParams, cb);
 }
