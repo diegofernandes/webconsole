@@ -164,35 +164,6 @@ exports.load = function(req, res) {
       // Unknown device
       res.status(404).json({
         'operation': 'GET',
-<<<<<<< HEAD
-        'device' : 'UNKNOWN',
-        'device_group' :  'UNKNOWN',
-        'memo' : 'UNKOWN',
-        'status' : 'UNKNOWN_DEVICE'
-      });
-    } else {
-      var r = result[0];
-      // Check is device is registered
-      if(r.registrationDate !== null) {
-        res.json({
-          'operation' : 'GET',
-          'device' : r.device,
-          'device_group' : r.device_group,
-          'memo': r.memo,
-          'submissionDate': r.creationDate,
-          'registrationDate' : r.registrationDate,
-          'status' : 'REGISTERED'
-        });
-      } else {
-        res.json({
-          'operation' : 'GET',
-          'device' : r.device,
-          'device_group' : r.device_group,
-          'submissionDate' : r.creationDate,
-          'status' : 'WAITING_ACKNOWLEDGEMENT'
-        });
-      }
-=======
         'device': 'UNKNOWN',
         'device_group': 'UNKNOWN',
         'status': 'UNKNOWN_DEVICE'
@@ -209,7 +180,6 @@ exports.load = function(req, res) {
         'memo': r.memo
       };
       res.status(200).json(r);
->>>>>>> refs/remotes/meccano-iot/master
     }
   });
 }
