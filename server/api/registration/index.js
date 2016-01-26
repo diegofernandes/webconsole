@@ -26,10 +26,12 @@ var router = express.Router();
 
 // Routes for /api/registration/
 router.get('/', controller.find);
-router.get('/:device', controller.getRegistration);
+router.get('/:device', controller.load);
 router.post('/', controller.saveRegistration);
 router.delete('/:device', controller.deleteRegistration);
-router.put('/', controller.acknowledgeRegistration);
+router.put('/:device', controller.update);
+router.patch('/:device', controller.update);
+router.put('/ack', controller.acknowledgeRegistration);
 
 
 module.exports = router;

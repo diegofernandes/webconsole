@@ -18,24 +18,74 @@
 */
 
 'use strict';
-
+var _ = require('lodash');
 var pool = require('../../config/mysql');
 
-
-
-
 exports.find = function(req, res) {
-  var op = pool.query('select * from `Registration`', function(error, result, fields) {
+  var size = parseInt(req.query.size || req.query.s || 10);
+  delete req.query.size;
+  delete req.query.s;
+  var page = parseInt(req.query.page || req.query.p || 1);
+  delete req.query.page;
+  delete req.query.p;
+  var offset = (page -1) * size;
+
+  query(req.query, offset, size, function(error, result, fields) {
     if (error) {
-      res.json({
+      console.error(error);
+      res.status(500).json({
         'operation': 'GET',
         'status': 'INTERNAL_ERROR',
         'cause': error
       });
       return;
     }
-    res.json(result);
+    count(req.query, function(error, resultCount, fields) {
+      if (error) {
+        console.error(error);
+        res.status(500).json({
+          'operation': 'GET',
+          'status': 'INTERNAL_ERROR',
+          'cause': error
+        });
+        return;
+      }
+      res.json({
+        data: result,
+        page: {
+          size: size,
+          totalElements: resultCount[0].totalElements,
+          totalPages: Math.ceil(resultCount[0].totalElements / size),
+          number: page
+        }
+      });
+    });
   });
+}
+
+function query(params, offset, limit, cb) {
+  _query(false, params, offset, limit, cb);
+}
+
+function count(params, cb) {
+  _query(true, params, null, null, cb);
+}
+
+function _query(count, params, offset, limit, cb) {
+
+  var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
+  sql += ' from `Registration`' + ((_.isEmpty(params)) ? '' : ' where ?');
+  sql += (count ? '' : ' limit ? offset ?');
+
+  var queryParamns = [];
+  if (!_.isEmpty(params)) {
+    queryParamns.push(params);
+  }
+  if (!count) {
+    queryParamns.push(limit,offset);
+  }
+
+  pool.query(sql, queryParamns, cb);
 }
 
 /**
@@ -61,15 +111,49 @@ exports.saveRegistration = function(req, res) {
   });
 }
 
+exports.update = function(req, res) {
+
+  var newValues = {};
+  if (req.body.device_group) {
+    newValues.device_group = req.body.device_group;
+  }
+  if (req.body.memo) {
+    newValues.memo = req.body.memo;
+  }
+
+
+  var op = pool.query('update Registration set ? where `device` = ? ', [newValues, req.params.device], function(error, result) {
+    if (error) {
+      console.error('Error persisting object:', error);
+      res.status(500).json({
+        operation: 'PUT',
+        status: 'INTERNAL_ERROR',
+        cause: error
+      });
+    } else {
+      if (result.affectedRows > 0) {
+        res.status(200).json({
+          operation: 'PUT',
+          status: 'OK'
+        });
+      } else {
+        res.status(404).json({
+          operation: 'PUT',
+          status: 'UNKNOWN_DEVICE'
+        });
+      }
+    }
+  });
+}
+
 /**
  * Get the object to the database
  */
-exports.getRegistration = function(req, res) {
+exports.load = function(req, res) {
   var device = req.params.device;
-  console.log("Get registration information from the database...");
   var op = pool.query('select * from `Registration` where `device` = ?', device, function(error, result, fields) {
     if (error) {
-      res.json({
+      res.status(500).json({
         'operation': 'GET',
         'status': 'INTERNAL_ERROR',
         'cause': error
@@ -78,7 +162,7 @@ exports.getRegistration = function(req, res) {
     }
     if (result.length === 0) {
       // Unknown device
-      res.json({
+      res.status(404).json({
         'operation': 'GET',
         'device': 'UNKNOWN',
         'device_group': 'UNKNOWN',
@@ -86,25 +170,16 @@ exports.getRegistration = function(req, res) {
       });
     } else {
       var r = result[0];
-      // Check is device is registered
-      if (r.registrationDate !== null) {
-        res.json({
-          'operation': 'GET',
-          'device': r.device,
-          'device_group': r.device_group,
-          'submissionDate': r.creationDate,
-          'registrationDate': r.registrationDate,
-          'status': 'REGISTERED'
-        });
-      } else {
-        res.json({
-          'operation': 'GET',
-          'device': r.device,
-          'device_group': r.device_group,
-          'submissionDate': r.creationDate,
-          'status': 'WAITING_ACKNOWLEDGEMENT'
-        });
-      }
+      var response = {
+        'operation': 'GET',
+        'device': r.device,
+        'device_group': r.device_group,
+        'submissionDate': r.creationDate,
+        'registrationDate': r.registrationDate,
+        'status': (r.registrationDate !== null) ? 'REGISTERED' : 'WAITING_ACKNOWLEDGEMENT',
+        'memo': r.memo
+      };
+      res.status(200).json(r);
     }
   });
 }
