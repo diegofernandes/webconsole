@@ -23,7 +23,10 @@ var _ = require('lodash');
 var config = require('../../config/environment');
 var pool = require('../../config/mysql');
 
-exports.index = function(req, res) {
+/**
+**  Count the number of devices for each status
+**/
+exports.count = function(req, res) {
 
   var sql = "select 'NORMAL' as `status`, count(*) as `count` from `IOTDB`.`Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
   " union select 'WARNING' as `status`, count(*) as `count` from `IOTDB`.`Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
@@ -37,6 +40,51 @@ exports.index = function(req, res) {
               config.timeouts.fail,
               config.timeouts.fail
             ],
+            function(error, result, fields) {
+              if (error) {
+                console.error(error);
+                res.status(500).json({
+                  'operation': 'GET',
+                  'status': 'INTERNAL_ERROR',
+                  'cause': error
+                });
+                return;
+              }
+              res.json({
+                data: result,
+                page: {
+                  size: result.length,
+                  totalElements: result.length,
+                  totalPages: 1,
+                  number: 1
+                }
+              });
+  });
+}
+
+
+/**
+**  Filter devices by status
+**/
+exports.status = function(req, res) {
+  var sql = "";
+  if(req.params.status === "NORMAL") {
+    sql = "select r.* from `IOTDB`.`Announcement` a, `IOTDB`.`Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < " + config.timeouts.warning + " and a.device = r.device ";
+  } else if (req.params.status === "WARNING") {
+    sql = "select r.* from `IOTDB`.`Announcement` a, `IOTDB`.`Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between " + (config.timeouts.warning + 1) + " and " + config.timeouts.fail + "  and a.device = r.device ";
+  } else if (req.params.status === "FAIL") {
+    sql = "select r.* from `IOTDB`.`Announcement` a, `IOTDB`.`Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > " + config.timeouts.fail + " and a.device = r.device ";
+  } else if (req.params.status === "WAITING_APPROVE") {
+    sql = "select * from `IOTDB`.`Registration` where `registrationDate` is null ";
+  } else {
+    res.status(500).json({
+      'operation': 'GET',
+      'status': 'INVALID_PARAMETER',
+      'cause': error
+    });
+    return;
+  }
+  pool.query(sql, [],
             function(error, result, fields) {
               if (error) {
                 console.error(error);
