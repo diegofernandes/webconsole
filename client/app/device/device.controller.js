@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams) {
+  .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams, DeviceStatus, $rootScope) {
+      
+    // Initialize variables
     $scope.pageNumber = 1;
     $scope.parametersFilter = {};
 
