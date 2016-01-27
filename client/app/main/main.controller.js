@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('MainCtrl', function($scope, $http, $state) {
+  .controller('MainCtrl', function($scope, $http, $state, DeviceStatus) {
     $scope.lastAnnouncements = [];
     $scope.deviceStatus = {
       labels: [],
@@ -9,16 +9,40 @@ angular.module('meccanoAdminApp')
     };
 
 
+    DeviceStatus.all().get({}, function (res){
+      
+      angular.forEach(res.data, function (item){
+        $scope.deviceStatus.labels.push(item.status);
+        $scope.deviceStatus.data.push(item.count);
+      });
+
+    }, function (err){
+      console.log(err);
+    });
+
+
+
+
+
+
+
+
+    
+
+
+
+
     $http.get('/api/lastAnnouncements').success(function(lastAnnouncements) {
       $scope.lastAnnouncements = lastAnnouncements;
     });
 
-    $http.get('/api/deviceStatus').success(function(deviceStatus) {
-      $scope.deviceStatus.labels = _.keys(deviceStatus);
-      $scope.deviceStatus.data = _.values(deviceStatus);
-      $scope.deviceStatus.colours = ['#5cb85c', '#f0ad4e', '#d9534f'];
-      $scope.deviceStatus.map = deviceStatus;
-    });
+    // $http.get('/api/deviceStatus').success(function(deviceStatus) {
+    //   $scope.deviceStatus.labels = _.keys(deviceStatus);
+    //   $scope.deviceStatus.data = _.values(deviceStatus);
+    //   console.log(_.keys(deviceStatus.data.status));
+    //   $scope.deviceStatus.colours = ['#5cb85c', '#f0ad4e', '#d9534f'];
+    //   $scope.deviceStatus.map = deviceStatus;
+    // });
 
 
     $scope.deviceStatusHistory = {

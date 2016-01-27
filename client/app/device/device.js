@@ -9,9 +9,17 @@ angular.module('meccanoAdminApp')
         templateUrl: 'app/device/device.html'
       })
       .state('device.list', {
-        url: '',
-        templateUrl: 'app/device/device.list.html',
-        controller: 'DeviceListCtrl'
+        url: '?status&device&group&page',
+        views: {
+          'index': {
+            templateUrl: 'app/device/device.list.html',
+            controller: 'DeviceListCtrl'
+          },
+          'details-device': {
+            templateUrl: 'app/device/device.detail.html',
+            controller: 'DeviceDetailCtrl'
+          }
+        }
       })
       .state('device.register', {
         url: '/new',

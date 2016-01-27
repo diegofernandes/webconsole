@@ -1,27 +1,35 @@
+<!-- <legend>Statistcs</legend>
+<div class="panel panel-default">
+  <table class="table table-striped">
+    <thead>
+      <th># Device</th>
+      <th>Sensor</th>
+      <th>Average</th>
+      <th>deviation</th>
+      <th>Error</th>
+      <th>Creation Date</th>
+    </thead>
+    <tbody>
+      <th># 1111</th>
+      <th>11111</th>
+      <th>11111</th>
+      <th>11111</th>
+      <th>11111</th>
+      <th>11111</th>
+    </tbody>
+  </table>
+</div>
 
-
-<div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div>
+<legend>Operations</legend>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <button class="btn btn-default glyphicon glyphicon-refresh"
+            alt="restart device">
+      
+    </button>
+    <button tooltip-placement="{{placement.selected}}" uib-tooltip="On the {{placement.selected}}" type="button" class="btn btn-default">Tooltip {{placement.selected}}</button>
+  </div>
+</div>
 
 <form name="deviceForm">
   <div class="form-group" ng-class="{'has-error has-feedback': deviceForm.macAddress.$invalid && !deviceForm.macAddress.$pristine}">
@@ -51,3 +59,56 @@
     <span class="glyphicon glyphicon-trash"></span>
     Delete</button>
 </form>
+ -->
+<div class="col-sm-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">Device Details</div>
+    <div class="panel-body">
+      <legend>Statistics</legend>
+
+      <legend>Actions</legend>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form class="form-inline">
+            
+          
+            <button class="btn btn-default glyphicon glyphicon-refresh"
+                    uib-tooltip="Restart device">
+              
+            </button>
+            <button class="btn btn-default glyphicon glyphicon-play-circle"
+                    uib-tooltip="Buzzer">
+            </button>
+            <button class="btn btn-default glyphicon glyphicon-pencil"
+                    uib-tooltip="Edit">
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <legend>Infomations of the device</legend>
+    </div>
+    <table class="table table-hover table-bordered">
+      <tr>
+        <th class="active"># device</th>
+        <td>{{ Devices.selectedDevice.device }}</td>
+      </tr>
+      <tr>
+        <th class="active">Group</th>
+        <td>{{ Devices.selectedDevice.device_group }}</td>
+      </tr>
+      <tr>
+        <th class="active">Registration</th>
+        <td>{{ Devices.selectedDevice.registrationDate | date : 'short' }}</td>
+      </tr>
+      <tr>
+        <th class="active">Creation</th>
+        <td>{{ Devices.selectedDevice.creationDate | date : 'short' }}</td>
+      </tr>
+      <tr>
+        <th class="active">Memo</th>
+        <td>{{ Devices.selectedDevice.memo }}</td>
+      </tr>
+    </table>
+  </div>
+</div>

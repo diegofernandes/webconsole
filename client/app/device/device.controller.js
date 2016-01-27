@@ -3,11 +3,53 @@
 angular.module('meccanoAdminApp')
   .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams) {
     $scope.pageNumber = 1;
+    $scope.parametersFilter = {};
+
+    $scope.Devices = DeviceStatus;
+
+    $rootScope.titlePanel = 'Devices';
+
+    // Status devices for populate input options
+    $scope.statusDevices = ['ALL', 'NORMAL', 'WARNING', 'FAIL', 'WAITING_APPROVAL'];
+
 
     $scope.registeredDevices = {};
-    $scope.registeredDevices = Registration.query({
-      page:$scope.pageNumber
-    });
+
+    $scope.showDetails = function(device){
+      $scope.Devices.selectedDevice = device;
+    }
+    // $scope.DeviceStatus = Registration.query({
+    //   page:$scope.pageNumber
+    // });
+
+      Registration.query({
+        page:$scope.pageNumber
+      }).$promise.then(function(obj){
+        $scope.registeredDevices.data = obj.data;
+      });
+
+    if ($state.params.status) {
+      DeviceStatus.byStatus().get({status: $state.params.status}, function (res){
+        console.log(res.data)
+        $scope.registeredDevices.data = res.data;
+      }, function (err){
+        console.log(err);
+      });
+    }
+
+    /** 
+      * Function to search devices by selected filter
+      * @param parameters {object}
+      * @param status
+      * @param device
+      * @param group
+      * @param page
+      */
+    $scope.search = function(parameters){
+
+      $state.go('device.list', parameters);
+
+    }
 
     console.log('DeviceListCtrl',  $scope.pageNumber );
     $scope.pageChanged = function () {
@@ -55,15 +97,17 @@ angular.module('meccanoAdminApp')
   };
 })
 
-
-
-
-
-.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams) {
+.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, DeviceStatus) {
   $scope.device = {
     device: $stateParams.deviceId,
     device_group: 0
   };
+
+  $scope.Devices = DeviceStatus;
+
+  console.log(DeviceStatus);
+
+  $rootScope.titlePanel = 'Device Details';
 
   $scope.save = function() {
     $http.post('api/device', $scope.device).then(function(data) {
