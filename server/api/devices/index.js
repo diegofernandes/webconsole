@@ -20,7 +20,7 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./registration.controller');
+var controller = require('./devices.controller');
 
 var router = express.Router();
 

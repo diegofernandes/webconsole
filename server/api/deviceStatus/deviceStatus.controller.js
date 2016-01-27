@@ -35,10 +35,10 @@ exports.count = function(req, res) {
 
   pool.query(sql,
             [
-              config.timeouts.warning,
-              (config.timeouts.warning + 1),
-              config.timeouts.fail,
-              config.timeouts.fail
+              5,
+              6,
+              15,
+              15
             ],
             function(error, result, fields) {
               if (error) {
@@ -69,11 +69,11 @@ exports.count = function(req, res) {
 exports.status = function(req, res) {
   var sql = "";
   if(req.params.status === "NORMAL") {
-    sql = "select r.* from `Announcement` a, `Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < " + config.timeouts.warning + " and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < 5 and a.device = r.device ";
   } else if (req.params.status === "WARNING") {
-    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between " + (config.timeouts.warning + 1) + " and " + config.timeouts.fail + "  and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between 6 and 15  and a.device = r.device ";
   } else if (req.params.status === "FAIL") {
-    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > " + config.timeouts.fail + " and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 and a.device = r.device ";
   } else if (req.params.status === "WAITING_APPROVE") {
     sql = "select * from `Registration` where `device_group` is null ";
   } else {
