@@ -31,7 +31,7 @@ exports.count = function(req, res) {
   var sql = "select 'NORMAL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
   " union select 'WARNING' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
   " union select 'FAIL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
-  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `registrationDate` is null ";
+  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `device_group` is null ";
 
   pool.query(sql,
             [
@@ -75,12 +75,12 @@ exports.status = function(req, res) {
   } else if (req.params.status === "FAIL") {
     sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > " + config.timeouts.fail + " and a.device = r.device ";
   } else if (req.params.status === "WAITING_APPROVE") {
-    sql = "select * from `Registration` where `registrationDate` is null ";
+    sql = "select * from `Registration` where `device_group` is null ";
   } else {
     res.status(500).json({
       'operation': 'GET',
       'status': 'INVALID_PARAMETER',
-      'cause': error
+      'cause': "req.params.status: " + req.params.status
     });
     return;
   }
