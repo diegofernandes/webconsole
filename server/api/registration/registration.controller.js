@@ -76,8 +76,11 @@ function count(params, cb) {
 function _query(count, params, offset, limit, cb) {
 
   var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
-  sql += ' from `IOTDB`.`Registration`' + ((_.isEmpty(params)) ? '' : ' where ?');
+  sql += ' from `DeviceStatus` ';
+  if(! _.isEmpty(params)) sql += 'where ? ';
   sql += (count ? '' : ' limit ? offset ?');
+
+  console.log(sql);
 
   var queryParamns = [];
   if (!_.isEmpty(params)) {
