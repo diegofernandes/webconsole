@@ -43,7 +43,7 @@ function createNormalCurve(Mean, StdDev) {
 	for ( var i = -10; i < 10.1; i += 0.1 ) {
 	  var dp = {
 	    x: i,
-	    y: NormalDensityZx( i, Mean, stdev )
+	    y: NormalDensityZx( i, Mean, StdDev )
 	  };
 	  if ( verticals.indexOf( Math.round( i * 10 ) / 10 ) !== -1 ) {
 	    dp.vertical = dp.value;
