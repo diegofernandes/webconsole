@@ -156,7 +156,7 @@ exports.update = function(req, res) {
  */
 exports.load = function(req, res) {
   var device = req.params.device;
-  var op = pool.query('select * from `IOTDB`.`Registration` where `device` = ?', device, function(error, result, fields) {
+  var op = pool.query('select * from `DeviceStatus` where `device` = ?', device, function(error, result, fields) {
     if (error) {
       res.status(500).json({
         'operation': 'GET',
