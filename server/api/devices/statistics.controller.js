@@ -19,15 +19,11 @@
 
 'use strict';
 var _ = require('lodash');
-
-var config = require('../../config/environment');
 var pool = require('../../config/mysql');
 
-// Get list of lastAnnouncementss
-exports.index = function(req, res) {
+console.log(pool);
 
-  console.log("Querying last Announcements...");
-
+exports.statistics = function(req, res) {
   var size = parseInt(req.query.size || req.query.s || 10);
   delete req.query.size;
   delete req.query.s;
@@ -56,14 +52,13 @@ exports.index = function(req, res) {
         });
         return;
       }
-      console.log("TOTAL ELEMENTS: " + resultCount.length);
       res.json({
         data: result,
         page: {
-          'size': size,
-          'totalElements': resultCount.length,
-          'totalPages': Math.ceil(resultCount.length / size),
-          'number': page
+          size: size,
+          totalElements: resultCount[0].totalElements,
+          totalPages: Math.ceil(resultCount[0].totalElements / size),
+          number: page
         }
       });
     });
@@ -71,26 +66,29 @@ exports.index = function(req, res) {
 }
 
 function query(params, offset, limit, cb) {
-    _query(false, params, offset, limit, cb);
+  _query(false, params, offset, limit, cb);
 }
 
 function count(params, cb) {
-    _query(true, params, null, null, cb);
+  _query(true, params, null, null, cb);
 }
 
 function _query(count, params, offset, limit, cb) {
-    var sql = 'select channel, device_group, device, sensor, data, creationDate ';
-    sql += ' from `Facts`' + ((_.isEmpty(params)) ? '' : ' where ?');
-    sql += (count ? '' : ' limit ? offset ?');
-    console.log(sql);
 
-    var queryParamns = [];
-    if (!_.isEmpty(params)) {
-      queryParamns.push(params);
-    }
-    if (!count) {
-      queryParamns.push(limit,offset);
-    }
+  var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
+  sql += ' from `DeviceStatistics` ';
+  if(! _.isEmpty(params)) sql += 'where ? ';
+  sql += (count ? '' : ' limit ? offset ?');
 
-    pool.query(sql, queryParamns, cb);
+  console.log(sql);
+
+  var queryParamns = [];
+  if (!_.isEmpty(params)) {
+    queryParamns.push(params);
+  }
+  if (!count) {
+    queryParamns.push(limit,offset);
+  }
+
+  pool.query(sql, queryParamns, cb);
 }

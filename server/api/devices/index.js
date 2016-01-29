@@ -20,18 +20,20 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./registration.controller');
+var devicesController = require('./devices.controller');
+var statisticsController = require('./statistics.controller');
 
 var router = express.Router();
 
 // Routes for /api/registration/
-router.get('/', controller.find);
-router.get('/:device', controller.load);
-router.post('/', controller.saveRegistration);
-router.delete('/:device', controller.deleteRegistration);
-router.put('/:device', controller.update);
-router.patch('/:device', controller.update);
-router.put('/ack', controller.acknowledgeRegistration);
+router.get('/', devicesController.find);
+router.get('/:device', devicesController.load);
+router.post('/', devicesController.saveRegistration);
+router.delete('/:device', devicesController.deleteRegistration);
+router.put('/:device', devicesController.update);
+router.patch('/:device', devicesController.update);
+router.put('/ack', devicesController.acknowledgeRegistration);
+router.get('/:device/statistics', statisticsController.statistics);
 
 
 module.exports = router;

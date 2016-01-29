@@ -31,14 +31,14 @@ exports.count = function(req, res) {
   var sql = "select 'NORMAL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
   " union select 'WARNING' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
   " union select 'FAIL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
-  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `registrationDate` is null ";
+  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `device_group` is null ";
 
   pool.query(sql,
             [
-              config.timeouts.warning,
-              (config.timeouts.warning + 1),
-              config.timeouts.fail,
-              config.timeouts.fail
+              5,
+              6,
+              15,
+              15
             ],
             function(error, result, fields) {
               if (error) {
@@ -69,17 +69,18 @@ exports.count = function(req, res) {
 exports.status = function(req, res) {
   var sql = "";
   if(req.params.status === "NORMAL") {
-    sql = "select r.* from `Announcement` a, `Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < " + config.timeouts.warning + " and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < 5 and a.device = r.device ";
   } else if (req.params.status === "WARNING") {
-    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between " + (config.timeouts.warning + 1) + " and " + config.timeouts.fail + "  and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between 6 and 15  and a.device = r.device ";
   } else if (req.params.status === "FAIL") {
-    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > " + config.timeouts.fail + " and a.device = r.device ";
+    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 and a.device = r.device ";
   } else if (req.params.status === "WAITING_APPROVE") {
-    sql = "select * from `Registration` where `registrationDate` is null ";
+    sql = "select * from `Registration` where `device_group` is null ";
   } else {
     res.status(500).json({
       'operation': 'GET',
-      'status': 'INVALID_PARAMETER'
+      'status': 'INVALID_PARAMETER',
+      'cause': "req.params.status: " + req.params.status
     });
     return;
   }
