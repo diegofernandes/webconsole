@@ -1,6 +1,7 @@
 # About Meccano IoT Project
 
 Meccano project is a multi-purpose IoT (Internet of Things) board and software platform created by Luciano Kadoya, Rogério Biondi, Diego Osse and Talita Paschoini. Its development started in early 2014 as a closed R&D project in the Software Architecture Division, with the aim of creating a board which is robust, based on a modern microprocessor (ESP8266), cheap, easy to implement and deploy through the 750 retail stores to perform several functions, such as:
+
 - Count the number of visitors in each store to calculate the sales/visits ratio;
 - Get the vote/feedback of users regarding the services;
 - Voice marketing;
