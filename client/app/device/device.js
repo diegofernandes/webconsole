@@ -9,7 +9,7 @@ angular.module('meccanoAdminApp')
         templateUrl: 'app/device/device.html'
       })
       .state('device.list', {
-        url: '?status&device&group&page',
+        url: '?status&device&group&page&size',
         views: {
           'index': {
             templateUrl: 'app/device/device.list.html',

@@ -1,42 +1,57 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams, DeviceStatus, $rootScope) {
+  .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams, Devices, $rootScope) {
       
     // Initialize variables
     $scope.pageNumber = 1;
-    $scope.parametersFilter = {};
+    $scope.parametersFilter = $state.params;
 
-    $scope.Devices = DeviceStatus;
-
-    $rootScope.titlePanel = 'Devices';
+    $scope.Devices = Devices;
 
     // Status devices for populate input options
-    $scope.statusDevices = ['ALL', 'NORMAL', 'WARNING', 'FAIL', 'WAITING_APPROVAL'];
-
+    $scope.statusDevices = ['NORMAL', 'WARNING', 'FAIL', 'WAITING_APPROVE'];
 
     $scope.registeredDevices = {};
 
-    $scope.showDetails = function(device){
-      $scope.Devices.selectedDevice = device;
-    }
-    // $scope.DeviceStatus = Registration.query({
-    //   page:$scope.pageNumber
-    // });
 
-      Registration.query({
-        page:$scope.pageNumber
-      }).$promise.then(function(obj){
-        $scope.registeredDevices.data = obj.data;
-      });
 
-    if ($state.params.status) {
-      DeviceStatus.byStatus().get({status: $state.params.status}, function (res){
-        console.log(res.data)
-        $scope.registeredDevices.data = res.data;
+    /** Function to load devices by device service 
+      * @param parameters {object}
+      * @param status
+      * @param device
+      * @param group
+      * @param page
+      * @param size
+      **/
+    function getDevices (parameters){
+      $scope.Devices.loadDevices().get(parameters, function (res){
+
+        // Total Items to pagination
+        $scope.totalItems = res.page.totalElements;
+        if (res.data){
+          $scope.registeredDevices.data = res.data;
+        } else {
+          $scope.registeredDevices.data = [];
+          $scope.registeredDevices.data.push(res);
+        }
+
       }, function (err){
-        console.log(err);
+        // Erase registeredDevices array if no device was found
+        if (err.status === 404) {
+          $scope.registeredDevices.data = [];
+        }
       });
+    };
+
+    getDevices($state.params);
+
+    /**
+      * Show Details in a lateral panel
+      * @params device {object}
+      */
+    $scope.showDetails = function(device){
+      $scope.Devices.selected = device;
     }
 
     /** 
@@ -46,23 +61,24 @@ angular.module('meccanoAdminApp')
       * @param device
       * @param group
       * @param page
+      * @param size
       */
     $scope.search = function(parameters){
+      parameters.page = 1;
 
-      $state.go('device.list', parameters);
+      $state.go('device.list', parameters, {reload: true});
 
     }
 
     console.log('DeviceListCtrl',  $scope.pageNumber );
-    $scope.pageChanged = function () {
-      console.log('pageChanged',  $scope.pageNumber );
-       Registration.query({
-        page:$scope.pageNumber
-      }).$promise.then(function(obj){
-        $scope.registeredDevices.data = obj.data;
-      });
+    $scope.pageChanged = function (parameters) {
+
+      parameters.page = $scope.pageNumber;
+      getDevices(parameters);
 
     }
+
+
 
   })
 
@@ -99,15 +115,13 @@ angular.module('meccanoAdminApp')
   };
 })
 
-.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, DeviceStatus) {
+.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices) {
   $scope.device = {
     device: $stateParams.deviceId,
     device_group: 0
   };
 
-  $scope.Devices = DeviceStatus;
-
-  console.log(DeviceStatus);
+  $scope.Devices = Devices;  
 
   $rootScope.titlePanel = 'Device Details';
 
@@ -125,4 +139,5 @@ angular.module('meccanoAdminApp')
   $scope.cancel = function() {
     $state.go('device.list', $stateParams);
   };
+
 });

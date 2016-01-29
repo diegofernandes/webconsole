@@ -62,25 +62,41 @@
  -->
 <div class="col-sm-4">
   <div class="panel panel-default">
-    <div class="panel-heading">Device Details</div>
+    <div class="panel-heading">Details</div>
     <div class="panel-body">
       <legend>Statistics</legend>
 
-      <legend>Actions</legend>
+      <legend>Actions <span class="glyphicon glyphicon-cog"></span></legend>
       <div class="panel panel-default">
         <div class="panel-body">
           <form class="form-inline">
             
-          
+            <!-- Button to restart the device -->
             <button class="btn btn-default glyphicon glyphicon-refresh"
-                    uib-tooltip="Restart device">
-              
+                    uib-tooltip="Restart device">              
             </button>
+
+            <!-- Button to send alert to the device -->
             <button class="btn btn-default glyphicon glyphicon-play-circle"
                     uib-tooltip="Buzzer">
             </button>
+
+            <!-- Button to Edit infomations of device -->
             <button class="btn btn-default glyphicon glyphicon-pencil"
                     uib-tooltip="Edit">
+            </button>
+
+            <!-- Button to Edit infomations of device -->
+            <button class="btn btn-default glyphicon glyphicon-trash"
+                    uib-tooltip="Destroy">
+            </button>
+
+            <!-- Button to turn of device -->
+            <button type="button" 
+                    class="btn glyphicon glyphicon-off" 
+                    ng-class="{'btn-success': !alterButton, 'btn-danger': alterButton}" 
+                    ng-click="alterButton = !alterButton" 
+                    uib-tooltip="Turn on/off">  
             </button>
           </form>
         </div>
@@ -91,23 +107,23 @@
     <table class="table table-hover table-bordered">
       <tr>
         <th class="active"># device</th>
-        <td>{{ Devices.selectedDevice.device }}</td>
+        <td>{{ Devices.selected.device }}</td>
       </tr>
       <tr>
         <th class="active">Group</th>
-        <td>{{ Devices.selectedDevice.device_group }}</td>
+        <td>{{ Devices.selected.device_group }}</td>
       </tr>
       <tr>
         <th class="active">Registration</th>
-        <td>{{ Devices.selectedDevice.registrationDate | date : 'short' }}</td>
+        <td>{{ Devices.selected.registrationDate | date : 'short' }}</td>
       </tr>
       <tr>
         <th class="active">Creation</th>
-        <td>{{ Devices.selectedDevice.creationDate | date : 'short' }}</td>
+        <td>{{ Devices.selected.creationDate | date : 'short' }}</td>
       </tr>
       <tr>
         <th class="active">Memo</th>
-        <td>{{ Devices.selectedDevice.memo }}</td>
+        <td>{{ Devices.selected.memo }}</td>
       </tr>
     </table>
   </div>
