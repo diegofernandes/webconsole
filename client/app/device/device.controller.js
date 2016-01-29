@@ -28,10 +28,11 @@ angular.module('meccanoAdminApp')
       $scope.Devices.loadDevices().get(parameters, function (res){
 
         // Total Items to pagination
-        $scope.totalItems = res.page.totalElements;
         if (res.data){
+          $scope.totalItems = res.page.totalElements;
           $scope.registeredDevices.data = res.data;
         } else {
+          $scope.totalItems = 1;
           $scope.registeredDevices.data = [];
           $scope.registeredDevices.data.push(res);
         }
@@ -95,14 +96,20 @@ angular.module('meccanoAdminApp')
   };
 })
 
-.controller('DeviceEditCtrl', function($scope, Registration, $state, $stateParams) {
-  $scope.registration = Registration.get({
-    device: $stateParams.deviceId
-  });
-  $scope.save = function() {
-    $scope.registration.$update().then(function(data) {
-      $state.go('device.list', $stateParams);
+.controller('DeviceEditCtrl', function($scope, Devices, $state, $stateParams) {
+
+
+  $scope.Device = Devices;
+  console.log($state.params)
+  if ($scope.Device.selected == null) {
+    Devices.loadDevices().get({device: $state.params.deviceId}, function (res){
+      $scope.Device.selected = res;
     });
+  }
+
+  $scope.save = function() {
+    Devices.loadDevices().update({device: $state.params.deviceId}, $scope.Device.selected);
+    $state.go('device.list');
   };
   $scope.destroy = function() {
     $http.delete('api/device/' + $scope.device.device).then(function(data) {

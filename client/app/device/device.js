@@ -9,7 +9,7 @@ angular.module('meccanoAdminApp')
         templateUrl: 'app/device/device.html'
       })
       .state('device.list', {
-        url: '?status&device&group&page&size',
+        url: '?status&device&device_group&page&size',
         views: {
           'index': {
             templateUrl: 'app/device/device.list.html',
@@ -28,8 +28,12 @@ angular.module('meccanoAdminApp')
       })
       .state('device.edit', {
         url: '/{deviceId}/edit',
-        templateUrl: 'app/device/device.edit.html',
-        controller: 'DeviceEditCtrl'
+        views: {
+          'index': {
+            templateUrl: 'app/device/device.edit.html',
+            controller: 'DeviceEditCtrl'
+          }
+        }
       })
       .state('device.detail', {
         url: '/{deviceId}/detail',

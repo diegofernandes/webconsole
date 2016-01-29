@@ -5,7 +5,10 @@ angular.module('meccanoAdminApp')
 
   	var self = {
   		loadDevices: function(){
-  			return $resource('api/devices/:device');
+  			return $resource('api/devices/:device', null, 
+  				{
+  					'update': {method: 'PUT'}
+  				});
   		},
   		selected: null
   	}
