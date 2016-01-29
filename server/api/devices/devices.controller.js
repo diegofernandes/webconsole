@@ -98,7 +98,7 @@ function _query(count, params, offset, limit, cb) {
  */
 exports.saveRegistration = function(req, res) {
   console.log("Persisting registration information to the database...");
-  var op = pool.query('insert into `IOTDB`.`Registration` set ?', req.body, function(error, result) {
+  var op = pool.query('insert into `Registration` set ?', req.body, function(error, result) {
     if (error) {
       console.error('Error persisting object:', error);
       res.status(500).json({
@@ -156,7 +156,7 @@ exports.update = function(req, res) {
  */
 exports.load = function(req, res) {
   var device = req.params.device;
-  var op = pool.query('select * from `IOTDB`.`Registration` where `device` = ?', device, function(error, result, fields) {
+  var op = pool.query('select * from `DeviceStatus` where `device` = ?', device, function(error, result, fields) {
     if (error) {
       res.status(500).json({
         'operation': 'GET',
@@ -196,7 +196,7 @@ exports.deleteRegistration = function(req, res) {
   var device = req.params.device;
   deleteAnnouncement(device);
   console.log("Unregistering device...");
-  var op = pool.query('delete from `IOTDB`.`Registration` where `device` = ?', device, function(error, result, fields) {
+  var op = pool.query('delete from `Registration` where `device` = ?', device, function(error, result, fields) {
     if (error) {
       res.json({
         'operation': 'DELETE',
@@ -219,7 +219,7 @@ exports.deleteRegistration = function(req, res) {
  */
 function deleteAnnouncement(device) {
   console.log("Removing Announcement data for device " + device + "...");
-  var op = pool.query('delete from `IOTDB`.`Announcement` where `device` = ?', device, function(error, result, fields) {
+  var op = pool.query('delete from `Announcement` where `device` = ?', device, function(error, result, fields) {
     if (error) {
       console.log("Announcement data could not be removed.");
       console.log(error);
