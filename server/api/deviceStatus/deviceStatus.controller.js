@@ -67,23 +67,6 @@ exports.count = function(req, res) {
 **  Filter devices by status
 **/
 exports.status = function(req, res) {
-  var sql = "";
-  if(req.params.status === "NORMAL") {
-    sql = "select r.* from `Announcement` a, `Registration` r where timestampdiff(minute, `lastAnnouncementDate`, now()) < 5 and a.device = r.device ";
-  } else if (req.params.status === "WARNING") {
-    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) between 6 and 15  and a.device = r.device ";
-  } else if (req.params.status === "FAIL") {
-    sql = "select r.* from `Announcement` a, `Registration` r  where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 and a.device = r.device ";
-  } else if (req.params.status === "WAITING_APPROVE") {
-    sql = "select * from `Registration` where `device_group` is null ";
-  } else {
-    res.status(500).json({
-      'operation': 'GET',
-      'status': 'INVALID_PARAMETER',
-      'cause': "req.params.status: " + req.params.status
-    });
-    return;
-  }
 
   // Calculates the parameters of pagination
   var size = parseInt(req.query.size || req.query.s || 10);
@@ -94,8 +77,11 @@ exports.status = function(req, res) {
   delete req.query.p;
   var offset = (page -1) * size;
 
+  var sql = "select s.* from `DeviceStatus` s where s.status = ?";
+  var params = [req.params.status];
+
   // Execute the query
-  query(sql, offset, size, function(error, result, fields) {
+  query(sql, params, offset, size, function(error, result, fields) {
       if (error) {
                 console.error(error);
                 res.status(500).json({
@@ -117,16 +103,21 @@ exports.status = function(req, res) {
   });
 }
 
-function query(sql, offset, limit, cb) {
-  _query(sql, false, offset, limit, cb);
+function query(sql, params, offset, limit, cb) {
+  _query(sql, params, false, offset, limit, cb);
 }
 
 function count(sql, cb) {
-  _query(sql, true, null, null, cb);
+  _query(sql, params, true, null, null, cb);
 }
 
-function _query(sql, count, offset, limit, cb) {
+function _query(sql, params, count, offset, limit, cb) {
+
   var queryParams = [];
+
+  if (!_.isEmpty(params)) {
+    queryParams.push(params);
+  }
 
   sql += (count ? '' : ' limit ? offset ?');
 
