@@ -65,6 +65,14 @@
     <div class="panel-heading">Details</div>
     <div class="panel-body">
       <legend>Statistics</legend>
+      <canvas id="line" 
+              class="chart chart-line" 
+              chart-data="data"
+              chart-labels="labels" 
+              chart-legend="true" 
+              chart-series="series"
+              chart-click="onClick" >
+      </canvas>
 
       <legend>Actions <span class="glyphicon glyphicon-cog"></span></legend>
       <div class="panel panel-default">
@@ -89,7 +97,8 @@
 
             <!-- Button to Edit infomations of device -->
             <button class="btn btn-default glyphicon glyphicon-trash"
-                    uib-tooltip="Destroy">
+                    uib-tooltip="Destroy"
+                    ng-click="destroy()">
             </button>
 
             <!-- Button to turn of device -->
