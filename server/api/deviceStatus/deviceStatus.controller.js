@@ -107,7 +107,7 @@ function query(sql, params, offset, limit, cb) {
   _query(sql, params, false, offset, limit, cb);
 }
 
-function count(sql, cb) {
+function count(sql,params, cb) {
   _query(sql, params, true, null, null, cb);
 }
 

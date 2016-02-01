@@ -2,7 +2,7 @@
 
 angular.module('meccanoAdminApp')
   .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams, Devices, $rootScope) {
-      
+
     // Initialize variables
     $scope.pageNumber = 1;
     $scope.parametersFilter = $state.params;
@@ -16,7 +16,7 @@ angular.module('meccanoAdminApp')
 
 
 
-    /** Function to load devices by device service 
+    /** Function to load devices by device service
       * @param parameters {object}
       * @param status
       * @param device
@@ -55,7 +55,7 @@ angular.module('meccanoAdminApp')
       $scope.Devices.selected = device;
     }
 
-    /** 
+    /**
       * Function to search devices by selected filter
       * @param parameters {object}
       * @param status
@@ -70,8 +70,6 @@ angular.module('meccanoAdminApp')
       $state.go('device.list', parameters, {reload: true});
 
     }
-
-    console.log('DeviceListCtrl',  $scope.pageNumber );
     $scope.pageChanged = function (parameters) {
 
       parameters.page = $scope.pageNumber;
@@ -100,7 +98,6 @@ angular.module('meccanoAdminApp')
 
 
   $scope.Device = Devices;
-  console.log($state.params)
   if ($scope.Device.selected == null) {
     Devices.loadDevices().get({device: $state.params.deviceId}, function (res){
       $scope.Device.selected = res;
@@ -134,7 +131,7 @@ angular.module('meccanoAdminApp')
     console.log(points, evt);
   };
 
-  $scope.Devices = Devices;  
+  $scope.Devices = Devices;
 
   $scope.destroy = function() {
 
