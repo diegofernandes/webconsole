@@ -81,6 +81,7 @@ function count(params, cb) {
 function _query(count, params, offset, limit, cb) {
     var sql = 'select channel, device_group, device, sensor, data, creationDate ';
     sql += ' from `Facts`' + ((_.isEmpty(params)) ? '' : ' where ?');
+    sql += ' order by creationDate desc ';
     sql += (count ? '' : ' limit ? offset ?');
     console.log(sql);
 
