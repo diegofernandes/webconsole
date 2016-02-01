@@ -5,11 +5,16 @@
 'use strict';
 
 // Set default node environment to development
-process.env.CONFIG_FILE = process.env.CONFIG_FILE ||  './config/config.yml';
+process.env.CONFIG_FILE = process.env.CONFIG_FILE || './config/config.yml';
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-var express = require('express');
 var config = require('./config/environment');
+if (config.seedDB) {
+  require('./config/seed');
+}
+
+var express = require('express');
+
 // Setup server
 var app = express();
 var server = require('http').createServer(app);
@@ -17,7 +22,7 @@ require('./config/express')(app);
 require('./routes')(app);
 
 // Start server
-server.listen(config.port, config.ip, function () {
+server.listen(config.port, config.ip, function() {
   console.log('Meccano IoT Webconsole listening on %d, in %s mode', config.port, app.get('env'));
 });
 
