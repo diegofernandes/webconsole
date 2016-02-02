@@ -10,6 +10,7 @@ angular.module('meccanoAdminApp')
       })
       .state('main.dash', {
         url: '?status',
+        authenticate: true,
         views: {
           'charts@main': {
             templateUrl: 'app/main/chats.doughnut.html',

@@ -21,8 +21,6 @@
 var _ = require('lodash');
 var pool = require('../../config/mysql');
 
-console.log(pool);
-
 exports.find = function(req, res) {
   var size = parseInt(req.query.size || req.query.s || 10);
   delete req.query.size;
@@ -79,8 +77,6 @@ function _query(count, params, offset, limit, cb) {
   sql += ' from `DeviceStatus` ';
   if(! _.isEmpty(params)) sql += 'where ? ';
   sql += (count ? '' : ' limit ? offset ?');
-
-  console.log(sql);
 
   var queryParamns = [];
   if (!_.isEmpty(params)) {
@@ -221,8 +217,7 @@ function deleteAnnouncement(device) {
   console.log("Removing Announcement data for device " + device + "...");
   var op = pool.query('delete from `Announcement` where `device` = ?', device, function(error, result, fields) {
     if (error) {
-      console.log("Announcement data could not be removed.");
-      console.log(error);
+      console.error("Announcement data could not be removed.",error);
     } else {
       console.log("Announcement data removed from database.");
     }
@@ -237,7 +232,6 @@ exports.acknowledgeRegistration = function(req, res) {
   console.log("Acknowledging registration information...");
   var qu = pool.query("select * from Registration where `device` = ?", req.body.device, function(errorq, results, fields) {
     if (!errorq && results.length === 1) {
-      console.log(results);
       var op = pool.query({
           sql: 'update `Registration` set `registrationDate` = ? where `device` = ? ',
           values: [(new Date()), req.body.device]
