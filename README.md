@@ -83,6 +83,7 @@ Configuration of Meccano IoT Web Console is simple. You should configure the ./c
 
 ```
 default:
+  seedDB: true
   mysql:
     host: 'iotdb_hostname'
     port: 3306
@@ -96,6 +97,15 @@ Each configuration parameter have the corresponding environment variable. They'l
 
 ### Environment variables
 
+#### Seed Database
+
+ - **SEED_DB**: creates the user admin when not found any user with admin role.
+
+This will include a default admin user with credentials:
+
+```
+admin@admin.con/admin
+```
 
 #### Database configuration
 
