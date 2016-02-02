@@ -25,7 +25,7 @@ var validateJwt = expressJwt({
 
 /**
  * Attaches the user object to the request if authenticated
- * Otherwise returns 403
+ * Otherwise returns 401
  */
 function isAuthenticated() {
   return compose()
@@ -33,7 +33,7 @@ function isAuthenticated() {
     .use(validateJwt)
     .use(function(err, req, res, next) {
       if (err.name === 'UnauthorizedError') {
-        res.status(403).send('invalid token.');
+        res.status(401).send('invalid token.');
       }
     })
     // Attach user to request
