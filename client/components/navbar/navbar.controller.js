@@ -6,14 +6,6 @@ angular.module('meccanoAdminApp')
       'title': 'Devices',
       'link': '/device',
       'icon': 'glyphicon glyphicon-list-alt'
-    }, {
-      'title': 'Groups',
-      'link': '/groups',
-      'icon': 'glyphicon glyphicon-list-alt'
-    }, {
-      'title': 'Status',
-      'link': '/status',
-      'icon': 'glyphicon glyphicon-list-alt'
     }];
 
     $scope.isCollapsed = true;
