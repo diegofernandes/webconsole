@@ -9,7 +9,12 @@ angular.module('meccanoAdminApp')
         templateUrl: 'app/main/main.html'
       })
       .state('main.dash', {
+<<<<<<< HEAD
         url: '?status&device&device_group&page&size',
+=======
+        url: '?status',
+        authenticate: true,
+>>>>>>> meccano-iot/master
         views: {
           'charts@main': {
             templateUrl: 'app/main/chats.doughnut.html',

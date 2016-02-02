@@ -21,13 +21,14 @@
 
 var express = require('express');
 var controller = require('./messages.controller');
+var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
 // Routes for /api/messages/
-router.get('/:id', controller.get);
-router.post('/', controller.post);
-router.delete('/:id', controller.delete);
-router.get('/device/:device', controller.getByDevice);
+router.get('/:id', auth.isAuthenticated(),controller.get);
+router.post('/', auth.isAuthenticated(),controller.post);
+router.delete('/:id', auth.isAuthenticated(),controller.delete);
+router.get('/device/:device', auth.isAuthenticated(),controller.getByDevice);
 
 module.exports = router;

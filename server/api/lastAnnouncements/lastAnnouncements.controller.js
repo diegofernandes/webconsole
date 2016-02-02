@@ -56,7 +56,6 @@ exports.index = function(req, res) {
         });
         return;
       }
-      console.log("TOTAL ELEMENTS: " + resultCount.length);
       res.json({
         data: result,
         page: {
@@ -83,7 +82,6 @@ function _query(count, params, offset, limit, cb) {
     sql += ' from `Facts`' + ((_.isEmpty(params)) ? '' : ' where ?');
     sql += ' order by creationDate desc ';
     sql += (count ? '' : ' limit ? offset ?');
-    console.log(sql);
 
     var queryParamns = [];
     if (!_.isEmpty(params)) {
