@@ -101,6 +101,11 @@ Each configuration parameter have the corresponding environment variable. They'l
 
  - **SEED_DB**: creates the user admin when not found any user with admin role.
 
+This will include a default admin user with credentials:
+
+```
+admin@admin.con/admin
+```
 
 #### Database configuration
 
