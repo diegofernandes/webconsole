@@ -10,6 +10,7 @@ angular.module('meccanoAdminApp')
       })
       .state('device.list', {
         url: '?status&device&device_group&page&size',
+        authenticate: true,
         views: {
           'index': {
             templateUrl: 'app/device/device.list.html',
@@ -23,11 +24,13 @@ angular.module('meccanoAdminApp')
       })
       .state('device.register', {
         url: '/new',
+        authenticate: true,
         templateUrl: 'app/device/device.edit.html',
         controller: 'DeviceRegisterCtrl'
       })
       .state('device.edit', {
         url: '/{deviceId}/edit',
+        authenticate: true,
         views: {
           'index': {
             templateUrl: 'app/device/device.edit.html',
@@ -37,6 +40,7 @@ angular.module('meccanoAdminApp')
       })
       .state('device.detail', {
         url: '/{deviceId}/detail',
+        authenticate: true,
         templateUrl: 'app/device/device.detail.html',
         controller: 'DeviceDetailCtrl'
       });

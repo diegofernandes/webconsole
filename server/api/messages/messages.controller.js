@@ -25,7 +25,6 @@ var pool = require('../../config/mysql');
 * Submit registration
 */
 exports.post = function(req, res) {
-  console.log("POST");
   var message = req.body;
   saveMessage(message, res);
 };
@@ -34,7 +33,7 @@ exports.post = function(req, res) {
 * Get registration information
 */
 exports.get = function(req, res) {
-  console.log("GET");
+
   var id = req.params.id;
   getMessage(id, res);
 };
@@ -43,7 +42,7 @@ exports.get = function(req, res) {
 * Get message by device
 */
 exports.getByDevice = function(req, res) {
-  console.log("GET");
+
   var device = req.params.device;
   getMessagesByDevice(device, res);
 };
@@ -52,7 +51,7 @@ exports.getByDevice = function(req, res) {
 * Unregister device
 */
 exports.delete = function(req, res) {
-  console.log("DELETE");
+
   var id = req.params.id;
   deleteMessage(id, res)
 };

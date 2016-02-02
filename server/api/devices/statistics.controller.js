@@ -21,7 +21,6 @@
 var _ = require('lodash');
 var pool = require('../../config/mysql');
 
-console.log(pool);
 
 exports.statistics = function(req, res) {
   var size = parseInt(req.query.size || req.query.s || 10);
@@ -80,7 +79,6 @@ function _query(count, params, offset, limit, cb) {
   if(! _.isEmpty(params)) sql += 'where ? ';
   sql += (count ? '' : ' limit ? offset ?');
 
-  console.log(sql);
 
   var queryParamns = [];
   if (!_.isEmpty(params)) {
