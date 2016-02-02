@@ -16,39 +16,54 @@
         <div class="panel-body">
           <form class="form-inline">
             
+
+            <!-- Button to Edit infomations of device -->
+            <button class="btn btn-default glyphicon glyphicon-ok"
+                    uib-tooltip="Authorize"
+                    ng-disabled="Devices.selected == null"
+                    ng-class="{ 'btn-warning': Devices.selected.status === 'WAITING_APPROVE',
+                                'btn-success': Devices.selected.status === 'NORMAL'}"
+                    ui-sref="device.edit({deviceId: Devices.selected.device})">
+            </button>
+
+            <!-- Button to Edit infomations of device -->
+            <button class="btn btn-default glyphicon glyphicon-remove"
+                    uib-tooltip="Disallow"
+                    ng-disabled="Devices.selected == null"
+                    ng-click="destroy(Devices.selected)">
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+      <legend>Commands <span class="glyphicon glyphicon-wrench"></span></legend>
+            <div class="panel panel-default">
+        <div class="panel-body">
+          <form class="form-inline">
+            
             <!-- Button to restart the device -->
             <button class="btn btn-default glyphicon glyphicon-refresh"
+                    ng-disabled="Devices.selected == null"
                     uib-tooltip="Restart device">              
             </button>
 
             <!-- Button to send alert to the device -->
             <button class="btn btn-default glyphicon glyphicon-play-circle"
-                    uib-tooltip="Buzzer">
-            </button>
-
-            <!-- Button to Edit infomations of device -->
-            <button class="btn btn-default glyphicon glyphicon-pencil"
-                    uib-tooltip="Edit"
-                    ui-sref="device.edit({deviceId: Devices.selected.device})">
-            </button>
-
-            <!-- Button to Edit infomations of device -->
-            <button class="btn btn-default glyphicon glyphicon-trash"
-                    uib-tooltip="Destroy"
-                    ng-click="destroy()">
+                    ng-disabled="Devices.selected == null"
+                    uib-tooltip="Blink">
             </button>
 
             <!-- Button to turn of device -->
-            <button type="button" 
+<!--             <button type="button" 
                     class="btn glyphicon glyphicon-off" 
                     ng-class="{'btn-success': !alterButton, 'btn-danger': alterButton}" 
                     ng-click="alterButton = !alterButton" 
                     uib-tooltip="Turn on/off">  
-            </button>
+            </button> -->
           </form>
         </div>
       </div>
-
       <legend>Infomations of the device</legend>
     </div>
     <table class="table table-hover table-bordered">
@@ -72,5 +87,10 @@
         <th class="active">Memo</th>
         <td>{{ Devices.selected.memo }}</td>
       </tr>
+      <tr>
+        <th class="active">Status</th>
+        <td>{{ Devices.selected.status | lowercase }}</td>
+      </tr>
     </table>
   </div>
+

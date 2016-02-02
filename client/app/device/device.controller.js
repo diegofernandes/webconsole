@@ -15,7 +15,6 @@ angular.module('meccanoAdminApp')
     $scope.registeredDevices = {};
 
 
-
     /** Function to load devices by device service
       * @param parameters {object}
       * @param status
@@ -123,7 +122,7 @@ angular.module('meccanoAdminApp')
   };
 })
 
-.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices) {
+.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal) {
 
   $scope.labels = ["January"];
   // $scope.series = ['Series A', 'Series B'];
@@ -137,14 +136,54 @@ angular.module('meccanoAdminApp')
 
   $scope.Devices = Devices;
 
-  $scope.destroy = function() {
 
-    Devices.loadDevices().delete({device: $scope.Devices.selected.device});
-    $scope.Devices.selected = null;
-    $state.go('device.list', {}, {reload: true});
+  $scope.destroy = function (device) {
+    console.log(device)
+
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: './app/device/delete.confirm.html',
+      controller: 'DeleteDeviceCtrl',
+      size: 'xs',
+      resolve: {
+        device: function () {
+          return device;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $state.go($state.current, {}, {reload: true});
+      $scope.Devices.selected = null;
+    }, function () {
+      
+    });
   };
-  $scope.cancel = function() {
-    $state.go('device.list', $stateParams);
+
+  $scope.toggleAnimation = function () {
+    $scope.animationsEnabled = !$scope.animationsEnabled;
+  };
+
+
+})
+.controller('DeleteDeviceCtrl', function ($scope, $uibModalInstance, device, Devices, $timeout){
+
+  console.log(device);
+
+  $scope.destroy = function() {
+    Devices.loadDevices().delete({device: device.device});
+    
+    $timeout(function(){
+      $uibModalInstance.close();
+    }, 500);
+
+
+  };
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
   };
 
 });
+
+
