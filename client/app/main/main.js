@@ -9,7 +9,7 @@ angular.module('meccanoAdminApp')
         templateUrl: 'app/main/main.html'
       })
       .state('main.dash', {
-        url: '?status',
+        url: '?status&device&device_group&page&size',
         views: {
           'charts@main': {
             templateUrl: 'app/main/chats.doughnut.html',

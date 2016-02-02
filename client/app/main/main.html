@@ -1,17 +1,25 @@
-<header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>Meccano IoT Web Console</h1>
-    <p class="lead">Statics, Remote Manager, Register,...</p>
-
-  </div>
-</header>
-
-<div class="container">
-  <div class="row" style="margin-bottom:5px;">
+<div class="container-fuild">
   <div class="row">
-    <div ui-view="charts"></div>
+    <header class="hero-unit" id="banner">  
+        <h1>Meccano IoT Web Console</h1>
+        <p class="lead">Statics, Remote Manager, Register,...</p>
+    </header>
   </div>
-  <div class="row">
-   <div ui-view="data"></div>
-  </div>
+
+  </br>
 </div>
+<div class="container">
+  <div class="row-fluid">
+    <div class="col-sm-12">
+      <div ui-view="charts"></div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="col-sm-12">
+      <div ui-view="data"></div>
+    </div>
+  </div>
+
+</div>
+

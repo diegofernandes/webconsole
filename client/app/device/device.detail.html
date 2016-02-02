@@ -1,66 +1,3 @@
-<!-- <legend>Statistcs</legend>
-<div class="panel panel-default">
-  <table class="table table-striped">
-    <thead>
-      <th># Device</th>
-      <th>Sensor</th>
-      <th>Average</th>
-      <th>deviation</th>
-      <th>Error</th>
-      <th>Creation Date</th>
-    </thead>
-    <tbody>
-      <th># 1111</th>
-      <th>11111</th>
-      <th>11111</th>
-      <th>11111</th>
-      <th>11111</th>
-      <th>11111</th>
-    </tbody>
-  </table>
-</div>
-
-<legend>Operations</legend>
-<div class="panel panel-default">
-  <div class="panel-body">
-    <button class="btn btn-default glyphicon glyphicon-refresh"
-            alt="restart device">
-      
-    </button>
-    <button tooltip-placement="{{placement.selected}}" uib-tooltip="On the {{placement.selected}}" type="button" class="btn btn-default">Tooltip {{placement.selected}}</button>
-  </div>
-</div>
-
-<form name="deviceForm">
-  <div class="form-group" ng-class="{'has-error has-feedback': deviceForm.macAddress.$invalid && !deviceForm.macAddress.$pristine}">
-    <label class="control-label" for="inputMac">MAC address</label>
-    <input type="text" class="form-control" id="inputMac" ng-model="device.device" name="macAddress" placeholder="FF:FF:FF:FF:FF:FF" required="">
-    <span ng-show="deviceForm.macAddress.$error.required && !deviceForm.macAddress.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-    <span ng-show="deviceForm.macAddress.$error.required && !deviceForm.macAddress.$pristine" id="inputError2Status" class="sr-only">(error)</span>
-  </div>
-  <div class="form-group" ng-class="{'has-error has-feedback': deviceForm.deviceGroup.$invalid && !deviceForm.deviceGroup.$pristine}">
-    <label class="control-label" for="inputDeviceGroup">Device Group</label>
-    <input type="text" class="form-control" id="inputDeviceGroup" ng-model="device.device_group" name="deviceGroup" placeholder="Device Group" required="">
-    <span ng-show="deviceForm.deviceGroup.$error.required && !deviceForm.deviceGroup.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-    <span ng-show="deviceForm.deviceGroup.$error.required && !deviceForm.deviceGroup.$pristine" id="inputError2Status" class="sr-only">(error)</span>
-  </div>
-  <div class="form-group">
-    <label class="control-label" for="inputDesc">Description</label>
-    <textarea class="form-control" id="inputDesc" ng-model="device.description" rows="3"></textarea>
-  </div>
-
-  <button ng-click="cancel()" class="btn btn-default">
-    <span class="glyphicon glyphicon-arrow-left"></span>
-    Cancel</button>
-  <button ng-click="save()" ng-disabled="deviceForm.$invalid" class="btn btn-primary">
-    <span class="glyphicon glyphicon-floppy-disk"></span>
-    Salve</button>
-  <button ng-click="destroy()" ng-show="device.device" class="btn btn-danger">
-    <span class="glyphicon glyphicon-trash"></span>
-    Delete</button>
-</form>
- -->
-<div class="col-sm-4">
   <div class="panel panel-default">
     <div class="panel-heading">Details</div>
     <div class="panel-body">
@@ -137,4 +74,3 @@
       </tr>
     </table>
   </div>
-</div>

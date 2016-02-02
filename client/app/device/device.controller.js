@@ -25,6 +25,7 @@ angular.module('meccanoAdminApp')
       * @param size
       **/
     function getDevices (parameters){
+      $scope.isLoading = true;
       $scope.Devices.loadDevices().get(parameters, function (res){
 
         // Total Items to pagination
@@ -37,10 +38,13 @@ angular.module('meccanoAdminApp')
           $scope.registeredDevices.data.push(res);
         }
 
+        $scope.isLoading = false;
+
       }, function (err){
         // Erase registeredDevices array if no device was found
         if (err.status === 404) {
           $scope.registeredDevices.data = [];
+          $scope.isLoading = false;
         }
       });
     };
@@ -67,7 +71,7 @@ angular.module('meccanoAdminApp')
     $scope.search = function(parameters){
       parameters.page = 1;
 
-      $state.go('device.list', parameters, {reload: true});
+      $state.go($state.current, parameters, {reload: true});
 
     }
 
@@ -124,11 +128,11 @@ angular.module('meccanoAdminApp')
 
 .controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices) {
 
-    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-  $scope.series = ['Series A', 'Series B'];
+  $scope.labels = ["January"];
+  // $scope.series = ['Series A', 'Series B'];
   $scope.data = [
-    [65, 59, 80, 81, 56, 55, 40],
-    [28, 48, 40, 19, 86, 27, 90]
+    [65, 10],
+    [28, -20]
   ];
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
@@ -139,6 +143,7 @@ angular.module('meccanoAdminApp')
   $scope.destroy = function() {
 
     Devices.loadDevices().delete({device: $scope.Devices.selected.device});
+    $scope.Devices.selected = null;
     $state.go('device.list', {}, {reload: true});
   };
   $scope.cancel = function() {
