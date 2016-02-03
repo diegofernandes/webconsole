@@ -13,12 +13,11 @@
     </div>
     <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
-        <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
+        <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" ng-show="isLoggedIn()">
           <a ng-href="{{item.link}}">
             <span class="{{item.icon}}" aria-hidden="true"></span>
             {{item.title}}</a>
         </li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -30,17 +29,25 @@
           <p class="navbar-text">Hello
             {{ getCurrentUser().name }}</p>
         </li>
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}">
-          <a ui-sref="settings">
+        <li ng-show="isLoggedIn()" dropdown ng-class="{active: isActive('/settings')}">
+          <a ui-sref="settings" dropdown-toggle>
             <span class="glyphicon glyphicon-cog"></span>
           </a>
-        </li>
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}">
-          <a href="" ng-click="logout()">Logout</a>
+          <ul class="dropdown-menu">
+            <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}">
+              <a href=""> 
+                <span class="glyphicon glyphicon-off pull-right"></span> Admin
+              </a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li ng-click="logout()" >
+              <a href="/admin"> 
+                <span class="glyphicon glyphicon-off pull-right"></span> Log out
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
-
     </div>
-
   </div>
 </div>
