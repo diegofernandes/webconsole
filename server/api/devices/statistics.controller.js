@@ -23,6 +23,8 @@ var pool = require('../../config/mysql');
 
 
 exports.statistics = function(req, res) {
+
+  console.log("Statistics for device: " + req.params.device);
   var size = parseInt(req.query.size || req.query.s || 10);
   delete req.query.size;
   delete req.query.s;
@@ -31,7 +33,7 @@ exports.statistics = function(req, res) {
   delete req.query.p;
   var offset = (page -1) * size;
 
-  query(req.query, offset, size, function(error, result, fields) {
+  query(req.query, req.params, offset, size, function(error, result, fields) {
     if (error) {
       console.error(error);
       res.status(500).json({
@@ -41,7 +43,7 @@ exports.statistics = function(req, res) {
       });
       return;
     }
-    count(req.query, function(error, resultCount, fields) {
+    count(req.query, req.params, function(error, resultCount, fields) {
       if (error) {
         console.error(error);
         res.status(500).json({
@@ -64,29 +66,32 @@ exports.statistics = function(req, res) {
   });
 }
 
-function query(params, offset, limit, cb) {
-  _query(false, params, offset, limit, cb);
+function query(queryParams, urlParams, offset, limit, cb) {
+  _query(false, queryParams, urlParams, offset, limit, cb);
 }
 
-function count(params, cb) {
-  _query(true, params, null, null, cb);
+function count(queryParams, urlParams, cb) {
+  _query(true, queryParams, urlParams, null, null, cb);
 }
 
-function _query(count, params, offset, limit, cb) {
+function _query(count, queryParams, urlParams, offset, limit, cb) {
 
   var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
-  sql += ' from `DeviceStatistics` ';
-  if(! _.isEmpty(params)) sql += 'where ? ';
+  sql += " from `DeviceStatistics` where device = '" + urlParams.device + "'";
+  if(! _.isEmpty(queryParams)) sql += ' and ? ';
   sql += (count ? '' : ' limit ? offset ?');
 
+  var parameters = [];
 
-  var queryParamns = [];
-  if (!_.isEmpty(params)) {
-    queryParamns.push(params);
+  if (!_.isEmpty(queryParams)) {
+    parameters.push(queryParams);
   }
   if (!count) {
-    queryParamns.push(limit,offset);
+    parameters.push(limit,offset);
   }
 
-  pool.query(sql, queryParamns, cb);
+  console.log(sql);
+  console.log("parameters: " + parameters);
+
+  pool.query(sql, parameters, cb);
 }
