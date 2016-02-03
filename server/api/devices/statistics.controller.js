@@ -25,6 +25,7 @@ var pool = require('../../config/mysql');
 exports.statistics = function(req, res) {
 
   console.log("Statistics for device: " + req.params.device);
+
   var size = parseInt(req.query.size || req.query.s || 10);
   delete req.query.size;
   delete req.query.s;
@@ -33,7 +34,9 @@ exports.statistics = function(req, res) {
   delete req.query.p;
   var offset = (page -1) * size;
 
-  query(req.query, req.params, offset, size, function(error, result, fields) {
+  var parameters = _.merge(req.query, req.params);
+
+  query(parameters, offset, size, function(error, result, fields) {
     if (error) {
       console.error(error);
       res.status(500).json({
@@ -43,7 +46,7 @@ exports.statistics = function(req, res) {
       });
       return;
     }
-    count(req.query, req.params, function(error, resultCount, fields) {
+    count(parameters, function(error, resultCount, fields) {
       if (error) {
         console.error(error);
         res.status(500).json({
@@ -66,32 +69,36 @@ exports.statistics = function(req, res) {
   });
 }
 
-function query(queryParams, urlParams, offset, limit, cb) {
-  _query(false, queryParams, urlParams, offset, limit, cb);
+function query(parameters, offset, limit, cb) {
+  _query(false, parameters, offset, limit, cb);
 }
 
-function count(queryParams, urlParams, cb) {
-  _query(true, queryParams, urlParams, null, null, cb);
+function count(parameters, cb) {
+  _query(true, parameters, null, null, cb);
 }
 
-function _query(count, queryParams, urlParams, offset, limit, cb) {
+function _query(count, parameters, offset, limit, cb) {
 
-  var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
-  sql += " from `DeviceStatistics` where device = '" + urlParams.device + "'";
-  if(! _.isEmpty(queryParams)) sql += ' and ? ';
+  var sql = 'select ' + (count ? 'count(*) as totalElements ' : '*') + ' from `DeviceStatistics` ';
+  if(! _.isEmpty(parameters)) {
+    sql += ' where ? ';
+    for(var p=1; p<parameters; p++) {
+      sql += " and ? ";
+    }
+  }
   sql += (count ? '' : ' limit ? offset ?');
 
-  var parameters = [];
+  var queryParams = [];
 
-  if (!_.isEmpty(queryParams)) {
-    parameters.push(queryParams);
+  if (!_.isEmpty(parameters)) {
+    queryParams.push(parameters);
   }
   if (!count) {
-    parameters.push(limit,offset);
+    queryParams.push(limit,offset);
   }
 
   console.log(sql);
-  console.log("parameters: " + parameters);
+  console.log("queryParams: " + queryParams);
 
-  pool.query(sql, parameters, cb);
+  pool.query(sql, queryParams, cb);
 }
