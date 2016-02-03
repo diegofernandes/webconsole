@@ -22,9 +22,9 @@ var _ = require('lodash');
 var pool = require('../../config/mysql');
 
 
-exports.statistics = function(req, res) {
+exports.find = function(req, res) {
 
-  console.log("Statistics for device: " + req.params.device);
+  console.log("Activity for device: " + req.params.device);
 
   var size = parseInt(req.query.size || req.query.s || 10);
   delete req.query.size;
@@ -79,7 +79,7 @@ function count(parameters, cb) {
 
 function _query(count, parameters, offset, limit, cb) {
 
-  var sql = 'select ' + (count ? 'count(*) as totalElements ' : '*') + ' from `DeviceStatistics` ';
+  var sql = 'select ' + (count ? 'count(*) as totalElements ' : '*') + ' from `DeviceActivity` ';
   if(! _.isEmpty(parameters)) {
     sql += ' where ? ';
     for(var p=1; p<parameters; p++) {

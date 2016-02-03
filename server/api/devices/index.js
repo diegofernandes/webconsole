@@ -22,6 +22,7 @@
 var express = require('express');
 var devicesController = require('./devices.controller');
 var statisticsController = require('./statistics.controller');
+var activityController = require('./activity.controller');
 var auth = require('../../auth/auth.service');
 
 var router = express.Router();
@@ -35,5 +36,6 @@ router.put('/:device', auth.isAuthenticated(),devicesController.update);
 router.patch('/:device', auth.isAuthenticated(),devicesController.update);
 router.put('/ack', auth.isAuthenticated(), devicesController.acknowledgeRegistration);
 router.get('/:device/statistics', auth.isAuthenticated(), statisticsController.statistics);
+router.get('/:device/activity', auth.isAuthenticated(), activityController.find);
 
 module.exports = router;
