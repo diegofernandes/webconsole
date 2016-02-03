@@ -10,6 +10,6 @@ var router = express.Router();
 
 router.get('/', auth.isAuthenticated(),controller.count);
 router.get('/status/:status', auth.isAuthenticated(),controller.status);
-router.get('/history', historyStatusController.history );
+router.get('/history', auth.isAuthenticated(), historyStatusController.history );
 
 module.exports = router;
