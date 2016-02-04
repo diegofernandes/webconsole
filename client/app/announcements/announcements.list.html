@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">Last Announcements of the devices</div>
-	<div class="panel-body">
+	<div class="panel-body" ng-show="currentState.name === 'announcements.list'">
 		
       <form class="form-inline" ng-submit="filterAnnouncements(parametersFilter)">  
         <!-- Text input search by ID device -->
@@ -83,7 +83,11 @@
 	</table>
 	<div class="panel-body">
 		<p class="text-center">
-			<button class="btn btn-default btn-xs" ng-click="loadMore(parametersFilter)">Load More Announcements...</button>		
+			<button class="btn btn-default btn-xs" 
+					ng-click="loadMore(parametersFilter)"
+					ng-show="currentState.name === 'announcements.list'">
+					Load More Announcements...
+			</button>		
 		</p>
 	</div>
 </div>

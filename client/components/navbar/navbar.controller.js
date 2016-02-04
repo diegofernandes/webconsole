@@ -4,8 +4,12 @@ angular.module('meccanoAdminApp')
   .controller('NavbarCtrl', function($scope, $location, Auth) {
     $scope.menu = [ {
       'title': 'Devices',
-      'link': '/device',
+      'state': 'device.list',
       'icon': 'glyphicon glyphicon-list-alt'
+    },{
+      'title': 'Activities',
+      'state': 'announcements.list',
+      'icon': 'glyphicon glyphicon-signal'
     }];
 
     $scope.isCollapsed = true;

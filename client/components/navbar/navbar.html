@@ -14,7 +14,7 @@
     <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" ng-show="isLoggedIn()">
-          <a ng-href="{{item.link}}">
+          <a ui-sref="{{item.state}}">
             <span class="{{item.icon}}" aria-hidden="true"></span>
             {{item.title}}</a>
         </li>
@@ -35,13 +35,13 @@
           </a>
           <ul class="dropdown-menu">
             <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}">
-              <a href=""> 
+              <a href="/admin"> 
                 <span class="glyphicon glyphicon-off pull-right"></span> Admin
               </a>
             </li>
             <li role="separator" class="divider"></li>
             <li ng-click="logout()" >
-              <a href="/admin"> 
+              <a href=""> 
                 <span class="glyphicon glyphicon-off pull-right"></span> Log out
               </a>
             </li>

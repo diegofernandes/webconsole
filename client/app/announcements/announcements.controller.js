@@ -7,7 +7,9 @@ angular.module('meccanoAdminApp')
 		$scope.parametersFilter = $state.params;
 		$scope.annoucements = [];
 
-		$scope.sensors = ['1', '2'];
+		$scope.currentState = $state.current;
+
+		console.log($scope.currentState)
 
 
 		/** function to load last annoucements
