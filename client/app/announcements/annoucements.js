@@ -4,7 +4,7 @@ angular.module('meccanoAdminApp')
   .config(function($stateProvider) {
     $stateProvider
       .state('announcements', {
-        url: '/announcements',
+        url: '/activity',
         abstract: true,
         templateUrl: 'app/announcements/announcements.html'
       })
