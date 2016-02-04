@@ -18,14 +18,25 @@
 */
 
 'use strict';
-var _ = require('lodash');
-var util = require('../../components/util');
-var db = require('../../sqldb');
 
-var DeviceStatistics = db.DeviceStatistics;
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('DeviceStatistics', {
+    device: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: false
+    },
+    sensor:DataTypes.INTEGER,
+    average:DataTypes.FLOAT,
+    deviation:DataTypes.FLOAT,
+    error:DataTypes.FLOAT,
+    creationDate:DataTypes.DATE
+  },{
+    freezeTableName: true,
+    timestamps:false
+  });
 
-exports.statistics = function(req, res) {
-  db.page(DeviceStatistics,req.query)
-    .then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+
+  return model;
 }

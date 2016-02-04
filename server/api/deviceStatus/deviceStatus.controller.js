@@ -20,110 +20,47 @@
 'use strict';
 var _ = require('lodash');
 
-var config = require('../../config/environment');
-var pool = require('../../config/mysql');
+var util = require('../../components/util');
+
+var db = require('../../sqldb');
+var DeviceStatus = db.DeviceStatus;
 
 /**
-**  Count the number of devices for each status
-**/
+ **  Count the number of devices for each status
+ **/
 exports.count = function(req, res) {
 
   var sql = "select 'NORMAL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
-  " union select 'WARNING' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
-  " union select 'FAIL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
-  " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `device_group` is null ";
+    " union select 'WARNING' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
+    " union select 'FAIL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
+    " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `device_group` is null ";
 
-  pool.query(sql,
-            [
-              5,
-              6,
-              15,
-              15
-            ],
-            function(error, result, fields) {
-              if (error) {
-                console.error(error);
-                res.status(500).json({
-                  'operation': 'GET',
-                  'status': 'INTERNAL_ERROR',
-                  'cause': error
-                });
-                return;
-              }
-              res.json({
-                data: result,
-                page: {
-                  size: result.length,
-                  totalElements: result.length,
-                  totalPages: 1,
-                  number: 1
-                }
-              });
-  });
+  return db.sequelize.query(sql, {
+      type: db.sequelize.QueryTypes.SELECT,
+      replacements: [
+        5, 6, 15, 15
+      ]
+    })
+    .then(function(result) {
+      res.json({
+        data: result,
+        page: {
+          size: result.length,
+          totalElements: result.length,
+          totalPages: 1,
+          number: 1
+        }
+      });
+    })
+    .catch(util.handleError(res));
+
 }
 
 
 /**
-**  Filter devices by status
-**/
-exports.status = function(req, res) {
-
-  // Calculates the parameters of pagination
-  var size = parseInt(req.query.size || req.query.s || 10);
-  delete req.query.size;
-  delete req.query.s;
-  var page = parseInt(req.query.page || req.query.p || 1);
-  delete req.query.page;
-  delete req.query.p;
-  var offset = (page -1) * size;
-
-  var sql = "select s.* from `DeviceStatus` s where s.status = ?";
-  var params = [req.params.status];
-
-  // Execute the query
-  query(sql, params, offset, size, function(error, result, fields) {
-      if (error) {
-                console.error(error);
-                res.status(500).json({
-                  'operation': 'GET',
-                  'status': 'INTERNAL_ERROR',
-                  'cause': error
-                });
-                return;
-              }
-              res.json({
-                data: result,
-                page: {
-                  size: result.length,
-                  totalElements: result.length,
-                  totalPages: 1,
-                  number: 1
-                }
-              });
-  });
-}
-
-function query(sql, params, offset, limit, cb) {
-  _query(sql, params, false, offset, limit, cb);
-}
-
-function count(sql,params, cb) {
-  _query(sql, params, true, null, null, cb);
-}
-
-function _query(sql, params, count, offset, limit, cb) {
-
-  var queryParams = [];
-
-  if (!_.isEmpty(params)) {
-    queryParams.push(params);
-  }
-
-  sql += (count ? '' : ' limit ? offset ?');
-
-  if (!count) {
-    queryParams.push(limit,offset);
-  }
-
-  pool.query(sql, queryParams, cb);
+ **  Filter devices by status
+ **/
+exports.show = function(req, res) {
+  db.page(DeviceStatus, _.merge(req.query, req.params)).then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }

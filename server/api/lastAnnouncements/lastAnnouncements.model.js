@@ -18,14 +18,30 @@
 */
 
 'use strict';
-var _ = require('lodash');
-var util = require('../../components/util');
-var db = require('../../sqldb');
 
-var DeviceStatistics = db.DeviceStatistics;
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('Facts', {
+    channel: DataTypes.STRING,
+    year: DataTypes.INTEGER,
+    month: DataTypes.INTEGER,
+    day: DataTypes.INTEGER,
+    week_day: DataTypes.INTEGER,
+    hour: DataTypes.INTEGER,
+    minute: DataTypes.INTEGER,
+    second: DataTypes.INTEGER,
+    device_group: DataTypes.STRING,
+    device: DataTypes.STRING,
+    sensor: DataTypes.INTEGER,
+    data: DataTypes.INTEGER,
+    creationDate: DataTypes.DATE
+  }, {
+    freezeTableName: true,
+    timestamps: false
+  });
 
-exports.statistics = function(req, res) {
-  db.page(DeviceStatistics,req.query)
-    .then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+  model.removeAttribute('id');
+  model.removeAttribute('createdAt');
+  model.removeAttribute('updatedAt');
+
+  return model;
 }

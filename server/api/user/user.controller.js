@@ -1,58 +1,95 @@
 'use strict';
 
-var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 
-var validationError = function(res, err) {
-  return res.status(422).json(err);
-};
+var util = require('../../components/util');
+
+var db = require('../../sqldb');
+
+var User = db.User;
+
+function validationError(res, statusCode) {
+  statusCode = statusCode || 422;
+  return function(err) {
+    res.status(statusCode).json(err);
+  }
+}
+
+function handleError(res, statusCode) {
+  statusCode = statusCode || 500;
+  return function(err) {
+    res.status(statusCode).send(err);
+  };
+}
 
 /**
  * Get list of users
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find('', function (err, users) {
-    if(err) return res.send(500, err);
-    res.json(200, users);
-  });
-};
+  User.findAll({
+      attributes: [
+        'ID',
+        'name',
+        'email',
+        'role'
+      ]
+    })
+    .then(function(users) {
+      res.status(200).json(users);
+    })
+    .catch(util.handleError(res));
+}
 
 /**
  * Creates a new user
  */
-exports.create = function (req, res, next) {
-  User.create(req.body, function(err, user) {
-    if (err) return validationError(res, err);
-    res.status(200).send();
-  });
-};
+exports.create = function(req, res, next) {
+  var newUser = User.build(req.body);
+  newUser.save()
+    .then(function(user) {
+      res.status(200).send();
+    })
+    .catch(validationError(res));
+}
 
 /**
  * Get a single user
  */
-exports.show = function (req, res, next) {
+exports.show = function(req, res, next) {
   var userId = req.params.id;
 
-  User.findOne({ID:userId}, function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.send(401);
-    res.json(user.profile);
-  });
-};
+  User.find({
+      where: {
+        ID: userId
+      }
+    })
+    .then(function(user) {
+      if (!user) {
+        return res.status(404).end();
+      }
+      res.json(user.profile);
+    })
+    .catch(function(err) {
+      next(err);
+    });
+}
 
 /**
  * Deletes a user
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
-  User.deleteByid(req.params.id, function(err, found) {
-    if(err) return res.send(500, err);
-    return res.send((found)?204:404);
-  });
-};
+  User.destroy({
+      ID: req.params.id
+    })
+    .then(function() {
+      res.status(204).end();
+    })
+    .catch(handleError(res));
+}
 
 /**
  * Change a users password
@@ -62,36 +99,49 @@ exports.changePassword = function(req, res, next) {
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
 
-  User.findOne({ID:userId},{safe:false}, function (err, user) {
-    if(user.authenticate(oldPass)) {
-      user.password = newPass;
-      User.update(user,function(err) {
-        if (err) return validationError(res, err);
-        res.send(200);
-      });
-    } else {
-      res.send(403);
-    }
-  });
-};
+  User.find({
+      where: {
+        ID: userId
+      }
+    })
+    .then(function(user) {
+      if (user.authenticate(oldPass)) {
+        user.password = newPass;
+        return user.save()
+          .then(function() {
+            res.status(204).end();
+          })
+          .catch(validationError(res));
+      } else {
+        return res.status(403).end();
+      }
+    });
+}
 
 /**
  * Get my info
  */
 exports.me = function(req, res, next) {
   var userId = req.user.ID;
-  User.findOne({
-    ID: userId
-  }, function(err, user) { // don't ever give out the password or salt
-    if (err) return next(err);
-    if (!user) return res.json(401);
-    res.json(user);
-  });
-};
 
-/**
- * Authentication callback
- */
-exports.authCallback = function(req, res, next) {
-  res.redirect('/');
-};
+  return User.find({
+      where: {
+        ID: userId
+      },
+      attributes: [
+        'ID',
+        'name',
+        'email',
+        'role'
+      ]
+    })
+    .then(function(user) {
+
+      if (!user) {
+        return res.status(401).end();
+      }
+
+      res.json(user);
+    })
+    .catch(next);
+}

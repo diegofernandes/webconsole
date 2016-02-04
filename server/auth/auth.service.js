@@ -6,7 +6,9 @@ var config = require('../config/environment');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
-var User = require('../api/user/user.model');
+var db = require('../sqldb');
+var User = db.User;
+
 var validateJwt = expressJwt({
   secret: config.secrets.session,
   credentialsRequired: true,
@@ -28,26 +30,39 @@ var validateJwt = expressJwt({
  * Otherwise returns 401
  */
 function isAuthenticated() {
-  return compose()
-    // Validate jwt
-    .use(validateJwt)
-    .use(function(err, req, res, next) {
-      if (err.name === 'UnauthorizedError') {
-        res.status(401).send('invalid token.');
-      }
-    })
-    // Attach user to request
-    .use(function(req, res, next) {
-      User.findOne({
-        ID: req.user.ID
-      }, function(err, user) {
-        if (err) return next(err);
-        if (!user) return res.send(401);
+  if (config.api.security) {
+    return compose()
+      // Validate jwt
+      .use(validateJwt)
+      .use(function(err, req, res, next) {
+        if (err.name === 'UnauthorizedError') {
+          res.status(401).send('invalid token.');
+        }
+      })
+      // Attach user to request
+      .use(function(req, res, next) {
+        User.find({
+            where: {
+              ID: req.user.ID
+            }
+          })
+          .then(function(user) {
+            if (!user) {
+              return res.status(401).end();
+            }
+            req.user = user;
 
-        req.user = user;
-        next();
+          })
+          .then(next)
+          .catch(function(err) {
+            next(err);
+          });
       });
-    });
+
+  } else {
+    return compose();
+  }
+
 }
 
 
@@ -57,16 +72,19 @@ function isAuthenticated() {
  */
 function hasRole(roleRequired) {
   if (!roleRequired) throw new Error('Required role needs to be set');
-
-  return compose()
-    .use(isAuthenticated())
-    .use(function meetsRequirements(req, res, next) {
-      if (config.userRoles.indexOf(roleRequired) >= 0 && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf(roleRequired)) {
-        next();
-      } else {
-        res.send(403);
-      }
-    });
+  if (config.api.security) {
+    return compose()
+      .use(isAuthenticated())
+      .use(function meetsRequirements(req, res, next) {
+        if (config.userRoles.indexOf(roleRequired) >= 0 && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf(roleRequired)) {
+          return next();
+        } else {
+          res.send(403);
+        }
+      });
+  } else {
+    return compose();
+  }
 }
 
 /**
