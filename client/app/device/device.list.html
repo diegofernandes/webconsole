@@ -67,7 +67,9 @@
             <img src="./assets/images/loading_gif.gif" style="height: 30px">
           </td>
         </tr>
-        <tr ng-repeat="device in registeredDevices.data" ng-click="Devices.selected = device">
+        <tr ng-repeat="device in registeredDevices.data" 
+            ng-click="Devices.selected = device" 
+            ng-class="{'selected-line': Devices.selected.device === device.device}">
           <td>{{device.device}}</td>
           <td>{{device.device_group}}</td>
           <td>
