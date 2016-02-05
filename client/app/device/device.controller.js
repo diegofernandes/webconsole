@@ -74,33 +74,40 @@ angular.module('meccanoAdminApp')
 
     }
     $scope.pageChanged = function (parameters) {
-
       parameters.page = $scope.pageNumber;
       getDevices(parameters);
-
     }
-
-
-
   })
 
-.controller('DeviceRegisterCtrl', function($scope, Registration, $state, $stateParams) {
-  $scope.registration = new Registration();
+.controller('DeviceRegisterCtrl', function($scope, $state, $stateParams, Devices) {
+  // $scope.registration = new Registration();
+
+  $scope.Devices = Devices;
 
   $scope.save = function() {
-    $scope.registration.$save().then(function(data) {
-      $state.go('device.list', $stateParams);
+    Devices.loadDevices().post($scope.Device.selected, function (res){
+      console.log(res)
+    }, function (err){
+      console.log(err)
     });
+    $state.go('device.list', {}, {reload: true});
   };
-  $scope.cancel = function() {
-    $state.go('device.list', $stateParams);
-  };
+  // $scope.save = function() {
+  //   $scope.registration.$save().then(function(data) {
+  //     $state.go('device.list', $stateParams);
+  //   });
+  // };
+  // $scope.cancel = function() {
+  //   $state.go('device.list', $stateParams);
+  // };
 })
 
 .controller('DeviceEditCtrl', function($scope, Devices, $state, $stateParams) {
 
 
   $scope.Device = Devices;
+
+  $scope.inputDisabled = true;
   if ($scope.Device.selected == null) {
     Devices.loadDevices().get({device: $state.params.deviceId}, function (res){
       $scope.Device.selected = res;

@@ -14,7 +14,7 @@
                  ng-model="Device.selected.device" 
                  name="macAddress" 
                  placeholder="FF:FF:FF:FF:FF:FF" 
-                 ng-disabled="true"
+                 ng-disabled="inputDisabled"
                  required="">
           <span ng-show="deviceForm.macAddress.$error.required && !deviceForm.macAddress.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
           <span ng-show="deviceForm.macAddress.$error.required && !deviceForm.macAddress.$pristine" class="sr-only">(error)</span>

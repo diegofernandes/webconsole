@@ -94,6 +94,7 @@ function _query(count, params, offset, limit, cb) {
  */
 exports.saveRegistration = function(req, res) {
   console.log("Persisting registration information to the database...");
+  console.log(req.body)
   var op = pool.query('insert into `Registration` set ?', req.body, function(error, result) {
     if (error) {
       console.error('Error persisting object:', error);
