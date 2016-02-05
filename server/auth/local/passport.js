@@ -8,12 +8,11 @@ exports.setup = function(User, config) {
     },
     function(email, password, done) {
       User.findOne({
-        email: email.toLowerCase()
-      }, {
-        safe: false
-      }, function(err, user) {
-        if (err) return done(err);
+        where: {
+          email: email.toLowerCase()
+        }
 
+      }).then(function(user) {
         if (!user) {
           return done(null, false, {
             message: 'This email is not registered.'
@@ -25,6 +24,9 @@ exports.setup = function(User, config) {
           });
         }
         return done(null, user);
+      })
+      .catch(function (err) {
+        if (err) return done(err);
       });
     }
   ));

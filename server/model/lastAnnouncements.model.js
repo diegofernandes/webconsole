@@ -19,18 +19,29 @@
 
 'use strict';
 
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('Facts', {
+    channel: DataTypes.STRING,
+    year: DataTypes.INTEGER,
+    month: DataTypes.INTEGER,
+    day: DataTypes.INTEGER,
+    week_day: DataTypes.INTEGER,
+    hour: DataTypes.INTEGER,
+    minute: DataTypes.INTEGER,
+    second: DataTypes.INTEGER,
+    device_group: DataTypes.STRING,
+    device: DataTypes.STRING,
+    sensor: DataTypes.INTEGER,
+    data: DataTypes.INTEGER,
+    creationDate: DataTypes.DATE
+  }, {
+    freezeTableName: true,
+    timestamps: false
+  });
 
-var util = require('../../components/util');
+  model.removeAttribute('id');
+  model.removeAttribute('createdAt');
+  model.removeAttribute('updatedAt');
 
-var _ = require('lodash');
-
-var db = require('../../sqldb');
-var DeviceHistoryStatus = db.DeviceHistoryStatus;
-
-/**
- **  Filter devices by status
- **/
-exports.show = function(req, res) {
-  db.page(DeviceHistoryStatus, req.query).then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+  return model;
 }

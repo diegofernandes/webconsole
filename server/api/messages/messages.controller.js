@@ -18,131 +18,66 @@
 */
 
 'use strict';
+var _ = require('lodash');
 
-var pool = require('../../config/mysql');
+var util = require('../../components/util');
 
-/*
-* Submit registration
-*/
-exports.post = function(req, res) {
-  var message = req.body;
-  saveMessage(message, res);
-};
+var db = require('../../sqldb');
 
-/*
-* Get registration information
-*/
-exports.get = function(req, res) {
+var Message = db.Message;
 
-  var id = req.params.id;
-  getMessage(id, res);
-};
+exports.show = function(req, res) {
+  db.page(Message, _.merge(req.query,req.params))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
+}
 
-/*
-* Get message by device
-*/
-exports.getByDevice = function(req, res) {
 
-  var device = req.params.device;
-  getMessagesByDevice(device, res);
-};
-
-/*
-* Unregister device
-*/
-exports.delete = function(req, res) {
-
-  var id = req.params.id;
-  deleteMessage(id, res)
-};
-
-/**
-* Saves the object to the database
-*/
-function saveMessage(object, res) {
-  console.log("Posting message to the database...");
-  var op = pool.query('insert into Messages set ?', object, function(error, result) {
-    if (error) {
-      console.error('Error posting message:', error);
-      res.status(500).json({
-        operation: 'POST',
-        message: 'ERROR',
-        cause: error
-      });
-    } else {
-      console.log("Message enqueued...");
-      res.status(200).json({
-        operation: 'POST',
-        message: 'MESSAGE_ENQUEUED'
-      });
-    }
-  });
+exports.load = function(req, res) {
+  Message.findOne({
+      where: req.params
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }
 
 /**
-* Get the object to the database
-*/
-function getMessage(id, res) {
-  console.log("Get message #" + id + " from the database...");
-  var op = pool.query('select * from `Messages` where `ID` = ?', id, function(error, result, fields) {
-    if (error) {
-      res.json({
-        'operation' : 'GET',
-        'message' : 'INTERNAL_ERROR',
-        'cause' : error
-      });
-      return;
-    }
-    if (result.length === 0) {
-      // Unknown device
-      res.status(404).json({
-        'operation': 'GET',
-        'status' : 'NOT FOUND'
-      });
-    } else {
-      var r = result[0];
-      res.status(200).json(r);
-    }
-  });
+ * Saves the object to the database
+ */
+exports.save = function(req, res) {
+
+  return Message.create(req.body)
+    .then(util.respondWithResult(res, 201))
+    .catch(util.handleError(res));
+
 }
 
-/**
-* Get messages of a device
-*/
-function getMessagesByDevice(device, res) {
-  console.log("Getting messages of device " + device + "...");
-  var op = pool.query('select * from `Messages` where `device` = ?', device, function(error, result, fields) {
-    if (error) {
-      res.json({
-        'operation' : 'GET',
-        'message' : 'INTERNAL_ERROR',
-        'cause' : error
-      });
-      return;
-    }
-    res.status(200).json(result);
-  });
+// Updates an existing Thing in the DB
+exports.update = function(req, res) {
+  if (req.body.ID) {
+    delete req.body.ID;
+  }
+  Message.find({
+      where: {
+        device: req.params.ID
+      }
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.saveUpdates(req.body))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }
 
-/**
-* Delete Message
-*/
-function deleteMessage(id, res) {
-  console.log("Deleting message...");
-  var op = pool.query('delete from `Messages` where `ID` = ?', id, function(error, result, fields) {
-    if (error) {
-      res.json({
-        'operation' : 'DELETE',
-        'message' : 'INTERNAL_ERROR',
-        'cause' : error
-      });
-    } else {
-      // Unknown device
-      res.json({
-        'operation': 'DELETE',
-        'ID' : id,
-        'status' : 'DELETED'
-      });
-    }
-  });
+// Deletes a Thing from the DB
+exports.destroy = function(req, res) {
+
+  Message.find({
+      where: {
+        device: req.params.ID
+      }
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.removeEntity(res))
+    .catch(util.handleError(res));
 }

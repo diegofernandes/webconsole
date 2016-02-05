@@ -19,83 +19,13 @@
 
 'use strict';
 var _ = require('lodash');
-var pool = require('../../config/mysql');
+var util = require('../../components/util');
+var db = require('../../sqldb');
 
+var DeviceStatistics = db.DeviceStatistics;
 
 exports.statistics = function(req, res) {
-
-  console.log("Statistics for device: " + req.params.device);
-
-  var size = parseInt(req.query.size || req.query.s || 10);
-  delete req.query.size;
-  delete req.query.s;
-  var page = parseInt(req.query.page || req.query.p || 1);
-  delete req.query.page;
-  delete req.query.p;
-  var offset = (page -1) * size;
-
-  var parameters = _.merge(req.query, req.params);
-
-  query(parameters, offset, size, function(error, result, fields) {
-    if (error) {
-      console.error(error);
-      res.status(500).json({
-        'operation': 'GET',
-        'status': 'INTERNAL_ERROR',
-        'cause': error
-      });
-      return;
-    }
-    count(parameters, function(error, resultCount, fields) {
-      if (error) {
-        console.error(error);
-        res.status(500).json({
-          'operation': 'GET',
-          'status': 'INTERNAL_ERROR',
-          'cause': error
-        });
-        return;
-      }
-      res.json({
-        data: result,
-        page: {
-          size: size,
-          totalElements: resultCount[0].totalElements,
-          totalPages: Math.ceil(resultCount[0].totalElements / size),
-          number: page
-        }
-      });
-    });
-  });
-}
-
-function query(parameters, offset, limit, cb) {
-  _query(false, parameters, offset, limit, cb);
-}
-
-function count(parameters, cb) {
-  _query(true, parameters, null, null, cb);
-}
-
-function _query(count, parameters, offset, limit, cb) {
-
-  var sql = 'select ' + (count ? 'count(*) as totalElements ' : '*') + ' from `DeviceStatistics` ';
-  if(! _.isEmpty(parameters)) {
-    sql += ' where ? ';
-    for(var p=1; p<parameters; p++) {
-      sql += " and ? ";
-    }
-  }
-  sql += (count ? '' : ' limit ? offset ?');
-
-  var queryParams = [];
-
-  if (!_.isEmpty(parameters)) {
-    queryParams.push(parameters);
-  }
-  if (!count) {
-    queryParams.push(limit,offset);
-  }
-
-  pool.query(sql, queryParams, cb);
+  db.page(DeviceStatistics,req.query)
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }

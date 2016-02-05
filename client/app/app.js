@@ -22,10 +22,11 @@ angular.module('meccanoAdminApp', [
 
 
     $locationProvider.html5Mode(true);
-    $httpProvider.interceptors.push('authInterceptor');
+    $httpProvider.interceptors.push('authInterceptor','alertInterceptor');
+
   })
 
-.factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
+.factory('authInterceptor', function($rootScope, $q, $cookieStore, $location,alertsPanel) {
   return {
     // Add authorization token to headers
     request: function(config) {
@@ -48,6 +49,25 @@ angular.module('meccanoAdminApp', [
       }
     }
   };
+})
+
+.factory('alertInterceptor', function($rootScope, $q, $location,alertsPanel) {
+  return {
+    responseError: function(response) {
+      if (response.status === 403) {
+        alertsPanel.addWarning('You are not authorized to performing this action.');
+        return $q.reject(response);
+      }else if (response.status === 500) {
+        alertsPanel.addError('The server return an error.');
+        return $q.reject(response);
+      } else if (response.status === -1) {
+        alertsPanel.addError('The server is inaccessible, please check your connection.');
+        return $q.reject(response);
+      }else {
+        return $q.reject(response);
+      }
+    }
+  }
 })
 
 .run(function($rootScope, $location, Auth) {

@@ -26,9 +26,9 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 // Routes for /api/messages/
-router.get('/:id', auth.isAuthenticated(),controller.get);
-router.post('/', auth.isAuthenticated(),controller.post);
-router.delete('/:id', auth.isAuthenticated(),controller.delete);
-router.get('/device/:device', auth.isAuthenticated(),controller.getByDevice);
+router.get('/', auth.isAuthenticated(),controller.show);
+router.get('/:id', auth.isAuthenticated(),controller.load);
+router.post('/', auth.isAuthenticated(),controller.save);
+router.delete('/:id', auth.isAuthenticated(),controller.destroy);
 
 module.exports = router;
