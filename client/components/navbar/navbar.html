@@ -29,8 +29,8 @@
           <p class="navbar-text">Hello
             {{ getCurrentUser().name }}</p>
         </li>
-        <li ng-show="isLoggedIn()" dropdown ng-class="{active: isActive('/settings')}">
-          <a ui-sref="settings" dropdown-toggle>
+        <li ng-show="isLoggedIn()" uib-dropdown ng-class="{active: isActive('/settings')}">
+          <a href="" uib-dropdown-toggle>
             <span class="glyphicon glyphicon-cog"></span>
           </a>
           <ul class="dropdown-menu">
