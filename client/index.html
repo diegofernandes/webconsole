@@ -36,6 +36,8 @@
     <![endif]-->
     <!-- NAVBAR -->
     <div ng-include="'components/navbar/navbar.html'"></div>
+    <!-- Alerts Panel -->
+    <div ng-include="'components/alerts-panel/alerts-panel.html'"></div>
     <!-- Add your site or application content here -->
     <div ui-view=""></div>
 
@@ -93,6 +95,8 @@
           <script src="app/device/device.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="components/alerts-panel/alerts-panel.controller.js"></script>
+          <script src="components/alerts-panel/alerts-panel.service.js"></script>
           <script src="components/announcements/announcements.service.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>

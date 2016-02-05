@@ -19,18 +19,23 @@
 
 'use strict';
 
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('DeviceHistoryStatus', {
+    status:DataTypes.STRING,
+    numberOfDevices:DataTypes.INTEGER,
+    creationDate:DataTypes.DATE
 
-var util = require('../../components/util');
+  }, {
+    freezeTableName: true,
+    timestamps: false,
+    defaultScope:{
+      order:'creationDate DESC'
+    }
+  });
 
-var _ = require('lodash');
+  model.removeAttribute('id');
+  model.removeAttribute('createdAt');
+  model.removeAttribute('updatedAt');
 
-var db = require('../../sqldb');
-var DeviceHistoryStatus = db.DeviceHistoryStatus;
-
-/**
- **  Filter devices by status
- **/
-exports.show = function(req, res) {
-  db.page(DeviceHistoryStatus, req.query).then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+  return model;
 }

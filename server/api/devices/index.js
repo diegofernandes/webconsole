@@ -27,15 +27,15 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-// Routes for /api/registration/
-router.get('/', auth.isAuthenticated(), devicesController.find);
+// Routes for /api/devices/
+router.get('/',auth.isAuthenticated(),devicesController.show);
 router.get('/:device', auth.isAuthenticated(),devicesController.load);
 router.post('/', auth.isAuthenticated(),devicesController.saveRegistration);
-router.delete('/:device', auth.isAuthenticated(),devicesController.deleteRegistration);
+router.delete('/:device', auth.isAuthenticated(),devicesController.destroy);
 router.put('/:device', auth.isAuthenticated(),devicesController.update);
 router.patch('/:device', auth.isAuthenticated(),devicesController.update);
-router.put('/ack', auth.isAuthenticated(), devicesController.acknowledgeRegistration);
-router.get('/:device/statistics', auth.isAuthenticated(), statisticsController.statistics);
-router.get('/:device/activity', auth.isAuthenticated(), activityController.find);
+
+router.get('/:device/statistics',statisticsController.statistics);
+
 
 module.exports = router;

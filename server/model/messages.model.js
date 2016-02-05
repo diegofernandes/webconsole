@@ -19,18 +19,24 @@
 
 'use strict';
 
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('Message', {
+    ID: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    device: DataTypes.STRING,
+    sender: DataTypes.STRING,
+    delivery_type: DataTypes.STRING,
+    message: DataTypes.STRING,
+    readDate: DataTypes.DATE,
+    creationDate: DataTypes.DATE,
+  }, {
+    timestamps: false
+  });
 
-var util = require('../../components/util');
 
-var _ = require('lodash');
-
-var db = require('../../sqldb');
-var DeviceHistoryStatus = db.DeviceHistoryStatus;
-
-/**
- **  Filter devices by status
- **/
-exports.show = function(req, res) {
-  db.page(DeviceHistoryStatus, req.query).then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+  return model;
 }

@@ -42,11 +42,7 @@ Configure
 ```
 # Set the environment variables
 # If you prefer, please record them in the .bash_profile or in the initialization script.
-export MYSQL_HOST=mysql_addres
-export MYSQL_PORT=3306
-export MYSQL_USER=user
-export MYSQL_PASSWORD=pass
-export MYSQL_DATABASE=IOTDB
+export MYSQL_URI=mysql://user:pass@host:port/database
 ```
 
 Quick run
@@ -85,11 +81,7 @@ Configuration of Meccano IoT Web Console is simple. You should configure the ./c
 default:
   seedDB: true
   mysql:
-    host: 'iotdb_hostname'
-    port: 3306
-    user: 'user'
-    password: 'password'
-    database: 'IOTDB'
+    uri: 'mysql://user:pass@host:port/database'
 ```
 
 Each configuration parameter have the corresponding environment variable. They'll be better explained in the next session.

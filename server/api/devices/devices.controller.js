@@ -19,82 +19,35 @@
 
 'use strict';
 var _ = require('lodash');
-var pool = require('../../config/mysql');
+var util = require('../../components/util');
 
-exports.find = function(req, res) {
-  var size = parseInt(req.query.size || req.query.s || 10);
-  delete req.query.size;
-  delete req.query.s;
-  var page = parseInt(req.query.page || req.query.p || 1);
-  delete req.query.page;
-  delete req.query.p;
-  var offset = (page -1) * size;
+var db = require('../../sqldb');
 
-  query(req.query, offset, size, function(error, result, fields) {
-    if (error) {
-      console.error(error);
-      res.status(500).json({
-        'operation': 'GET',
-        'status': 'INTERNAL_ERROR',
-        'cause': error
-      });
-      return;
-    }
-    count(req.query, function(error, resultCount, fields) {
-      if (error) {
-        console.error(error);
-        res.status(500).json({
-          'operation': 'GET',
-          'status': 'INTERNAL_ERROR',
-          'cause': error
-        });
-        return;
-      }
-      res.json({
-        data: result,
-        page: {
-          size: size,
-          totalElements: resultCount[0].totalElements,
-          totalPages: Math.ceil(resultCount[0].totalElements / size),
-          number: page
-        }
-      });
-    });
-  });
+var Registration = db.Registration;
+var Announcement = db.Announcement;
+
+exports.show = function(req, res) {
+  db.page(Registration, req.query)
+  .then(util.respondWithResult(res))
+  .catch(util.handleError(res));
 }
 
-function query(params, offset, limit, cb) {
-  _query(false, params, offset, limit, cb);
-}
 
-function count(params, cb) {
-  _query(true, params, null, null, cb);
-}
-
-function _query(count, params, offset, limit, cb) {
-
-  var sql = 'select ' + (count ? 'count(*) as totalElements' : '*');
-  sql += ' from `DeviceStatus` ';
-  if(! _.isEmpty(params)) sql += 'where ? ';
-  sql += (count ? '' : ' limit ? offset ?');
-
-  var queryParamns = [];
-  if (!_.isEmpty(params)) {
-    queryParamns.push(params);
-  }
-  if (!count) {
-    queryParamns.push(limit,offset);
-  }
-
-  pool.query(sql, queryParamns, cb);
+exports.load = function(req, res) {
+  Registration.findOne({
+      where: req.params
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }
 
 /**
  * Saves the object to the database
  */
 exports.saveRegistration = function(req, res) {
+
   console.log("Persisting registration information to the database...");
-  console.log(req.body)
   var op = pool.query('insert into `Registration` set ?', req.body, function(error, result) {
     if (error) {
       console.error('Error persisting object:', error);
@@ -111,143 +64,44 @@ exports.saveRegistration = function(req, res) {
       });
     }
   });
+
+  return Registration.create(req.body, {
+      logging: true
+    }).then(util.respondWithResult(res, 201))
+    .catch(util.handleError(res));
 }
 
+// Updates an existing Thing in the DB
 exports.update = function(req, res) {
-
-  var newValues = {};
-  if (req.body.device_group) {
-    newValues.device_group = req.body.device_group;
+  if (req.body.device) {
+    delete req.body.device;
   }
-  if (req.body.memo) {
-    newValues.memo = req.body.memo;
-  }
-
-
-  var op = pool.query('update Registration set ? where `device` = ? ', [newValues, req.params.device], function(error, result) {
-    if (error) {
-      console.error('Error persisting object:', error);
-      res.status(500).json({
-        operation: 'PUT',
-        status: 'INTERNAL_ERROR',
-        cause: error
-      });
-    } else {
-      if (result.affectedRows > 0) {
-        res.status(200).json({
-          operation: 'PUT',
-          status: 'OK'
-        });
-      } else {
-        res.status(404).json({
-          operation: 'PUT',
-          status: 'UNKNOWN_DEVICE'
-        });
+  Registration.find({
+      where: {
+        device: req.params.device
       }
-    }
-  });
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.saveUpdates(req.body))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }
 
-/**
- * Get the object to the database
- */
-exports.load = function(req, res) {
-  var device = req.params.device;
-  var op = pool.query('select * from `DeviceStatus` where `device` = ?', device, function(error, result, fields) {
-    if (error) {
-      res.status(500).json({
-        'operation': 'GET',
-        'status': 'INTERNAL_ERROR',
-        'cause': error
-      });
-      return;
-    }
-    if (result.length === 0) {
-      // Unknown device
-      res.status(404).json({
-        'operation': 'GET',
-        'device': 'UNKNOWN',
-        'device_group': 'UNKNOWN',
-        'status': 'UNKNOWN_DEVICE'
-      });
-    } else {
-      var r = result[0];
-      var response = {
-        'operation': 'GET',
-        'device': r.device,
-        'device_group': r.device_group,
-        'submissionDate': r.creationDate,
-        'registrationDate': r.registrationDate,
-        'status': (r.registrationDate !== null) ? 'REGISTERED' : 'WAITING_ACKNOWLEDGEMENT',
-        'memo': r.memo
-      };
-      res.status(200).json(r);
-    }
-  });
-}
+// Deletes a Thing from the DB
+exports.destroy = function(req, res) {
 
-/**
- * Unregister Device
- */
-exports.deleteRegistration = function(req, res) {
-  var device = req.params.device;
-  deleteAnnouncement(device);
-  console.log("Unregistering device...");
-  var op = pool.query('delete from `Registration` where `device` = ?', device, function(error, result, fields) {
-    if (error) {
-      res.json({
-        'operation': 'DELETE',
-        'status': 'INTERNAL_ERROR',
-        'cause': error
-      });
-    } else {
-      // Unknown device
-      res.json({
-        'operation': 'DELETE',
-        'device': device,
-        'status': 'UNREGISTERED'
-      });
-    }
-  });
-}
-
-/**
- * Unregister Device
- */
-function deleteAnnouncement(device) {
-  console.log("Removing Announcement data for device " + device + "...");
-  var op = pool.query('delete from `Announcement` where `device` = ?', device, function(error, result, fields) {
-    if (error) {
-      console.error("Announcement data could not be removed.",error);
-    } else {
-      console.log("Announcement data removed from database.");
-    }
-  });
-}
-
-
-/**
- * Acknowledge registration
- */
-exports.acknowledgeRegistration = function(req, res) {
-  console.log("Acknowledging registration information...");
-  var qu = pool.query("select * from Registration where `device` = ?", req.body.device, function(errorq, results, fields) {
-    if (!errorq && results.length === 1) {
-      var op = pool.query({
-          sql: 'update `Registration` set `registrationDate` = ? where `device` = ? ',
-          values: [(new Date()), req.body.device]
-        },
-        function(error, result) {
-          if (error) {
-            console.error('Error updating object:', error);
-            res.send("INTERNAL_ERROR");
-          } else {
-            console.log("Data successfuly updated to database...");
-            res.send(results[0].device_group);
-          }
-        });
-    } else {
-      res.json("UNKNOWN_DEVICE");
-    }
-  });
+  Announcement.destroy({
+      where: {
+        device: req.params.device
+      }
+    }).then(function() {
+      return Registration.find({
+        where: {
+          device: req.params.device
+        }
+      })
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.removeEntity(res))
+    .catch(util.handleError(res));
 }
