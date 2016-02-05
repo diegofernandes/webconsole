@@ -1,0 +1,101 @@
+<div class="panel panel-default">
+	<div class="panel-heading">Last Announcements of the devices</div>
+	<div class="panel-body" ng-show="currentState.name === 'announcements.list'">
+		
+      <form class="form-inline" ng-submit="filterAnnouncements(parametersFilter)">  
+        <!-- Text input search by ID device -->
+        <div class="form-group">
+          <label class="sr-only" for="deviceId">Device</label>
+          <input type="text" 
+                 class="form-control" 
+                 id="deviceId" 
+                 placeholder="Device ID"
+                 ng-model="parametersFilter.device">
+        </div>
+
+        <!-- Text input search devices by group -->
+        <div class="form-group" >
+          <label class="sr-only" for="deviceGroup">Group</label>
+          <input type="text" 
+                 class="form-control" 
+                 id="deviceGroup" 
+                 placeholder="Device Group"
+                 ng-model="parametersFilter.device_group">
+        </div>
+
+        <!-- Text input search devices by channel -->
+        <div class="form-group" >
+          <label class="sr-only" for="channel">Channel</label>
+          <input type="text" 
+                 class="form-control" 
+                 id="channel" 
+                 placeholder="Channel"
+                 ng-model="parametersFilter.channel">
+        </div>
+
+        <!-- Text input search devices by sensor -->
+        <div class="form-group" >
+          <label class="sr-only" for="sensor">Sensor</label>
+          <input type="text" 
+                 class="form-control" 
+                 id="sensor" 
+                 placeholder="Sensor"
+                 ng-model="parametersFilter.sensor">
+        </div>
+
+        <!-- Text input search devices by sensor -->
+        <div class="form-group" >
+          <label class="sr-only" for="data">Data</label>
+          <input type="text" 
+                 class="form-control" 
+                 id="data" 
+                 placeholder="Data"
+                 ng-model="parametersFilter.data">
+        </div>
+
+        <!-- Submit button -->
+        <button class="btn btn-default" type="submit" aria-label="Register new device">
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+      </form>
+	</div>
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th width="200px">Device</th>
+				<th>Channel</th>
+				<th width="100px">Group</th>
+				<th width="100px">Sensor</th>
+				<th width="100px">Data</th>
+				<th>Creation Date</th>
+			</tr>
+		</thead>
+		<tbody>
+	        <tr ng-show="announcements.length == 0 && isLoading === false">
+	          <td class="text-danger text-center" colspan="6">Device not found.</td>
+	        </tr>
+			<tr ng-show="isLoading">
+				<td colspan="6" class="text-center">
+					<img src="./assets/images/loading_gif.gif" style="height: 30px">
+				</td>
+			</tr>
+			<tr ng-repeat="announcement in announcements">
+				<td>{{ announcement.device }}</td>
+				<td>{{ announcement.channel }}</td>
+				<td>{{ announcement.device_group }}</td>
+				<td>{{ announcement.sensor }}</td>
+				<td>{{ announcement.data }}</td>
+				<td>{{ announcement.creationDate | date: 'short' }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="panel-body">
+		<p class="text-center">
+			<button class="btn btn-default btn-xs" 
+					ng-click="loadMore(parametersFilter)"
+					ng-show="currentState.name === 'announcements.list'">
+					Load More Announcements...
+			</button>		
+		</p>
+	</div>
+</div>

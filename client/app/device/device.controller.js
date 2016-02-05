@@ -15,7 +15,6 @@ angular.module('meccanoAdminApp')
     $scope.registeredDevices = {};
 
 
-
     /** Function to load devices by device service
       * @param parameters {object}
       * @param status
@@ -25,6 +24,7 @@ angular.module('meccanoAdminApp')
       * @param size
       **/
     function getDevices (parameters){
+      $scope.isLoading = true;
       $scope.Devices.loadDevices().get(parameters, function (res){
 
         // Total Items to pagination
@@ -37,10 +37,13 @@ angular.module('meccanoAdminApp')
           $scope.registeredDevices.data.push(res);
         }
 
+        $scope.isLoading = false;
+
       }, function (err){
         // Erase registeredDevices array if no device was found
         if (err.status === 404) {
           $scope.registeredDevices.data = [];
+          $scope.isLoading = false;
         }
       });
     };
@@ -67,7 +70,7 @@ angular.module('meccanoAdminApp')
     $scope.search = function(parameters){
       parameters.page = 1;
 
-      $state.go('device.list', parameters, {reload: true});
+      $state.go($state.current, parameters, {reload: true});
 
     }
     $scope.pageChanged = function (parameters) {
@@ -119,13 +122,13 @@ angular.module('meccanoAdminApp')
   };
 })
 
-.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices) {
+.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal) {
 
-    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-  $scope.series = ['Series A', 'Series B'];
+  $scope.labels = ["January"];
+  // $scope.series = ['Series A', 'Series B'];
   $scope.data = [
-    [65, 59, 80, 81, 56, 55, 40],
-    [28, 48, 40, 19, 86, 27, 90]
+    [65, 10],
+    [28, -20]
   ];
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
@@ -133,13 +136,54 @@ angular.module('meccanoAdminApp')
 
   $scope.Devices = Devices;
 
-  $scope.destroy = function() {
 
-    Devices.loadDevices().delete({device: $scope.Devices.selected.device});
-    $state.go('device.list', {}, {reload: true});
+  $scope.destroy = function (device) {
+    console.log(device)
+
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: './app/device/delete.confirm.html',
+      controller: 'DeleteDeviceCtrl',
+      size: 'xs',
+      resolve: {
+        device: function () {
+          return device;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $state.go($state.current, {}, {reload: true});
+      $scope.Devices.selected = null;
+    }, function () {
+      
+    });
   };
-  $scope.cancel = function() {
-    $state.go('device.list', $stateParams);
+
+  $scope.toggleAnimation = function () {
+    $scope.animationsEnabled = !$scope.animationsEnabled;
+  };
+
+
+})
+.controller('DeleteDeviceCtrl', function ($scope, $uibModalInstance, device, Devices, $timeout){
+
+  console.log(device);
+
+  $scope.destroy = function() {
+    Devices.loadDevices().delete({device: device.device});
+    
+    $timeout(function(){
+      $uibModalInstance.close();
+    }, 500);
+
+
+  };
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
   };
 
 });
+
+

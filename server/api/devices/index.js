@@ -22,6 +22,7 @@
 var express = require('express');
 var devicesController = require('./devices.controller');
 var statisticsController = require('./statistics.controller');
+var activityController = require('./activity.controller');
 var auth = require('../../auth/auth.service');
 
 var router = express.Router();

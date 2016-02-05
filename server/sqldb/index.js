@@ -7,19 +7,22 @@
 var path = require('path');
 var config = require('../config/environment');
 var Sequelize = require('sequelize');
+var Promise = require("bluebird");
 
 var db = {
-  sequelize: new Sequelize(config.sequelize.uri, config.sequelize.options)
+  sequelize: new Sequelize(config.mysql.uri, config.mysql.options)
 };
 
 // Insert models below
-db.LastAnnouncements = db.sequelize.import('../api/lastAnnouncements/lastAnnouncements.model');
-db.DeviceStatus = db.sequelize.import('../api/deviceStatus/deviceStatus.model');
-db.Registration = db.sequelize.import('../api/devices/registration.model');
-db.Announcement = db.sequelize.import('../api/devices/announcement.model');
-db.DeviceStatistics = db.sequelize.import('../api/devices/deviceStatistics.model');
-db.Message = db.sequelize.import('../api/messages/messages.model');
-db.User = db.sequelize.import('../api/user/user.model');
+db.LastAnnouncements = db.sequelize.import('../model/lastAnnouncements.model');
+db.DeviceStatus = db.sequelize.import('../model/deviceStatus.model');
+db.Registration = db.sequelize.import('../model/registration.model');
+db.Announcement = db.sequelize.import('../model/announcement.model');
+db.DeviceStatistics = db.sequelize.import('../model/deviceStatistics.model');
+db.Message = db.sequelize.import('../model/messages.model');
+db.User = db.sequelize.import('../model/user.model');
+db.DeviceHistoryStatus = db.sequelize.import('../model/deviceHistoryStatus.model');
+db.DeviceActivity = db.sequelize.import('../model/deviceActivity.model');
 
 
 db.page = function(Model, params) {

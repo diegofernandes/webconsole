@@ -124,7 +124,7 @@ exports.changePassword = function(req, res, next) {
 exports.me = function(req, res, next) {
   var userId = req.user.ID;
 
-  return User.find({
+  User.find({
       where: {
         ID: userId
       },

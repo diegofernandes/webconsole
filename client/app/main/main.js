@@ -8,8 +8,8 @@ angular.module('meccanoAdminApp')
         abstract: true,
         templateUrl: 'app/main/main.html'
       })
-      .state('main.dash', {
-        url: '?status',
+      .state('main.dash', { 
+        url: '?status&device&device_group&page&size&sensor&data&creationdate',
         authenticate: true,
         views: {
           'charts@main': {
@@ -17,8 +17,8 @@ angular.module('meccanoAdminApp')
             controller: 'MainCtrl'
           },
           'data@main': {
-            templateUrl: 'app/device/device.list.html',
-            controller: 'DeviceListCtrl'
+            templateUrl: 'app/announcements/announcements.list.html',
+            controller: 'AnnouncementsCtrl'
           }
         }
       });

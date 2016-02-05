@@ -51,9 +51,9 @@ function isAuthenticated() {
               return res.status(401).end();
             }
             req.user = user;
-
+            next();
+            return null;
           })
-          .then(next)
           .catch(function(err) {
             next(err);
           });
@@ -94,7 +94,7 @@ function signToken(id) {
   return jwt.sign({
     ID: id
   }, config.secrets.session, {
-    expiresIn: '5m'
+    expiresIn: config.secrets.sessionTime
   });
 }
 
