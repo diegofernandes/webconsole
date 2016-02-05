@@ -26,12 +26,10 @@ angular.module('meccanoAdminApp')
 
     loadDeviceStatus();
 
+    // Reload chart pie in five minutes
     $interval(function(){
       loadDeviceStatus();
-    }, 300000);
-
-
-    
+    }, 300000);    
 
     $scope.deviceStatusHistory = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -48,7 +46,7 @@ angular.module('meccanoAdminApp')
     $scope.onClick = function(points, evt) {
       console.log(points, evt);
 
-      $state.go('main.dash',{status:points[0].label},{reload:true});
+      $state.go('device.list',{status:points[0].label});
     };
 
   });
