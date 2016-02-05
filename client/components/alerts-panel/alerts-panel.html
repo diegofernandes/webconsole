@@ -1,0 +1,8 @@
+<div class="container" ng-controller="AlertsPanelCtrl">
+  <uib-alert ng-repeat="alert in alertsPanel.alerts" type="{{alert.type}}" dismiss-on-timeout="120000" close="closeAlert($index)">
+    <span class="glyphicon" ng-class="{'glyphicon-exclamation-sign': alert.type === 'danger', 'glyphicon-warning-sign': alert.type === 'warning', 'glyphicon-ok': alert.type === 'success'}" aria-hidden="true"></span>
+    <span class="sr-only">{{alert.type}}:</span>
+    <strong>{{alert.title}}</strong>
+    {{alert.msg}}
+  </uib-alert>
+</div>

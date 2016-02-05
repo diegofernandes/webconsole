@@ -19,18 +19,23 @@
 
 'use strict';
 
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('Registration', {
+    device: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: false
+    },
+    device_group: DataTypes.STRING,
+    memo: DataTypes.STRING,
+    registrationDate: DataTypes.DATE,
+    creationDate: DataTypes.DATE
+  },{
+    freezeTableName: true,
+    timestamps:false
+  });
 
-var util = require('../../components/util');
 
-var _ = require('lodash');
-
-var db = require('../../sqldb');
-var DeviceHistoryStatus = db.DeviceHistoryStatus;
-
-/**
- **  Filter devices by status
- **/
-exports.show = function(req, res) {
-  db.page(DeviceHistoryStatus, req.query).then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+  return model;
 }
