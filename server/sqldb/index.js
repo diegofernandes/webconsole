@@ -35,19 +35,17 @@ db.page = function(Model, params) {
   var offset = (page - 1) * size;
 
   return Promise.join(
-    function() {
-      return Model.findAll({
-        where: params,
-        offset: offset,
-        limit: size
-      })
-    },
-    function() {
-      return Model.count({
-        where: params
-      })
-    },
+
+    Model.findAll({
+      where: params,
+      offset: offset,
+      limit: size
+    }),
+    Model.count({
+      where: params
+    }),
     function(data, total) {
+      console.trace(data, total);
       return {
         data: data,
         page: {
@@ -59,6 +57,5 @@ db.page = function(Model, params) {
       };
     });
 }
-
 
 module.exports = db;
