@@ -122,6 +122,9 @@ exports.changePassword = function(req, res, next) {
  * Get my info
  */
 exports.me = function(req, res, next) {
+  if(!req.user || !req.user.ID){
+    return next();
+  }
   var userId = req.user.ID;
 
   User.find({
