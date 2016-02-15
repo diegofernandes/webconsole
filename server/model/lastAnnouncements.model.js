@@ -36,7 +36,10 @@ module.exports = function(sequelize, DataTypes) {
     creationDate: DataTypes.DATE
   }, {
     freezeTableName: true,
-    timestamps: false
+    timestamps: false,
+    defaultScope:{
+      order:'creationDate DESC'
+    }
   });
 
   model.removeAttribute('id');
