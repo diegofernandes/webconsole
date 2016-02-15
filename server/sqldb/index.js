@@ -45,7 +45,6 @@ db.page = function(Model, params) {
       where: params
     }),
     function(data, total) {
-      console.trace(data, total);
       return {
         data: data,
         page: {
