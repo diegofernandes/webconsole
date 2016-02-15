@@ -9,6 +9,7 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 router.get('/', auth.isAuthenticated(),controller.count);
+router.get('/status',auth.isAuthenticated(), controller.show);
 router.get('/status/:status',auth.isAuthenticated(), controller.show);
 router.get('/history', auth.isAuthenticated(), historyStatusController.show );
 
