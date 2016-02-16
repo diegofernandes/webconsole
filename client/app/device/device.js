@@ -25,14 +25,18 @@ angular.module('meccanoAdminApp')
       .state('device.register', {
         url: '/new',
         authenticate: true,
-        templateUrl: 'app/device/device.edit.html',
-        controller: 'DeviceRegisterCtrl'
+        views: {
+          'authorizeDevice': {
+            templateUrl: 'app/device/device.edit.html',
+            controller: 'DeviceRegisterCtrl'
+          }
+        }
       })
       .state('device.edit', {
         url: '/{deviceId}/edit',
         authenticate: true,
         views: {
-          'index': {
+          'authorizeDevice': {
             templateUrl: 'app/device/device.edit.html',
             controller: 'DeviceEditCtrl'
           }

@@ -47,11 +47,11 @@ exports.load = function(req, res) {
  */
 exports.saveRegistration = function(req, res) {
 
+
   return Registration.create(req.body, {
       logging: true
     }).then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));
-
 }
 
 // Updates an existing Thing in the DB
