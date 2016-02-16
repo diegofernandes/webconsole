@@ -36,6 +36,6 @@ router.put('/:device', auth.isAuthenticated(),devicesController.update);
 router.patch('/:device', auth.isAuthenticated(),devicesController.update);
 
 router.get('/:device/statistics',statisticsController.statistics);
-
+router.get('/:device/activity',activityController.show);
 
 module.exports = router;
