@@ -14,7 +14,6 @@ angular.module('meccanoAdminApp')
 
     $scope.registeredDevices = {};
 
-
     /** Function to load devices by device service
       * @param parameters {object}
       * @param status
@@ -24,21 +23,17 @@ angular.module('meccanoAdminApp')
       * @param size
       **/
     function getDevices (parameters){
+      // Start load gif
       $scope.isLoading = true;
+
       $scope.Devices.loadDevices().get(parameters, function (res){
 
         // Total Items to pagination
-        if (res.data){
-          $scope.totalItems = res.page.totalElements;
-          $scope.registeredDevices.data = res.data;
-        } else {
-          $scope.totalItems = 1;
-          $scope.registeredDevices.data = [];
-          $scope.registeredDevices.data.push(res);
-        }
+        $scope.totalItems = res.page.totalElements;
+        $scope.registeredDevices.data = res.data;
 
+        // Stop load gif
         $scope.isLoading = false;
-
       }, function (err){
         // Erase registeredDevices array if no device was found
         if (err.status === 404) {
@@ -48,6 +43,7 @@ angular.module('meccanoAdminApp')
       });
     };
 
+    // Load devices by the parameters from url
     getDevices($state.params);
 
     /**
@@ -69,14 +65,12 @@ angular.module('meccanoAdminApp')
       */
     $scope.search = function(parameters){
       parameters.page = 1;
-
       $state.go($state.current, parameters, {reload: true});
-
-    }
+    };
     $scope.pageChanged = function (parameters) {
       parameters.page = $scope.pageNumber;
       getDevices(parameters);
-    }
+    };
   })
 
 .controller('DeviceRegisterCtrl', function($scope, $state, $stateParams, Devices) {
@@ -85,7 +79,7 @@ angular.module('meccanoAdminApp')
   $scope.Devices = Devices;
 
   $scope.save = function() {
-    Devices.loadDevices().post($scope.Device.selected, function (res){
+    Devices.devices().post($scope.Device.selected, function (res){
       console.log(res)
     }, function (err){
       console.log(err)
@@ -115,7 +109,7 @@ angular.module('meccanoAdminApp')
   }
 
   $scope.save = function() {
-    Devices.loadDevices().update({device: $state.params.deviceId}, $scope.Device.selected);
+    Devices.devices().update({device: $state.params.deviceId}, $scope.Device.selected);
     $state.go('device.list', {}, {reload: true});
   };
   $scope.destroy = function() {
@@ -163,7 +157,7 @@ angular.module('meccanoAdminApp')
       $state.go($state.current, {}, {reload: true});
       $scope.Devices.selected = null;
     }, function () {
-      
+
     });
   };
 
@@ -178,8 +172,8 @@ angular.module('meccanoAdminApp')
   console.log(device);
 
   $scope.destroy = function() {
-    Devices.loadDevices().delete({device: device.device});
-    
+    Devices.devices().delete({device: device.device});
+
     $timeout(function(){
       $uibModalInstance.close();
     }, 500);
@@ -192,5 +186,3 @@ angular.module('meccanoAdminApp')
   };
 
 });
-
-

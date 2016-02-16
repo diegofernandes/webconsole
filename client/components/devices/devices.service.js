@@ -4,11 +4,15 @@ angular.module('meccanoAdminApp')
   .factory('Devices', function ($resource) {
 
   	var self = {
-  		loadDevices: function(){
-  			return $resource('api/devices/:device', null, 
+      loadDevices: function () {
+        return $resource('api/deviceStatus/status/:status');
+      },
+  		devices: function(){
+  			return $resource('api/devices/:device', null,
   				{
   					'update': {method: 'PUT'},
-  					'delete': {method: 'DELETE'}
+  					'delete': {method: 'DELETE'},
+            'post': {method: 'POST'}
   				});
   		},
   		selected: null
@@ -16,9 +20,4 @@ angular.module('meccanoAdminApp')
 
   	return self;
 
-
-    // return $resource('api/devices/:device', {}, {
-    //   query: {method:'GET', params:{device:'@_device'}, isArray:true},
-    //   byStatus: {method: 'GET',params:{satus:'devices'}, isArray:true}
-    // });
   });

@@ -47,23 +47,6 @@ exports.load = function(req, res) {
  */
 exports.saveRegistration = function(req, res) {
 
-  console.log("Persisting registration information to the database...");
-  var op = pool.query('insert into `Registration` set ?', req.body, function(error, result) {
-    if (error) {
-      console.error('Error persisting object:', error);
-      res.status(500).json({
-        operation: 'POST',
-        status: 'INTERNAL_ERROR',
-        cause: error
-      });
-    } else {
-      console.log("Data successfuly persisted to database...");
-      res.status(200).json({
-        operation: 'POST',
-        status: 'WAITING_ACKNOWLEDGEMENT'
-      });
-    }
-  });
 
   return Registration.create(req.body, {
       logging: true
