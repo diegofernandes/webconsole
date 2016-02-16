@@ -7,7 +7,7 @@ angular.module('meccanoAdminApp')
       'state': 'device.list',
       'icon': 'glyphicon glyphicon-list-alt'
     },{
-      'title': 'Activities',
+      'title': 'Activity',
       'state': 'announcements.list',
       'icon': 'glyphicon glyphicon-signal'
     }];

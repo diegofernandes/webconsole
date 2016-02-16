@@ -5,6 +5,19 @@
 
     <p>Are you sure you want to delete the device?</p>
     <p>It will be available when connecting to the network again</p>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Infomations of Device
+      </div>
+      <div class="panel-body">
+        <p>Device: {{device.device}}</p>
+        <p>Group: {{device.device_group}}</p>
+        <p>Registration: {{device.registrationDate}}</p>
+        <p>Created: {{device.creationDate}}</p>
+        <p>Status: {{device.status}}</p>
+        <p>Memo: {{device.memo}}</p>
+      </div>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="destroy()">OK</button>
