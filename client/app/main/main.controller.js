@@ -1,16 +1,17 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('MainCtrl', function($scope, $interval, $state, DeviceStatus) {
+  .controller('MainCtrl', function($scope, $interval, $state, DeviceStatus, $filter) {
     $scope.lastAnnouncements = [];
 
     function loadDeviceStatus() {
       $scope.deviceStatus = {
         labels: [],
-        data: []
+        data: [],
+        colours:  [ '#d9534f','#5cb85c','#337ab7','#f0ad4e']
       };
       DeviceStatus.all().get({}, function(res) {
-        angular.forEach(res.data, function(item) {
+        angular.forEach(_.chain(res.data).sortBy('status').value(), function(item) {
           $scope.deviceStatus.labels.push(item.status);
           $scope.deviceStatus.data.push(item.count);
         });
@@ -20,10 +21,11 @@ angular.module('meccanoAdminApp')
       });
     };
 
-    // Load Statistics of Devices to populate the chart pie
+    // Load Statistics of Devices to populate the charts
     loadDeviceStatus();
+    loadDeviceStatusHistory();
 
-    // Reload chart pie in five minutes
+    // Reload charts in five minutes
     $interval(function() {
       loadDeviceStatus();
       loadDeviceStatusHistory();
@@ -36,7 +38,7 @@ angular.module('meccanoAdminApp')
         data: []
       };
 
-      DeviceStatus.history.get(function(resp) {
+      DeviceStatus.history().get({},function(resp) {
         var creationDateDefault = _.chain(resp.data).uniqBy('creationDate').reduce(function(result, item) {
           result.push({
             numberOfDevices: 0,
@@ -46,7 +48,9 @@ angular.module('meccanoAdminApp')
         }, []).value();
 
         var chart = {
-          labels: _.chain(resp.data).uniqBy('creationDate').map('creationDate').sort().value(),
+          labels: _.chain(resp.data).uniqBy('creationDate').map('creationDate').sort().map(function(date) {
+            return $filter('date')(date, 'shortTime');
+          }).value(),
           series: _.chain(resp.data).uniqBy('status').map('status').sort().value()
         };
         chart.data = _.reduce(chart.series, function(result, item) {
@@ -55,11 +59,10 @@ angular.module('meccanoAdminApp')
           }).unionBy(creationDateDefault, 'creationDate').sortBy('creationDate').map('numberOfDevices').value());
           return result;
         }, []);
-        $scope.deviceStatus = chart;
-
+        chart.colours=  [ '#d9534f','#5cb85c','#337ab7','#f0ad4e'];
+        $scope.deviceStatusHistory = chart;
       });
     }
-
 
     // Go to page Devices With selected status of the chart
     $scope.onClick = function(points, evt) {
