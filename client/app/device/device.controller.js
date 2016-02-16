@@ -67,6 +67,7 @@ angular.module('meccanoAdminApp')
       parameters.page = 1;
       $state.go($state.current, parameters, {reload: true});
     };
+
     $scope.pageChanged = function (parameters) {
       parameters.page = $scope.pageNumber;
       getDevices(parameters);
@@ -74,30 +75,19 @@ angular.module('meccanoAdminApp')
   })
 
 .controller('DeviceRegisterCtrl', function($scope, $state, $stateParams, Devices) {
-  // $scope.registration = new Registration();
 
   $scope.Devices = Devices;
 
   $scope.save = function() {
     Devices.devices().post($scope.Device.selected, function (res){
-      console.log(res)
+      $state.go('device.list', {}, {reload: true});
     }, function (err){
       console.log(err)
     });
-    $state.go('device.list', {}, {reload: true});
   };
-  // $scope.save = function() {
-  //   $scope.registration.$save().then(function(data) {
-  //     $state.go('device.list', $stateParams);
-  //   });
-  // };
-  // $scope.cancel = function() {
-  //   $state.go('device.list', $stateParams);
-  // };
 })
 
 .controller('DeviceEditCtrl', function($scope, Devices, $state, $stateParams) {
-
 
   $scope.Device = Devices;
 
@@ -106,7 +96,7 @@ angular.module('meccanoAdminApp')
     Devices.loadDevices().get({device: $state.params.deviceId}, function (res){
       $scope.Device.selected = res;
     });
-  }
+  };
 
   $scope.save = function() {
     Devices.devices().update({device: $state.params.deviceId}, $scope.Device.selected);
@@ -137,10 +127,8 @@ angular.module('meccanoAdminApp')
 
   $scope.Devices = Devices;
 
-
+  // Open Modal to confirm the de
   $scope.destroy = function (device) {
-    console.log(device)
-
     var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       templateUrl: './app/device/delete.confirm.html',
@@ -169,18 +157,19 @@ angular.module('meccanoAdminApp')
 })
 .controller('DeleteDeviceCtrl', function ($scope, $uibModalInstance, device, Devices, $timeout){
 
-  console.log(device);
+  // Device info to confirm delete
+  $scope.device = device;
 
+  // Delete Device
   $scope.destroy = function() {
     Devices.devices().delete({device: device.device});
 
     $timeout(function(){
       $uibModalInstance.close();
     }, 500);
-
-
   };
 
+  // Close modal without do nothing
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
