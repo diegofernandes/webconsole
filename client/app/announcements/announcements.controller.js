@@ -9,9 +9,6 @@ angular.module('meccanoAdminApp')
 
 		$scope.currentState = $state.current;
 
-		console.log($scope.currentState)
-
-
 		/** function to load last annoucements
 		  * @param parameters {object}
 		  * @param page
@@ -27,49 +24,57 @@ angular.module('meccanoAdminApp')
 		function loadAnnouncements (parameters, clearArray){
 
 			clearArray ? $scope.announcements = [] : false;
+
+			// Start load Gif
 			$scope.isLoading = true;
 
 			Announcements.lastAnnouncements().get(parameters, function (res){
-				
+				// Populate Array to show last announcements
 				angular.forEach(res.data, function (item){
 					$scope.announcements.push(item);
 				});
+				// Stop load Gif
 				$scope.isLoading = false;
 
 			}, function (err){
 				console.log(err);
+				// Stop load Gif
 				$scope.isLoading = false;
 			});
+		};
+		// Validate state to apply interval to reload grif of announcements
+		if ($state.current.name === "main.dash"){
+			$scope.parametersFilter.size = 5;
+			reloadGrid();
 		};
 
 		// Load Announcements in load Controller with parameter passed in the url
 		loadAnnouncements($state.params, true);
 
-		if ($state.current.name === "main.dash"){
-			reloadGrid();
-		} 
-
-
+		// Reload information of grid in five minutes
 		function reloadGrid (){
 			$interval(function(){
 				loadAnnouncements({}, true);
-			}, 300000);	
-		}
+			}, 300000);
+		};
 
-
-		$scope.filterAnnouncements = function (parameters){	
+		// Filter announcements by inputs of grid
+		$scope.filterAnnouncements = function (parameters){
 			parameters.page = 1;
-
 			$state.go($state.current, parameters, {reload: true});
 		};
 
+		// Button to load more annoucements
 		$scope.loadMore = function (parameters){
 
+			// Set incrementation to get next page of announcements
 			if (parameters.page === undefined){
 				parameters.page = 1;
 			} else {
-				parameters.page += 1;				
+				parameters.page += 1;
 			}
+
+			// get annoucements
 			loadAnnouncements(parameters);
 		}
 	});

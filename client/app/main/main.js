@@ -8,7 +8,7 @@ angular.module('meccanoAdminApp')
         abstract: true,
         templateUrl: 'app/main/main.html'
       })
-      .state('main.dash', { 
+      .state('main.dash', {
         url: '?status&device&device_group&page&size&sensor&data&creationdate',
         authenticate: true,
         views: {
