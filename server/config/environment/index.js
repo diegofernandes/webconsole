@@ -26,21 +26,18 @@ var conf = yamlConfig.load(process.env.CONFIG_FILE, process.env.NODE_ENV);
 
 // Load other configuration from environment or config file
 process.env.PORT = process.env.PORT || conf.port;
-process.env.ADDRESS = process.env.ADDRESS || conf.address;
-process.env.TZ = process.env.TZ ||  conf.timezone || 'Brazil/East';
-process.env.SEED_DB = process.env.SEED_DB || false;
+process.env.ADDRESS = process.env.ADDRESS || conf.address || 'localhost';
+process.env.SEED_DB = process.env.SEED_DB || conf.seedDB || false;
 process.env.MYSQL_URI = process.env.MYSQL_URI || conf.mysql.uri;
 
 console.log();
 console.log("===================================================================");
-console.log("*** Meccano IoT Gateway Configuration ")
+console.log("*** Meccano IoT Gateway Configuration ***")
 console.log("NODE_ENV: " + process.env.NODE_ENV);
 console.log("CONFIG_FILE: " + process.env.CONFIG_FILE);
 console.log("PORT: " + process.env.PORT);
 console.log("ADDRESS: " + process.env.ADDRESS);
-console.log("TZ: " + process.env.TZ);
 console.log("SEED_DB: " + process.env.SEED_DB);
-console.log("===");
 console.log("MYSQL_URI: " + process.env.MYSQL_URI);
 console.log("===================================================================");
 console.log();
@@ -48,7 +45,6 @@ console.log();
 // Merge of configuration (environment + yaml)
 conf.port = process.env.PORT;
 conf.address = process.env.ADDRESS;
-conf.timezone = process.env.TZ;
 conf.seedDB = process.env.SEED_DB;
 conf.mysql.uri = process.env.MYSQL_URI;
 
