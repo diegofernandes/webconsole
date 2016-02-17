@@ -11,7 +11,7 @@
     "angular-cookies": ">=1.4.0",
     "angular-sanitize": ">=1.4.0",
     "font-awesome": ">=4.1.0",
-    "lodash": "~2.4.1",
+    "lodash": "^4.4.0",
     "angular-ui-router": "~0.2.15",
     "angular-chart.js": "~0.8.8",
     "angular-bootstrap": "~0.14.3"

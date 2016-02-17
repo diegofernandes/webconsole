@@ -31,6 +31,8 @@ var DeviceHistoryStatus = db.DeviceHistoryStatus;
  **  Filter devices by status
  **/
 exports.show = function(req, res) {
-  db.page(DeviceHistoryStatus, req.query).then(util.respondWithResult(res))
+  var size = parseInt(req.query.size || 20);
+  delete  req.query.size
+  DeviceHistoryStatus.findAll({where:req.query,limit:size}).then(util.respondWithResult(res))
     .catch(util.handleError(res));
 }

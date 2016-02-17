@@ -7,7 +7,7 @@
 var path = require('path');
 var config = require('../config/environment');
 var Sequelize = require('sequelize');
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 
 var db = {
   sequelize: new Sequelize(config.mysql.uri, config.mysql.options)

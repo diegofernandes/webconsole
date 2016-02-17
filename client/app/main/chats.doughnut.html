@@ -1,20 +1,27 @@
 <div class="col-lg-6 col-sm-12">
-  <canvas id="doughnut" 
-  			class="chart chart-doughnut" 
-  			chart-data="deviceStatus.data" 
-  			chart-legend="true" 
-  			chart-labels="deviceStatus.labels" 
-  			chart-click="onClick" 
+  <canvas id="doughnut"
+  			class="chart chart-doughnut"
+  			chart-data="deviceStatus.data"
+  			chart-legend="true"
+  			chart-labels="deviceStatus.labels"
+  			chart-click="onClick"
   			chart-colours="deviceStatus.colours">
   	</canvas>
 </div>
 <div class="col-lg-6 col-sm-12">
-  <canvas id="line" 
-  			class="chart chart-line" 
-  			chart-data="deviceStatusHistory.data" 
-  			chart-labels="deviceStatusHistory.labels" 
-  			chart-legend="true" 
-  			chart-series="deviceStatusHistory.series" 
+  <div class="btn-group">
+        <label class="btn btn-default" ng-model="status.NORMAL" uib-btn-radio="'NORMAL'" uib-btn-checkbox>Normal</label>
+        <label class="btn btn-default" ng-model="status.FAIL" uib-btn-radio="'FAIL'" uib-btn-checkbox>Fail</label>
+        <label class="btn btn-default" ng-model="status.WAITING_APPROVE" uib-btn-radio="'WAITING_APPROVE'" uib-btn-checkbox>Waiting Approve</label>
+        <label class="btn btn-default" ng-model="status.WARNING" uib-btn-radio="'WARNING'" uib-btn-checkbox>Warning</label>
+    </div>
+  <canvas id="line"
+  			class="chart chart-line"
+  			chart-data="deviceStatusHistory.data"
+  			chart-labels="deviceStatusHistory.labels"
+  			chart-legend="false"
+        chart-options="{datasetFill:true,scaleBeginAtZero:true}"
+  			chart-series="deviceStatusHistory.series"
   			chart-colours="deviceStatusHistory.colours">
   	</canvas>
 </div>
