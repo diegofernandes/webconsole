@@ -70,4 +70,4 @@ var all = {
  userRoles: ['guest', 'user', 'admin'],
 };
 
-module.exports = _.merge(all,conf || {});
+module.exports = _.merge(all, conf || {});
