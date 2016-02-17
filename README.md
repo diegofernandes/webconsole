@@ -114,3 +114,10 @@ The parameters bellow control the connection and behaviour of the RDBMS.
 - **MYSQL_DATABASE**: database name or instance id.
 
 - **MYSQL_CONNECTIONLIMIT**: maximum number of connections.
+
+
+### High Availability Setup (HA)
+
+Meccano Webconsole may be configured to High Availability in a simple way.
+You should configure two or more webconsole instances and load balance them.
+In most cases, the webconsole are grouped together with Meccano ServiceManager in the same instances/machines.
