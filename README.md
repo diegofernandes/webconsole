@@ -103,17 +103,7 @@ admin@admin.con/admin
 
 The parameters bellow control the connection and behaviour of the RDBMS.
 
-- **MYSQL_HOST**: database hostname or ip address.
-
-- **MYSQL_PORT**: database port.
-
-- **MYSQL_USER**: database user.
-
-- **MYSQL_PASSWORD**: database password.
-
-- **MYSQL_DATABASE**: database name or instance id.
-
-- **MYSQL_CONNECTIONLIMIT**: maximum number of connections.
+- **MYSQL_URI**: the uri connection string(`mysql://user:pass@host:port/database`).
 
 
 ### High Availability Setup (HA)
