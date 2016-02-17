@@ -19,20 +19,25 @@ if(!config.api.security){
 
 var sqldb = require('./sqldb');
 if (config.seedDB) {
-  require('./config/seed');
+  require('./config/seed')();
 }
 
+
+
 var express = require('express');
+
 
 // Setup server
 var app = express();
 var server = require('http').createServer(app);
+
 require('./config/express')(app);
 require('./routes')(app);
 
+
 // Start server
 function startServer() {
-  server.listen(config.port, config.ip, function() {
+  server.listen(config.port, config.address, function() {
     console.log('Meccano IoT Webconsole listening on %d, in %s mode', config.port, app.get('env'));
   });
 }
