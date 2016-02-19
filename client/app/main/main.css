@@ -28,3 +28,13 @@
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
 }
+
+
+@keyframes rotating {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    animation: rotating 5s linear infinite;
+}

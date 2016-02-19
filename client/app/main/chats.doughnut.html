@@ -15,6 +15,7 @@
         <label class="btn btn-default" ng-model="status.WAITING_APPROVE" uib-btn-radio="'WAITING_APPROVE'" uib-btn-checkbox>Waiting Approve</label>
         <label class="btn btn-default" ng-model="status.WARNING" uib-btn-radio="'WARNING'" uib-btn-checkbox>Warning</label>
     </div>
+    <button class="btn btn-default" ng-click="refresh()"><span class="glyphicon glyphicon-refresh spinner"></span></button>
   <canvas id="line"
   			class="chart chart-line"
   			chart-data="deviceStatusHistory.data"

@@ -18,11 +18,9 @@ angular.module('meccanoAdminApp')
         colours:  [ '#d9534f','#5cb85c','#337ab7','#f0ad4e']
       };
       DeviceStatus.all().get({}, function(res) {
-        angular.forEach(_.chain(res.data).sortBy('status').value(), function(item) {
-          $scope.deviceStatus.labels.push(item.status);
-          $scope.deviceStatus.data.push(item.count);
-          $scope.deviceStatus.colours = colours($scope.deviceStatus.labels);
-        });
+        $scope.deviceStatus.labels = _.keys(res.data);
+        $scope.deviceStatus.data = _.values(res.data);
+        $scope.deviceStatus.colours = colours($scope.deviceStatus.labels);
 
       }, function(err) {
         console.log(err);
@@ -32,11 +30,13 @@ angular.module('meccanoAdminApp')
     // Load Statistics of Devices to populate the charts
     loadDeviceStatus();
 
-    // Reload charts in five minutes
-    $interval(function() {
+    $scope.refresh = function() {
       loadDeviceStatus();
       loadDeviceStatusHistory();
-    }, 300000);
+    };
+
+    // Reload charts in five minutes
+    $interval($scope.refresh , 300000);
 
     function loadDeviceStatusHistory() {
       $scope.deviceStatusHistory = {

@@ -30,27 +30,16 @@ var DeviceStatus = db.DeviceStatus;
  **/
 exports.count = function(req, res) {
 
-  var sql = "select 'NORMAL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) <= ? " +
-    " union select 'WARNING' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) between ? and ? " +
-    " union select 'FAIL' as `status`, count(*) as `count` from `Announcement` where timestampdiff(minute, `lastAnnouncementDate`, now()) > 15 " +
-    " union select 'WAITING_APPROVE' as `status`, count(*) as `count` from `Registration` where `device_group` is null ";
-
-  return db.sequelize.query(sql, {
-      type: db.sequelize.QueryTypes.SELECT,
-      replacements: [
-        5, 6, 15, 15
-      ]
-    })
-    .then(function(result) {
-      res.json({
-        data: result,
-        page: {
-          size: result.length,
-          totalElements: result.length,
-          totalPages: 1,
-          number: 1
-        }
-      });
+  return DeviceStatus.findAll({
+      attributes: [
+        'status', [db.sequelize.fn('COUNT', db.sequelize.col('*')), 'numberOfDevices']
+      ],
+      group: 'status'
+    }).then(function(data) {
+      var result = _.chain(data).transform(function(result,item) {
+        return result[item.status] = item.dataValues.numberOfDevices;
+      },{NORMAL:0,FAIL:0,WARNING:0,WAITING_APPROVE:0}).value();
+      res.json({data: result});
     })
     .catch(util.handleError(res));
 
