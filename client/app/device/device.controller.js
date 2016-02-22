@@ -120,7 +120,7 @@ angular.module('meccanoAdminApp')
   };
   $scope.destroy = function() {
     $http.delete('api/device/' + $scope.device.device).then(function() {
-      $state.go('device.list', $stateParams);
+      $state.go('device.list', $stateParams,{reload: true});
     });
   };
   $scope.cancel = function() {
