@@ -28,7 +28,7 @@ var DeviceStatus = db.DeviceStatus;
 /**
  **  Count the number of devices for each status
  **/
-exports.count = function(req, res) {
+exports.index = function(req, res) {
 
   return DeviceStatus.findAll({
       attributes: [
