@@ -11,7 +11,7 @@
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
         Meccano IoT Web Console</a>
     </div>
-    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+    <div uib-collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" ng-show="isLoggedIn()">
           <a ui-sref="{{item.state}}">
