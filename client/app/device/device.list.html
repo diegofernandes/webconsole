@@ -2,13 +2,13 @@
     <div class="panel-heading">Devices</div>
     <div class="panel-body">
 
-      <form class="form-inline" ng-submit="search(parametersFilter)">  
+      <form class="form-inline" ng-submit="search(parametersFilter)">
         <!-- Text input search by ID device -->
         <div class="form-group">
           <label class="sr-only" for="deviceId">Device</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="deviceId" 
+          <input type="text"
+                 class="form-control"
+                 id="deviceId"
                  placeholder="Device ID"
                  ng-model="parametersFilter.device">
         </div>
@@ -16,9 +16,9 @@
         <!-- Text input search devices by group -->
         <div class="form-group" >
           <label class="sr-only" for="deviceGroup">Group</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="deviceGroup" 
+          <input type="text"
+                 class="form-control"
+                 id="deviceGroup"
                  placeholder="Device Group"
                  ng-model="parametersFilter.device_group">
         </div>
@@ -26,10 +26,10 @@
         <!-- Select input status of devices -->
         <div class="form-group">
           <label class="sr-only" for="deviceStatus">Device Status</label>
-          <select class="form-control" 
-                  id="deviceStatus" 
+          <select class="form-control"
+                  id="deviceStatus"
                   ng-model="parametersFilter.status"
-                  ng-change="search(parametersFilter)"> 
+                  ng-change="search(parametersFilter)">
             <option value="">ALL</option>
             <option ng-repeat="status in statusDevices"
                     value="{{ status }}">
@@ -67,8 +67,8 @@
             <img src="./assets/images/loading_gif.gif" style="height: 30px">
           </td>
         </tr>
-        <tr ng-repeat="device in registeredDevices.data" 
-            ng-click="Devices.selected = device" 
+        <tr ng-repeat="device in registeredDevices.data"
+            ng-click="showDetails(device)" 
             ng-class="{'selected-line': Devices.selected.device === device.device}">
           <td>{{device.device}}</td>
           <td>{{device.device_group}}</td>
@@ -82,17 +82,15 @@
     <div class="  panel-body">
       <!-- Pagination of devices -->
       <div class="text-center">
-        <uib-pagination class="pagination-sm" 
-                        total-items="totalItems" 
+        <uib-pagination class="pagination-sm"
+                        total-items="totalItems"
                         items-per-page="10"
-                        ng-model="pageNumber" 
-                        ng-change="pageChanged(parametersFilter)" 
-                        max-size="5" 
-                        boundary-link-numbers="true" 
+                        ng-model="pageNumber"
+                        ng-change="pageChanged(parametersFilter)"
+                        max-size="5"
+                        boundary-link-numbers="true"
                         rotate="true">
         </uib-pagination>
       </div>
     </div>
   </div>
-
-
