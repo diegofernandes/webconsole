@@ -32,7 +32,6 @@ module.exports = function(sequelize, DataTypes) {
     lastAnnouncementDate: DataTypes.DATE,
     elapsedMinutes: DataTypes.INTEGER,
     status: DataTypes.STRING
-
   }, {
     freezeTableName: true,
     timestamps: false
