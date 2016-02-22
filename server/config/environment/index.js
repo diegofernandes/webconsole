@@ -21,11 +21,15 @@ var path = require('path');
 var _ = require('lodash');
 var yamlConfig = require('node-yaml-config');
 
+// Set default node environment to development
+process.env.CONFIG_FILE = process.env.CONFIG_FILE ||  path.normalize(__dirname + '/../../../config/config.yml');
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 // Try loading the configuration file, if exists
 var conf = yamlConfig.load(process.env.CONFIG_FILE, process.env.NODE_ENV);
 
 // Load other configuration from environment or config file
-process.env.PORT = process.env.PORT || conf.port;
+process.env.PORT = process.env.PORT || conf.port || 9000;
 process.env.ADDRESS = process.env.ADDRESS || conf.address || 'localhost';
 process.env.SEED_DB = process.env.SEED_DB || conf.seedDB || false;
 process.env.MYSQL_URI = process.env.MYSQL_URI || conf.mysql.uri;
