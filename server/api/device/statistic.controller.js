@@ -24,7 +24,7 @@ var db = require('../../sqldb');
 
 var DeviceStatistics = db.DeviceStatistics;
 
-exports.statistics = function(req, res) {
+exports.index = function(req, res) {
   db.page(DeviceStatistics,req.query)
     .then(util.respondWithResult(res))
     .catch(util.handleError(res));
