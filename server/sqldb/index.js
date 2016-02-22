@@ -7,7 +7,7 @@
 var path = require('path');
 var config = require('../config/environment');
 var Sequelize = require('sequelize');
-var Promise = require('bluebird');
+var P = require('bluebird');
 
 var db = {
   sequelize: new Sequelize(config.mysql.uri, config.mysql.options)
@@ -34,7 +34,7 @@ db.page = function(Model, params) {
   delete params.p;
   var offset = (page - 1) * size;
 
-  return Promise.join(
+  return P.join(
 
     Model.findAll({
       where: params,
