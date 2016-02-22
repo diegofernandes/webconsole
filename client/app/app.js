@@ -26,7 +26,7 @@ angular.module('meccanoAdminApp', [
 
   })
 
-.factory('authInterceptor', function($rootScope, $q, $cookieStore, $location,alertsPanel) {
+.factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
   return {
     // Add authorization token to headers
     request: function(config) {
@@ -50,7 +50,6 @@ angular.module('meccanoAdminApp', [
     }
   };
 })
-
 .factory('alertInterceptor', function($rootScope, $q, $location,alertsPanel) {
   return {
     responseError: function(response) {
@@ -67,9 +66,8 @@ angular.module('meccanoAdminApp', [
         return $q.reject(response);
       }
     }
-  }
+  };
 })
-
 .run(function($rootScope, $location, Auth) {
   // Redirect to login if route requires auth and you're not logged in
   $rootScope.$on('$stateChangeStart', function(event, next) {

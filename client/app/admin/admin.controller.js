@@ -17,7 +17,7 @@ angular.module('meccanoAdminApp')
       });
     };
   })
-  .controller('AdminNewCtrl', function($scope, Auth, $state, $window) {
+  .controller('AdminNewCtrl', function($scope, Auth, $state) {
     $scope.user = {
       role: 'user'
     };

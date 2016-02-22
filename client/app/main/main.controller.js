@@ -3,19 +3,32 @@
 angular.module('meccanoAdminApp')
   .controller('MainCtrl', function($scope, $interval, $state, DeviceStatus, $filter) {
     $scope.lastAnnouncements = [];
-    $scope.status = {
-      NORMAL:false,
-      FAIL:true,
-      WAITING_APPROVE:false,
-      WARNING:true
-    };
     $scope.statusResults = [];
+    $scope.status = {
+      NORMAL: false,
+      FAIL: true,
+      WAITING_APPROVE: false,
+      WARNING: true
+    };
+
+    var statusColours = {
+      FAIL: '#d9534f',
+      NORMAL: '#5cb85c',
+      WAITING_APPROVE: '#337ab7',
+      WARNING: '#f0ad4e'
+    };
+
+    function colours(series) {
+      return _.chain(series).map(function(item) {
+        return statusColours[item];
+      }).value();
+    }
 
     function loadDeviceStatus() {
       $scope.deviceStatus = {
         labels: [],
         data: [],
-        colours:  [ '#d9534f','#5cb85c','#337ab7','#f0ad4e']
+        colours: ['#d9534f', '#5cb85c', '#337ab7', '#f0ad4e']
       };
       DeviceStatus.all().get({}, function(res) {
         $scope.deviceStatus.labels = _.keys(res.data);
@@ -25,18 +38,7 @@ angular.module('meccanoAdminApp')
       }, function(err) {
         console.log(err);
       });
-    };
-
-    // Load Statistics of Devices to populate the charts
-    loadDeviceStatus();
-
-    $scope.refresh = function() {
-      loadDeviceStatus();
-      loadDeviceStatusHistory();
-    };
-
-    // Reload charts in five minutes
-    $interval($scope.refresh , 300000);
+    }
 
     function loadDeviceStatusHistory() {
       $scope.deviceStatusHistory = {
@@ -45,7 +47,10 @@ angular.module('meccanoAdminApp')
         data: []
       };
 
-      DeviceStatus.history().get({size:($scope.statusResults.length || 1)* 16,status:$scope.statusResults},function(resp) {
+      DeviceStatus.history().get({
+        size: ($scope.statusResults.length || 1) * 16,
+        status: $scope.statusResults
+      }, function(resp) {
         var creationDateDefault = _.chain(resp).uniqBy('creationDate').reduce(function(result, item) {
           result.push({
             numberOfDevices: 0,
@@ -66,34 +71,40 @@ angular.module('meccanoAdminApp')
           }).unionBy(creationDateDefault, 'creationDate').sortBy('creationDate').map('numberOfDevices').value());
           return result;
         }, []);
-        chart.colours= colours(chart.series);
+        chart.colours = colours(chart.series);
         $scope.deviceStatusHistory = chart;
       });
     }
 
-    var statusColours = {FAIL:'#d9534f',NORMAL:'#5cb85c',WAITING_APPROVE:'#337ab7',WARNING:'#f0ad4e'};
-    function colours(series) {
-      return _.chain(series).map(function(item) {
-        return statusColours[item];
-      }).value();
-    }
-    $scope.$watchCollection('status', function (newStatus, oldStatus) {
 
-      if(_.countBy(newStatus).true){
+    $scope.$watchCollection('status', function(newStatus, oldStatus) {
+
+      if (_.countBy(newStatus).true) {
         $scope.statusResults = [];
-        angular.forEach(newStatus, function (value, key) {
+        angular.forEach(newStatus, function(value, key) {
           if (value) {
             $scope.statusResults.push(key);
           }
         });
         loadDeviceStatusHistory();
-      }else {
+      } else {
         $scope.status = oldStatus;
       }
 
-      });
+    });
+
+    // Load Statistics of Devices to populate the charts
+    loadDeviceStatus();
+
+    $scope.refresh = function() {
+      loadDeviceStatus();
+      loadDeviceStatusHistory();
+    };
+
+    // Reload charts in five minutes
+    $interval($scope.refresh, 300000);
     // Go to page Devices With selected status of the chart
-    $scope.onClick = function(points, evt) {
+    $scope.onClick = function(points) {
       $state.go('device.list', {
         status: points[0].label
       });

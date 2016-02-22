@@ -22,7 +22,7 @@ angular.module('meccanoAdminApp')
           data:   [[0]]
         }
       }
-  	}
+  	};
 
   	return self;
 

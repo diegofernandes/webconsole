@@ -60,7 +60,7 @@ angular.module('meccanoAdminApp')
         var cb = callback || angular.noop;
 
         return User.save(user,
-          function(data) {
+          function() {
             return cb(User.get());
           },
           function(err) {
