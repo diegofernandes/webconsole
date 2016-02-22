@@ -4,13 +4,6 @@
 
 'use strict';
 
-
-var path = require('path');
-
-// Set default node environment to development
-process.env.CONFIG_FILE = process.env.CONFIG_FILE ||  path.normalize(__dirname + '/../config/config.yml');
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
 var config = require('./config/environment');
 
 if(!config.api.security){
