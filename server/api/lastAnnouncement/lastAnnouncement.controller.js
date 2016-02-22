@@ -24,10 +24,10 @@ var util = require('../../components/util');
 var _ = require('lodash');
 
 var db = require('../../sqldb');
-var LastAnnouncements = db.LastAnnouncements;
+var Fact = db.Fact;
 
 
-exports.show = function(req, res) {
-  db.page(LastAnnouncements, req.query).then(util.respondWithResult(res))
+exports.index = function(req, res) {
+  db.page(Fact, req.query).then(util.respondWithResult(res))
     .catch(util.handleError(res));
 }

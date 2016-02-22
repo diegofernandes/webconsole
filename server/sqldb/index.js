@@ -14,7 +14,7 @@ var db = {
 };
 
 // Insert models below
-db.LastAnnouncements = db.sequelize.import('../model/lastAnnouncements.model');
+db.Fact = db.sequelize.import('../model/fact.model');
 db.DeviceStatus = db.sequelize.import('../model/deviceStatus.model');
 db.Registration = db.sequelize.import('../model/registration.model');
 db.Announcement = db.sequelize.import('../model/announcement.model');
