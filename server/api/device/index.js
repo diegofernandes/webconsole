@@ -20,22 +20,22 @@
 'use strict';
 
 var express = require('express');
-var devicesController = require('./devices.controller');
-var statisticsController = require('./statistics.controller');
+var deviceController = require('./device.controller');
+var statisticController = require('./statistic.controller');
 var activityController = require('./activity.controller');
 var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
 // Routes for /api/devices/
-router.get('/',auth.isAuthenticated(),devicesController.show);
-router.get('/:device', auth.isAuthenticated(),devicesController.load);
-router.post('/', auth.isAuthenticated(),devicesController.saveRegistration);
-router.delete('/:device', auth.isAuthenticated(),devicesController.destroy);
-router.put('/:device', auth.isAuthenticated(),devicesController.update);
-router.patch('/:device', auth.isAuthenticated(),devicesController.update);
+router.get('/',auth.isAuthenticated(),deviceController.index);
+router.get('/:device', auth.isAuthenticated(),deviceController.show);
+router.post('/', auth.isAuthenticated(),deviceController.create);
+router.delete('/:device', auth.isAuthenticated(),deviceController.destroy);
+router.put('/:device', auth.isAuthenticated(),deviceController.update);
+router.patch('/:device', auth.isAuthenticated(),deviceController.update);
 
-router.get('/:device/statistics',statisticsController.statistics);
-router.get('/:device/activity',activityController.show);
+router.get('/:device/statistics',auth.isAuthenticated(),statisticController.index);
+router.get('/:device/activity',auth.isAuthenticated(),activityController.index);
 
 module.exports = router;

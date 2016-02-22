@@ -26,14 +26,14 @@ var db = require('../../sqldb');
 var Registration = db.Registration;
 var Announcement = db.Announcement;
 
-exports.show = function(req, res) {
+exports.index = function(req, res) {
   db.page(Registration, req.query)
   .then(util.respondWithResult(res))
   .catch(util.handleError(res));
 }
 
 
-exports.load = function(req, res) {
+exports.show = function(req, res) {
   Registration.findOne({
       where: req.params
     })
@@ -45,7 +45,7 @@ exports.load = function(req, res) {
 /**
  * Saves the object to the database
  */
-exports.saveRegistration = function(req, res) {
+exports.create = function(req, res) {
 
 
   return Registration.create(req.body, {

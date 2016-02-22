@@ -28,7 +28,7 @@ var DeviceActivity = db.DeviceActivity;
 /**
  **  Filter devices by status
  **/
-exports.show = function(req, res) {
+exports.index = function(req, res) {
   db.page(DeviceActivity, _.merge(req.query, req.params)).then(util.respondWithResult(res))
     .catch(util.handleError(res));
 
