@@ -12,10 +12,16 @@ angular.module('meccanoAdminApp')
   				{
   					'update': {method: 'PUT'},
   					'delete': {method: 'DELETE'},
-            'post': {method: 'POST'}
+            'post': {method: 'POST'},
+            'activity': {method: 'GET', url: 'api/devices/:device/activity'}
   				});
   		},
-  		selected: null
+  		selected: {
+        activity: {
+          labels: [0],
+          data:   [[0]]
+        }
+      }
   	}
 
   	return self;

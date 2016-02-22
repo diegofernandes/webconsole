@@ -48,11 +48,27 @@ angular.module('meccanoAdminApp')
 
     /**
       * Show Details in a lateral panel
-      * @params device {object}
+      * @param device {object}
       */
     $scope.showDetails = function(device){
       $scope.Devices.selected = device;
-    }
+
+      $scope.Devices.devices().activity({device: device.device}, function (res){
+        $scope.Devices.selected.activity = {};
+        $scope.Devices.selected.activity.data = [[]];
+        $scope.Devices.selected.activity.labels = [];
+        if (res.data.length !== 0){
+          res.data.reverse();
+          angular.forEach(res.data, function (item){
+            $scope.Devices.selected.activity.labels.push(item.hour + 'h');
+            $scope.Devices.selected.activity.data[0].push(item.updates);
+          });
+        } else {
+          $scope.Devices.selected.activity.data = [[0]];
+          $scope.Devices.selected.activity.labels = [0];
+        }
+      });
+    };
 
     /**
       * Function to search devices by selected filter
@@ -115,12 +131,12 @@ angular.module('meccanoAdminApp')
 
 .controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal) {
 
-  $scope.labels = ["January"];
-  // $scope.series = ['Series A', 'Series B'];
-  $scope.data = [
-    [65, 10],
-    [28, -20]
-  ];
+  // $scope.labels = ["January"];
+  $scope.series = ['Updates'];
+  // $scope.data = [
+  //   [65, 10],
+  //   [28, -20]
+  // ];
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
   };
