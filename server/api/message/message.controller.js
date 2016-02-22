@@ -17,6 +17,8 @@
 *
 */
 
+
+
 'use strict';
 var _ = require('lodash');
 
@@ -26,14 +28,14 @@ var db = require('../../sqldb');
 
 var Message = db.Message;
 
-exports.show = function(req, res) {
+exports.index = function(req, res) {
   db.page(Message, _.merge(req.query,req.params))
     .then(util.respondWithResult(res))
     .catch(util.handleError(res));
 }
 
 
-exports.load = function(req, res) {
+exports.show = function(req, res) {
   Message.findOne({
       where: req.params
     })
@@ -45,7 +47,7 @@ exports.load = function(req, res) {
 /**
  * Saves the object to the database
  */
-exports.save = function(req, res) {
+exports.create = function(req, res) {
 
   return Message.create(req.body)
     .then(util.respondWithResult(res, 201))
@@ -53,14 +55,14 @@ exports.save = function(req, res) {
 
 }
 
-// Updates an existing Thing in the DB
+// Updates an existing Message in the DB
 exports.update = function(req, res) {
   if (req.body.ID) {
     delete req.body.ID;
   }
   Message.find({
       where: {
-        device: req.params.ID
+        ID: req.params.id
       }
     })
     .then(util.handleEntityNotFound(res))
@@ -69,12 +71,12 @@ exports.update = function(req, res) {
     .catch(util.handleError(res));
 }
 
-// Deletes a Thing from the DB
+// Deletes a Message from the DB
 exports.destroy = function(req, res) {
 
   Message.find({
       where: {
-        device: req.params.ID
+        ID: req.params.id
       }
     })
     .then(util.handleEntityNotFound(res))

@@ -1,5 +1,5 @@
 /*
-* Meccano IOT Gateway
+* Meccano IOT Webconsole
 *
 *
 * This program is free software: you can redistribute it and/or modify
@@ -19,16 +19,27 @@
 
 'use strict';
 
-var express = require('express');
-var controller = require('./messages.controller');
-var auth = require('../../auth/auth.service');
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('Message', {
+    ID: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    device: DataTypes.STRING(20),
+    sender: DataTypes.STRING(20),
+    delivery_type: DataTypes.STRING(20),
+    message: DataTypes.STRING(1024),
+    readDate: DataTypes.DATE,
+    creationDate: {
+      type: DataTypes.DATE,
+      defaultValue: sequelize.NOW
+    }
+  }, {
+    timestamps: false
+  });
 
-var router = express.Router();
 
-// Routes for /api/messages/
-router.get('/', auth.isAuthenticated(),controller.show);
-router.get('/:id', auth.isAuthenticated(),controller.load);
-router.post('/', auth.isAuthenticated(),controller.save);
-router.delete('/:id', auth.isAuthenticated(),controller.destroy);
-
-module.exports = router;
+  return model;
+}

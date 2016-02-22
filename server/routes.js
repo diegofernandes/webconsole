@@ -12,7 +12,7 @@ module.exports = function(app) {
   app.use('/api/devices', require('./api/devices'));
   app.use('/api/deviceStatus', require('./api/deviceStatus'));
   app.use('/api/lastAnnouncements', require('./api/lastAnnouncements'));
-  app.use('/api/messages', require('./api/messages'));
+  app.use('/api/messages', require('./api/message'));
   app.use('/api/users', require('./api/user'));
 
   app.use('/auth', require('./auth'));
