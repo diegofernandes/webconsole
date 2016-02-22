@@ -10,14 +10,14 @@ module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
 
     ID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    name: DataTypes.STRING,
+    name: DataTypes.STRING(45),
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       unique: {
         msg: 'The specified email address is already in use.'
       },
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       defaultValue: 'user'
     },
     password: {
@@ -56,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
       // Non-sensitive info we'll be putting in the token
       token: function() {
         return {
-          '_id': this._id,
+          'ID': this.ID,
           'role': this.role
         };
       }
