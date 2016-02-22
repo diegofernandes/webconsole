@@ -30,12 +30,12 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: 'user'
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       validate: {
         notEmpty: true
       }
     },
-    salt: DataTypes.STRING
+    salt: DataTypes.TEXT
 
   }, {
     freezeTableName: true,

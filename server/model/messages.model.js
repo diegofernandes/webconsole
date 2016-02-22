@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     message: DataTypes.STRING,
     readDate: DataTypes.DATE,
     creationDate: DataTypes.DATE,
-  }, {
+  },{
     timestamps: false
   });
 
