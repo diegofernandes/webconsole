@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('MainCtrl', function($scope, $interval, $state, DeviceStatus, $filter) {
+  .controller('MainCtrl', function($scope, $interval, $timeout, $state, DeviceStatus, $filter) {
     $scope.lastAnnouncements = [];
     $scope.statusResults = [];
     $scope.status = {
@@ -75,10 +75,20 @@ angular.module('meccanoAdminApp')
         $scope.deviceStatusHistory = chart;
       });
     }
+    var statusTimeout;
+
+    function startStatusTimeout() {
+      if (angular.isDefined(statusTimeout)) {
+        $timeout.cancel(statusTimeout);
+      }
+      statusTimeout = $timeout(function() {
+        loadDeviceStatusHistory();
+        statusTimeout = undefined;
+      }, 1000);
+    }
 
 
     $scope.$watchCollection('status', function(newStatus, oldStatus) {
-
       if (_.countBy(newStatus).true) {
         $scope.statusResults = [];
         angular.forEach(newStatus, function(value, key) {
@@ -86,11 +96,10 @@ angular.module('meccanoAdminApp')
             $scope.statusResults.push(key);
           }
         });
-        loadDeviceStatusHistory();
+        startStatusTimeout();
       } else {
         $scope.status = oldStatus;
       }
-
     });
 
     // Load Statistics of Devices to populate the charts
@@ -102,11 +111,21 @@ angular.module('meccanoAdminApp')
     };
 
     // Reload charts in five minutes
-    $interval($scope.refresh, 300000);
+    var intervalCharts = $interval($scope.refresh, 300000);
     // Go to page Devices With selected status of the chart
     $scope.onClick = function(points) {
       $state.go('device.list', {
         status: points[0].label
       });
     };
+
+    $scope.$on('$destroy', function() {
+      // Make sure that the interval is destroyed too
+      if (angular.isDefined(statusTimeout)) {
+        $timeout.cancel(statusTimeout);
+      }
+      if (angular.isDefined(intervalCharts)) {
+        $interval.cancel(intervalCharts)
+      }
+    });
   });
