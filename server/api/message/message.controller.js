@@ -17,24 +17,26 @@
 *
 */
 
+
+
 'use strict';
 var _ = require('lodash');
+
 var util = require('../../components/util');
 
 var db = require('../../sqldb');
 
-var Registration = db.Registration;
-var Announcement = db.Announcement;
+var Message = db.Message;
 
-exports.show = function(req, res) {
-  db.page(Registration, req.query)
-  .then(util.respondWithResult(res))
-  .catch(util.handleError(res));
+exports.index = function(req, res) {
+  db.page(Message, _.merge(req.query,req.params))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }
 
 
-exports.load = function(req, res) {
-  Registration.findOne({
+exports.show = function(req, res) {
+  Message.findOne({
       where: req.params
     })
     .then(util.handleEntityNotFound(res))
@@ -45,23 +47,22 @@ exports.load = function(req, res) {
 /**
  * Saves the object to the database
  */
-exports.saveRegistration = function(req, res) {
+exports.create = function(req, res) {
 
-
-  return Registration.create(req.body, {
-      logging: true
-    }).then(util.respondWithResult(res, 201))
+  return Message.create(req.body)
+    .then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));
+
 }
 
-// Updates an existing Thing in the DB
+// Updates an existing Message in the DB
 exports.update = function(req, res) {
-  if (req.body.device) {
-    delete req.body.device;
+  if (req.body.ID) {
+    delete req.body.ID;
   }
-  Registration.find({
+  Message.find({
       where: {
-        device: req.params.device
+        ID: req.params.id
       }
     })
     .then(util.handleEntityNotFound(res))
@@ -70,19 +71,13 @@ exports.update = function(req, res) {
     .catch(util.handleError(res));
 }
 
-// Deletes a Thing from the DB
+// Deletes a Message from the DB
 exports.destroy = function(req, res) {
 
-  Announcement.destroy({
+  Message.find({
       where: {
-        device: req.params.device
+        ID: req.params.id
       }
-    }).then(function() {
-      return Registration.find({
-        where: {
-          device: req.params.device
-        }
-      })
     })
     .then(util.handleEntityNotFound(res))
     .then(util.removeEntity(res))

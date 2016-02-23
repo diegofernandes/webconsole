@@ -18,25 +18,14 @@
 */
 
 'use strict';
+var _ = require('lodash');
+var util = require('../../components/util');
+var db = require('../../sqldb');
 
-module.exports = function(sequelize, DataTypes) {
-  var model = sequelize.define('Message', {
-    ID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    device: DataTypes.STRING,
-    sender: DataTypes.STRING,
-    delivery_type: DataTypes.STRING,
-    message: DataTypes.STRING,
-    readDate: DataTypes.DATE,
-    creationDate: DataTypes.DATE,
-  }, {
-    timestamps: false
-  });
+var DeviceStatistics = db.DeviceStatistics;
 
-
-  return model;
+exports.index = function(req, res) {
+  db.page(DeviceStatistics,req.query)
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 }

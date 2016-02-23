@@ -5,14 +5,15 @@
 'use strict';
 
 var errors = require('./components/errors');
+var path = require('path');
 
 module.exports = function(app) {
 
   // Insert routes below
-  app.use('/api/devices', require('./api/devices'));
+  app.use('/api/devices', require('./api/device'));
   app.use('/api/deviceStatus', require('./api/deviceStatus'));
-  app.use('/api/lastAnnouncements', require('./api/lastAnnouncements'));
-  app.use('/api/messages', require('./api/messages'));
+  app.use('/api/lastAnnouncements', require('./api/lastAnnouncement'));
+  app.use('/api/messages', require('./api/message'));
   app.use('/api/users', require('./api/user'));
 
   app.use('/auth', require('./auth'));
@@ -24,6 +25,6 @@ module.exports = function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get(function(req, res) {
-      res.sendfile(app.get('appPath') + '/index.html');
+      res.sendFile('index.html',{root:app.get('appPath')});
     });
 };

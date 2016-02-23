@@ -28,7 +28,7 @@ var DeviceStatus = db.DeviceStatus;
 /**
  **  Count the number of devices for each status
  **/
-exports.count = function(req, res) {
+exports.index = function(req, res) {
 
   return DeviceStatus.findAll({
       attributes: [
@@ -37,7 +37,7 @@ exports.count = function(req, res) {
       group: 'status'
     }).then(function(data) {
       var result = _.chain(data).transform(function(result,item) {
-        return result[item.status] = item.dataValues.numberOfDevices;
+        return (result[item.status] = item.dataValues.numberOfDevices);
       },{NORMAL:0,FAIL:0,WARNING:0,WAITING_APPROVE:0}).value();
       res.json({data: result});
     })

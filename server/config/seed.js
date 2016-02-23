@@ -12,7 +12,7 @@ var User = db.User;
 
 module.exports = function() {
   console.log('Seeding...');
-  User.sync().then(function() {
+  return User.sync().then(function() {
     return User.find({
         where: {
           role: 'admin'
@@ -20,7 +20,7 @@ module.exports = function() {
       })
       .then(function(users) {
         if (_.isEmpty(users)) {
-          User.create({
+          return User.create({
             role: 'admin',
             name: 'Admin',
             email: 'admin@admin.com',

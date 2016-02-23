@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams, Devices, $rootScope) {
+  .controller('DeviceListCtrl', function($scope, Registration, $state, $stateParams, Devices) {
 
     // Initialize variables
     $scope.pageNumber = 1;
@@ -41,7 +41,7 @@ angular.module('meccanoAdminApp')
           $scope.isLoading = false;
         }
       });
-    };
+    }
 
     // Load devices by the parameters from url
     getDevices($state.params);
@@ -95,33 +95,32 @@ angular.module('meccanoAdminApp')
   $scope.Devices = Devices;
 
   $scope.save = function() {
-    Devices.devices().post($scope.Device.selected, function (res){
+    Devices.devices().post($scope.Device.selected, function (){
       $state.go('device.list', {}, {reload: true});
     }, function (err){
-      console.log(err)
+      console.log(err);
     });
   };
 })
 
-.controller('DeviceEditCtrl', function($scope, Devices, $state, $stateParams) {
+.controller('DeviceEditCtrl', function($scope, Devices, $state, $stateParams, $http) {
 
   $scope.Device = Devices;
 
   $scope.inputDisabled = true;
-  if ($scope.Device.selected == null) {
+  if ($scope.Device.selected === null || $scope.Device.selected === undefined) {
     Devices.loadDevices().get({device: $state.params.deviceId}, function (res){
       $scope.Device.selected = res;
     });
-  };
+  }
 
   $scope.save = function() {
     Devices.devices().update({device: $state.params.deviceId}, $scope.Device.selected);
     $state.go('device.list', {}, {reload: true});
   };
   $scope.destroy = function() {
-    $http.delete('api/device/' + $scope.device.device).then(function(data) {
-
-      $state.go('device.list', $stateParams);
+    $http.delete('api/device/' + $scope.device.device).then(function() {
+      $state.go('device.list', $stateParams,{reload: true});
     });
   };
   $scope.cancel = function() {
@@ -130,13 +129,8 @@ angular.module('meccanoAdminApp')
 })
 
 .controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal) {
-
-  // $scope.labels = ["January"];
   $scope.series = ['Updates'];
-  // $scope.data = [
-  //   [65, 10],
-  //   [28, -20]
-  // ];
+
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
   };
@@ -157,7 +151,7 @@ angular.module('meccanoAdminApp')
       }
     });
 
-    modalInstance.result.then(function (selectedItem) {
+    modalInstance.result.then(function () {
       $state.go($state.current, {}, {reload: true});
       $scope.Devices.selected = null;
     }, function () {

@@ -20,7 +20,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  var model = sequelize.define('Facts', {
+  var model = sequelize.define('Fact', {
     channel: DataTypes.STRING,
     year: DataTypes.INTEGER,
     month: DataTypes.INTEGER,
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
     data: DataTypes.INTEGER,
     creationDate: DataTypes.DATE
   }, {
-    freezeTableName: true,
+    freezeTableName: false,
     timestamps: false,
     defaultScope:{
       order:'creationDate DESC'

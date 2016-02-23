@@ -19,15 +19,27 @@
 
 'use strict';
 
-var util = require('../../components/util');
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('Message', {
+    ID: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    device: DataTypes.STRING(20),
+    sender: DataTypes.STRING(20),
+    delivery_type: DataTypes.STRING(20),
+    message: DataTypes.STRING(1024),
+    readDate: DataTypes.DATE,
+    creationDate: {
+      type: DataTypes.DATE,
+      defaultValue: sequelize.NOW
+    }
+  }, {
+    timestamps: false
+  });
 
-var _ = require('lodash');
 
-var db = require('../../sqldb');
-var LastAnnouncements = db.LastAnnouncements;
-
-
-exports.show = function(req, res) {
-  db.page(LastAnnouncements, req.query).then(util.respondWithResult(res))
-    .catch(util.handleError(res));
+  return model;
 }

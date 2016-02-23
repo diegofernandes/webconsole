@@ -18,14 +18,16 @@
 */
 
 'use strict';
-var _ = require('lodash');
+
 var util = require('../../components/util');
+
+var _ = require('lodash');
+
 var db = require('../../sqldb');
+var Fact = db.Fact;
 
-var DeviceStatistics = db.DeviceStatistics;
 
-exports.statistics = function(req, res) {
-  db.page(DeviceStatistics,req.query)
-    .then(util.respondWithResult(res))
+exports.index = function(req, res) {
+  db.page(Fact, req.query).then(util.respondWithResult(res))
     .catch(util.handleError(res));
 }

@@ -23,7 +23,9 @@ angular.module('meccanoAdminApp')
 		  */
 		function loadAnnouncements (parameters, clearArray){
 
-			clearArray ? $scope.announcements = [] : false;
+			if(clearArray){
+				$scope.announcements = [];
+			}
 
 			// Start load Gif
 			$scope.isLoading = true;
@@ -41,22 +43,24 @@ angular.module('meccanoAdminApp')
 				// Stop load Gif
 				$scope.isLoading = false;
 			});
-		};
-		// Validate state to apply interval to reload grif of announcements
-		if ($state.current.name === "main.dash"){
-			$scope.parametersFilter.size = 5;
-			reloadGrid();
-		};
-
-		// Load Announcements in load Controller with parameter passed in the url
-		loadAnnouncements($state.params, true);
+		}
 
 		// Reload information of grid in five minutes
 		function reloadGrid (){
 			$interval(function(){
 				loadAnnouncements({}, true);
 			}, 300000);
-		};
+		}
+		// Validate state to apply interval to reload grif of announcements
+		if ($state.current.name === 'main.dash'){
+			$scope.parametersFilter.size = 5;
+			reloadGrid();
+		}
+
+		// Load Announcements in load Controller with parameter passed in the url
+		loadAnnouncements($state.params, true);
+
+
 
 		// Filter announcements by inputs of grid
 		$scope.filterAnnouncements = function (parameters){
@@ -76,5 +80,5 @@ angular.module('meccanoAdminApp')
 
 			// get annoucements
 			loadAnnouncements(parameters);
-		}
+		};
 	});

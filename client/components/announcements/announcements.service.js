@@ -7,7 +7,7 @@ angular.module('meccanoAdminApp')
   		lastAnnouncements: function(){
   			return $resource('api/lastAnnouncements');
   		}
-  	}
+  	};
 
   	return self;
 

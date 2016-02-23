@@ -1,5 +1,5 @@
 /*
-* Meccano IOT Gateway
+* Meccano IOT Webconsole
 *
 *
 * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,18 @@
 */
 
 'use strict';
+var util = require('../../components/util');
 
-var express = require('express');
-var controller = require('./messages.controller');
-var auth = require('../../auth/auth.service');
+var _ = require('lodash');
 
-var router = express.Router();
+var db = require('../../sqldb');
+var DeviceActivity = db.DeviceActivity;
 
-// Routes for /api/messages/
-router.get('/', auth.isAuthenticated(),controller.show);
-router.get('/:id', auth.isAuthenticated(),controller.load);
-router.post('/', auth.isAuthenticated(),controller.save);
-router.delete('/:id', auth.isAuthenticated(),controller.destroy);
+/**
+ **  Filter devices by status
+ **/
+exports.index = function(req, res) {
+  db.page(DeviceActivity, _.merge(req.query, req.params)).then(util.respondWithResult(res))
+    .catch(util.handleError(res));
 
-module.exports = router;
+}
