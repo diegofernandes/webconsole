@@ -1,6 +1,0 @@
-default:
-  seedDB: true
-
-test:
-  mysql:
-    uri: 'mysql://test:test@192.168.99.100:3306/IOTDB_TEST'
