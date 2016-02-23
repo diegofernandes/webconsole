@@ -64,11 +64,11 @@
         </tr>
         <tr ng-show="isLoading">
           <td colspan="4" class="text-center">
-            <img src="./assets/images/loading_gif.gif" style="height: 30px">
+            <img src="assets/images/loading.gif" style="height: 30px">
           </td>
         </tr>
         <tr ng-repeat="device in registeredDevices.data"
-            ng-click="showDetails(device)" 
+            ng-click="showDetails(device)"
             ng-class="{'selected-line': Devices.selected.device === device.device}">
           <td>{{device.device}}</td>
           <td>{{device.device_group}}</td>

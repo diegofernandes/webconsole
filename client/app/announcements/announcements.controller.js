@@ -44,10 +44,13 @@ angular.module('meccanoAdminApp')
 				$scope.isLoading = false;
 			});
 		}
-
+		var intervalGrid;
 		// Reload information of grid in five minutes
 		function reloadGrid (){
-			$interval(function(){
+			if(angular.isDefined(intervalGrid)){
+				$interval.cancel(intervalGrid);
+			}
+			intervalGrid = $interval(function(){
 				loadAnnouncements({}, true);
 			}, 300000);
 		}
@@ -81,4 +84,10 @@ angular.module('meccanoAdminApp')
 			// get annoucements
 			loadAnnouncements(parameters);
 		};
+		$scope.$on('$destroy', function() {
+      // Make sure that the interval is destroyed too
+			if(angular.isDefined(intervalGrid)){
+				$interval.cancel(intervalGrid);
+			}
+    });
 	});

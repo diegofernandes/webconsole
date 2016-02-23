@@ -141,7 +141,7 @@ angular.module('meccanoAdminApp')
   $scope.destroy = function (device) {
     var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
-      templateUrl: './app/device/delete.confirm.html',
+      templateUrl: 'app/device/delete.confirm.html',
       controller: 'DeleteDeviceCtrl',
       size: 'xs',
       resolve: {
