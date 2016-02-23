@@ -1,0 +1,13 @@
+default:
+  seedDB: true
+  mysql:
+    uri: 'mysql://localhost:3306/IOTDB'
+    options:
+      logging: true
+      poll:
+        maxConnections: 10
+        minConnections: 1
+
+test:
+  mysql:
+    uri: 'mysql://localhost:3306/IOTDB_TEST'
