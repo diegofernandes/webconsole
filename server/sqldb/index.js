@@ -8,10 +8,20 @@ var path = require('path');
 var config = require('../config/environment');
 var Sequelize = require('sequelize');
 var P = require('bluebird');
+var util = require('util');
 
 var db = {
-  sequelize: new Sequelize(config.mysql.uri, config.mysql.options)
+  sequelize: initSequelize()
 };
+
+function initSequelize() {
+  if(util.isNullOrUndefined(config.mysql.uri)){
+    return new Sequelize(config.mysql.database,config.mysql.username,config.mysql.password,config.mysql.options)
+  }else{
+    return new Sequelize(config.mysql.uri,config.mysql.options);
+  }
+
+}
 
 // Insert models below
 db.Fact = db.sequelize.import('../model/fact.model');
