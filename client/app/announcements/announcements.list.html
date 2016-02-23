@@ -1,14 +1,14 @@
 <div class="panel panel-default">
 	<div class="panel-heading">Last Announcements of the devices</div>
 	<div class="panel-body" ng-show="currentState.name === 'announcements.list'">
-		
-      <form class="form-inline" ng-submit="filterAnnouncements(parametersFilter)">  
+
+      <form class="form-inline" ng-submit="filterAnnouncements(parametersFilter)">
         <!-- Text input search by ID device -->
         <div class="form-group">
           <label class="sr-only" for="deviceId">Device</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="deviceId" 
+          <input type="text"
+                 class="form-control"
+                 id="deviceId"
                  placeholder="Device ID"
                  ng-model="parametersFilter.device">
         </div>
@@ -16,9 +16,9 @@
         <!-- Text input search devices by group -->
         <div class="form-group" >
           <label class="sr-only" for="deviceGroup">Group</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="deviceGroup" 
+          <input type="text"
+                 class="form-control"
+                 id="deviceGroup"
                  placeholder="Device Group"
                  ng-model="parametersFilter.device_group">
         </div>
@@ -26,9 +26,9 @@
         <!-- Text input search devices by channel -->
         <div class="form-group" >
           <label class="sr-only" for="channel">Channel</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="channel" 
+          <input type="text"
+                 class="form-control"
+                 id="channel"
                  placeholder="Channel"
                  ng-model="parametersFilter.channel">
         </div>
@@ -36,9 +36,9 @@
         <!-- Text input search devices by sensor -->
         <div class="form-group" >
           <label class="sr-only" for="sensor">Sensor</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="sensor" 
+          <input type="text"
+                 class="form-control"
+                 id="sensor"
                  placeholder="Sensor"
                  ng-model="parametersFilter.sensor">
         </div>
@@ -46,9 +46,9 @@
         <!-- Text input search devices by sensor -->
         <div class="form-group" >
           <label class="sr-only" for="data">Data</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="data" 
+          <input type="text"
+                 class="form-control"
+                 id="data"
                  placeholder="Data"
                  ng-model="parametersFilter.data">
         </div>
@@ -76,7 +76,7 @@
 	        </tr>
 			<tr ng-show="isLoading">
 				<td colspan="6" class="text-center">
-					<img src="./assets/images/loading_gif.gif" style="height: 30px">
+					<img src="assets/images/loading.gif" style="height: 30px">
 				</td>
 			</tr>
 			<tr ng-repeat="announcement in announcements">
@@ -95,7 +95,7 @@
 					ng-click="loadMore(parametersFilter)"
 					ng-show="currentState.name === 'announcements.list'">
 					Load More Announcements...
-			</button>		
+			</button>
 		</p>
 	</div>
 </div>
