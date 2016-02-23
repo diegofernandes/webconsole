@@ -38,3 +38,10 @@
 .spinner {
     animation: rotating 5s linear infinite;
 }
+
+.icon span.glyphicon {
+	opacity: 0;
+}
+.icon.active span.glyphicon {
+	opacity: 1;
+}

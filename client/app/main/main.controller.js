@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('MainCtrl', function($scope, $interval, $state, DeviceStatus, $filter) {
+  .controller('MainCtrl', function($scope, $interval, $timeout,$state, DeviceStatus, $filter) {
     $scope.lastAnnouncements = [];
     $scope.statusResults = [];
     $scope.status = {
@@ -75,6 +75,16 @@ angular.module('meccanoAdminApp')
         $scope.deviceStatusHistory = chart;
       });
     }
+    var statusTimeout;
+    function startStatusTimeout(){
+      if(angular.isDefined(statusTimeout)){
+        $timeout.cancel(statusTimeout);
+      }
+      statusTimeout = $timeout(function() {
+        loadDeviceStatusHistory();
+        statusTimeout = undefined;
+      },1000);
+    }
 
 
     $scope.$watchCollection('status', function(newStatus, oldStatus) {
@@ -86,12 +96,14 @@ angular.module('meccanoAdminApp')
             $scope.statusResults.push(key);
           }
         });
-        loadDeviceStatusHistory();
+        startStatusTimeout();
       } else {
         $scope.status = oldStatus;
       }
 
     });
+
+
 
     // Load Statistics of Devices to populate the charts
     loadDeviceStatus();
