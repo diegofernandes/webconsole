@@ -1,14 +1,29 @@
 language: node_js
 cache:
   directories:
-    - node_modules
-    - client/bower_components
+  - node_modules
+  - client/bower_components
 node_js:
-  - 4.3.1
+- 4.3.1
 before_script:
-  - npm install -g bower grunt-cli
-  - bower install
-  - "mysql -e 'create database if not exists IOTDB_TEST;'"
+- npm install -g bower grunt-cli
+- bower install
+- mysql -e 'create database if not exists IOTDB_TEST;'
 services: mysql
 env:
-  - MYSQL_URI=mysql://travis@127.0.0.1:3306/IOTDB_TEST
+  global:
+  - NODE_ENV: travis
+  - MYSQL_URI: mysql://travis@127.0.0.1:3306/IOTDB_TEST
+  - secure: MlwHWvbNz49vhnNvddbbcNZ0lZNB5h9wUV9Sdl6UsqzmXernqnmc4sEK2unQUM6NaoLD6Y+ZkymtLzxvcV4WVBr2Dgs/8vhEAST7GSiOeEaSR94mWYhTsXbFchHchosFH9Y/Rkb6p+9pKG13uCSlKf13ss66k4WvtmoL0Mjuq4mLXicwDD2JT93eLr6vOV1hMXC3Sua+jmEaWfCtJUvzcbUScaAsnKBhZVCpIyPdrXtU/1s7OxQxcMsydgy6pMmGBlJsjTs6Z1emnfEJzAdN7Ppol+nwRaaHCrjyoqkOdAPStzLlcGU8LWU4jwDuffiJBd7xrJyWo6h6xeHRdfjxUA/TQpWnCtkIq6WBQDYuvqgtv+Zu3PZTaIXyufI5AxPfJyfi4bUBwg0jZnMGnOz9jkJExNTTDEGEX95YZOgQfEc7me05YwLBCKPKMgfGr7nXPlIR3l04Wr7bsOMeYw2CknA2lWHmU5ZahU3D4Il4p79GP17z2g4TmV5zLUy/RCOU/oWgitrs8P+I2leNBFj+5k+UipJIElcSSCnDeCKcJkLlNjRoM5Gqbu0ye21YyGOwCKyJkwY34+1udDqx615+gDZsTCJs5MlyqVRLuHlqvCjO2Y5E865HFqaMRKbeCeQD1W9fWNPjNCd+jKDi3IeZTWsSFM+BpK3nCE/ZH+wlWnk=
+addons:
+  coverity_scan:
+    project:
+      name: meccano-iot/webconsole
+      description: Build submitted via Travis CI
+    notification_email: diego.osse@gmail.com
+    build_command_prepend: ''
+    build_command: grunt build
+    branch_pattern: master
+notifications:
+  slack:
+    secure: ty70itzBMqk0hUp9YBOrPAekXRYuKqDbXNVZ2VfIhGUcWh002G8YlF9PpkkhIgEuXhjmCCh2vyHDt3fVdH+YYJFQmNRts6irf5UCELbR/V22Ubb2rV3aoB1KKPEv+l2ZVsk0U8clomUX2eCf3+os3/QQnuI+4F9uKpvAa0lXwzElyivLH0kq3sEzIMTb8xmVASuTxoVPhORqklHq9I+EVr1DyAgZ/OmeJJTm0ZAYx6YfBbt3osoZuNqbhBKXoXSN+GqOh5fCkCEYoB2sbRuEiH0ZPYNYTFTWZbO/6vB3Eyxlc3Tid+4JnCXpUaJikBXKddCljFbirHy0shj46lxAgujdoI5RaNsS8rTXbeky45yk6KWTQEHH4KJozAmgak9Kb193BaMgfqhF8wdzBBUX+wxGNMBo9qbIfEa5y8oMMb2QHOov42qY5XDIB/3yLE6T2ip6KbEJvVR2OiF2pQUO0v7CzeOfn9L/2X98A5y7+vt3ajRdDmTwYD96Q9Wp/YUCfwpLP3OxOXZDviWC7bfgqNOT9ZiDqgF+IkUkRz+9kkD2kd42xnnm1kDAKN74dji902RQq7M+HKzduFnqf8mXO5Xuhrjz7jLqdJ8bkpeNjH5I7Ta/15amx7AsMP2efTsb6MkJhF2Azc1R0C+PwsSaFtBEsEU8oDGcFgIPmhG1a60=
