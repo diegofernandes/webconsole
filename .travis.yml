@@ -12,18 +12,22 @@ before_script:
 services: mysql
 env:
   global:
-  - NODE_ENV: travis
-  - MYSQL_URI: mysql://travis@127.0.0.1:3306/IOTDB_TEST
-  - secure: MlwHWvbNz49vhnNvddbbcNZ0lZNB5h9wUV9Sdl6UsqzmXernqnmc4sEK2unQUM6NaoLD6Y+ZkymtLzxvcV4WVBr2Dgs/8vhEAST7GSiOeEaSR94mWYhTsXbFchHchosFH9Y/Rkb6p+9pKG13uCSlKf13ss66k4WvtmoL0Mjuq4mLXicwDD2JT93eLr6vOV1hMXC3Sua+jmEaWfCtJUvzcbUScaAsnKBhZVCpIyPdrXtU/1s7OxQxcMsydgy6pMmGBlJsjTs6Z1emnfEJzAdN7Ppol+nwRaaHCrjyoqkOdAPStzLlcGU8LWU4jwDuffiJBd7xrJyWo6h6xeHRdfjxUA/TQpWnCtkIq6WBQDYuvqgtv+Zu3PZTaIXyufI5AxPfJyfi4bUBwg0jZnMGnOz9jkJExNTTDEGEX95YZOgQfEc7me05YwLBCKPKMgfGr7nXPlIR3l04Wr7bsOMeYw2CknA2lWHmU5ZahU3D4Il4p79GP17z2g4TmV5zLUy/RCOU/oWgitrs8P+I2leNBFj+5k+UipJIElcSSCnDeCKcJkLlNjRoM5Gqbu0ye21YyGOwCKyJkwY34+1udDqx615+gDZsTCJs5MlyqVRLuHlqvCjO2Y5E865HFqaMRKbeCeQD1W9fWNPjNCd+jKDi3IeZTWsSFM+BpK3nCE/ZH+wlWnk=
-addons:
-  coverity_scan:
-    project:
-      name: meccano-iot/webconsole
-      description: Build submitted via Travis CI
-    notification_email: diego.osse@gmail.com
-    build_command_prepend: ''
-    build_command: grunt build
-    branch_pattern: master
+    - NODE_ENV: travis
+    - MYSQL_URI: mysql://travis@127.0.0.1:3306/IOTDB_TEST
 notifications:
   slack:
     secure: ty70itzBMqk0hUp9YBOrPAekXRYuKqDbXNVZ2VfIhGUcWh002G8YlF9PpkkhIgEuXhjmCCh2vyHDt3fVdH+YYJFQmNRts6irf5UCELbR/V22Ubb2rV3aoB1KKPEv+l2ZVsk0U8clomUX2eCf3+os3/QQnuI+4F9uKpvAa0lXwzElyivLH0kq3sEzIMTb8xmVASuTxoVPhORqklHq9I+EVr1DyAgZ/OmeJJTm0ZAYx6YfBbt3osoZuNqbhBKXoXSN+GqOh5fCkCEYoB2sbRuEiH0ZPYNYTFTWZbO/6vB3Eyxlc3Tid+4JnCXpUaJikBXKddCljFbirHy0shj46lxAgujdoI5RaNsS8rTXbeky45yk6KWTQEHH4KJozAmgak9Kb193BaMgfqhF8wdzBBUX+wxGNMBo9qbIfEa5y8oMMb2QHOov42qY5XDIB/3yLE6T2ip6KbEJvVR2OiF2pQUO0v7CzeOfn9L/2X98A5y7+vt3ajRdDmTwYD96Q9Wp/YUCfwpLP3OxOXZDviWC7bfgqNOT9ZiDqgF+IkUkRz+9kkD2kd42xnnm1kDAKN74dji902RQq7M+HKzduFnqf8mXO5Xuhrjz7jLqdJ8bkpeNjH5I7Ta/15amx7AsMP2efTsb6MkJhF2Azc1R0C+PwsSaFtBEsEU8oDGcFgIPmhG1a60=
+before_deploy:
+  - test $TRAVIS_TEST_RESULT = 0 \
+    && grunt build \
+    && cd dist \
+    && npm install --prod \
+    && cd $TRAVIS_BUILD_DIR \
+    && tar -zcvf meccano-webconsole-$TRAVIS_TAG.tar.gz dist
+deploy:
+  provider: releases
+  file: 'meccano-webconsole-$TRAVIS_TAG.tar.gz'
+  api-key:
+    secure: izG9EeU6/k+amLL3Ipx6moyqXk5egJTExlQxc2VlRTQ6+o+qt/nGVmlxKIsZ77vuxRCXbEkqMf8EZzcxt7rGXddJjfZf1aJ68aHADxD5H5fUu7kz4LwrXiNLOe5LfS18ECqoNwuK2jK4xaoKkTlZUpoVrnqSsmAKQs7tBPMWOGeDZgKMG+i7BMP/vqwfw0vCjMNYOh91wY7K24VIlJDCILjVM95pL8Znv6dQKJv6YQXevS+Q9T9jtaa91eFeUa55UbE8IdhA3ntPr+hErnhyghoWM7JPdAO54Qu3q7SUGO/jK/qd7f6wIZjI/ubN5sNfNoF+WjDsVBoXXzasiesYvua677bL+YN6dEE9JZHa2kzEI8m/FaxJceSxd5/7aTLmWw9RJnKGWrqZb9T/DTc1bNkYDu915uLYcHnZCaMIiOKMdp68G3iX0LE530+ILrZ/SHKSnNJerIN5wA4MmQ6hrny+eUuYjX3fFcU80Sm9koVmQYLrGWJ1rwK+frXcuvSWUm7d0ciTuC5RiXt9oGP2RyrW1Wny//KSMO23Dh/eBwLBHjvHKYGdt456EJPJ5Jn/HDhPtLtHs3SeLhv7jokhv4oQ0xsYccopfKTm56ZlErsLtuehlMLg//5O7xqABxo3MPk6qdSrwSB0H46dzQXCmJeLUGR8RiqN78ffx4YZ/9E=
+  on:
+    tags: true
