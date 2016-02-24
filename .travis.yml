@@ -10,6 +10,8 @@ before_script:
 - bower install
 - mysql -e 'create database if not exists IOTDB_TEST;'
 services: mysql
+after_success:
+  - coveralls
 env:
   global:
   - NODE_ENV: travis
