@@ -18,60 +18,103 @@
 */
 'use strict';
 var path = require('path');
+var util = require('util');
 var _ = require('lodash');
-var yamlConfig = require('node-yaml-config');
+var yamlConfig = require('./yml');
 
 // Set default node environment to development
-process.env.CONFIG_FILE = process.env.CONFIG_FILE ||  path.normalize(__dirname + '/../../../config/config.yml');
+process.env.CONFIG_FILE = process.env.CONFIG_FILE || path.normalize(__dirname + '/../../../config/config.yml')
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Try loading the configuration file, if exists
-var conf = yamlConfig.load(process.env.CONFIG_FILE, process.env.NODE_ENV);
-
-// Load other configuration from environment or config file
-process.env.PORT = process.env.PORT || conf.port || 9000;
-process.env.ADDRESS = process.env.ADDRESS || conf.address || 'localhost';
-process.env.SEED_DB = process.env.SEED_DB || conf.seedDB || false;
-process.env.MYSQL_URI = process.env.MYSQL_URI || conf.mysql.uri;
-
-console.log();
-console.log("===================================================================");
-console.log("*** Meccano IoT Gateway Configuration ***")
-console.log("NODE_ENV: " + process.env.NODE_ENV);
-console.log("CONFIG_FILE: " + process.env.CONFIG_FILE);
-console.log("PORT: " + process.env.PORT);
-console.log("ADDRESS: " + process.env.ADDRESS);
-console.log("SEED_DB: " + process.env.SEED_DB);
-console.log("MYSQL_URI: " + process.env.MYSQL_URI);
-console.log("===================================================================");
-console.log();
-
-// Merge of configuration (environment + yaml)
-conf.port = process.env.PORT;
-conf.address = process.env.ADDRESS;
-conf.seedDB = process.env.SEED_DB;
-conf.mysql.uri = process.env.MYSQL_URI;
-
 var all = {
- env: process.env.NODE_ENV,
+  env: process.env.NODE_ENV,
 
- api:{security:true},
+  api: {
+    security: true
+  },
 
- // Root path of server
- root: path.normalize(__dirname + '/../../..'),
+  showConfig: true,
+
+  // Root path of server
+  root: path.normalize(__dirname + '/../../..'),
 
 
- // Should we populate the DB with sample data?
- seedDB: false,
+  // Should we populate the DB with sample data?
+  seedDB: false,
 
- // Secret for session, you will want to change this and make it an environment variable
- secrets: {
-   session: 'meccano-webconsole-secret',
-   sessionTime: '30m'
- },
+  // Secret for session, you will want to change this and make it an environment variable
+  secrets: {
+    session: 'meccano-webconsole-secret',
+    sessionTime: '30m'
+  },
 
- // List of user roles
- userRoles: ['guest', 'user', 'admin'],
+  // List of user roles
+  userRoles: ['guest', 'user', 'admin'],
+
+  port: 9000,
+  address: 'localhost',
+  mysql: {
+    uri: undefined,
+    username: undefined,
+    password: undefined,
+    database: 'IOTDB',
+    options: {
+      dialect: 'mysql',
+      logging: false,
+      pool: {
+        maxConnections: 5,
+        minConnections: 1
+      },
+      host: undefined,
+      port: undefined
+    }
+  }
 };
 
-module.exports = _.merge(all, conf || {});
+var config = _.merge(all, yamlConfig(), require('./env'));
+
+if (config.showConfig) {
+  console.log();
+  console.log("===================================================================");
+  console.log("*** Meccano IoT Gateway Configuration ***")
+  console.log("NODE_ENV: " + process.env.NODE_ENV);
+  console.log("CONFIG_FILE: " + process.env.CONFIG_FILE);
+  show(config);
+  console.log("===================================================================");
+  console.log();
+}
+
+function show(object, parent) {
+  _.forIn(object, function(value, key) {
+      var completeKey;
+      if (parent) {
+        completeKey = parent + '_' + key;
+      } else {
+        completeKey = key;
+      }
+      if (util.isArray(value)) {
+        console.log(completeKey.toUpperCase(), value);
+      } else if (util.isObject(value)) {
+        show(value, completeKey);
+      } else {
+        if (util.isNullOrUndefined(value)) {
+        delete object[key];
+      } else {
+        console.log('%s: %s', completeKey.toUpperCase(), value);
+      }
+    }
+  });
+}
+
+if((config.mysql.uri && (config.mysql.database || config.mysql.username || config.mysql.password || config.mysql.options.host || config.mysql.options.port))){
+  console.error('CONFIG ERROR!!\n\tYou should only specify MYSQL_URI and MYSQL_[DATABASE,USERNAME,PASSWORD,HOST,PORT]');
+  process.exit(1);
+}
+
+if(config.mysql.options.logging){
+  config.mysql.options.logging = console.log;
+}else{
+  config.mysql.options.logging = false
+}
+
+module.exports = config;
