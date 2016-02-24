@@ -21,7 +21,7 @@ before_deploy: test $TRAVIS_TEST_RESULT = 0 && grunt build && cd dist && npm ins
 deploy:
   provider: releases
   file: 'meccano-webconsole-$TRAVIS_TAG.tar.gz'
-  api-key:
+  api_key:
     secure: izG9EeU6/k+amLL3Ipx6moyqXk5egJTExlQxc2VlRTQ6+o+qt/nGVmlxKIsZ77vuxRCXbEkqMf8EZzcxt7rGXddJjfZf1aJ68aHADxD5H5fUu7kz4LwrXiNLOe5LfS18ECqoNwuK2jK4xaoKkTlZUpoVrnqSsmAKQs7tBPMWOGeDZgKMG+i7BMP/vqwfw0vCjMNYOh91wY7K24VIlJDCILjVM95pL8Znv6dQKJv6YQXevS+Q9T9jtaa91eFeUa55UbE8IdhA3ntPr+hErnhyghoWM7JPdAO54Qu3q7SUGO/jK/qd7f6wIZjI/ubN5sNfNoF+WjDsVBoXXzasiesYvua677bL+YN6dEE9JZHa2kzEI8m/FaxJceSxd5/7aTLmWw9RJnKGWrqZb9T/DTc1bNkYDu915uLYcHnZCaMIiOKMdp68G3iX0LE530+ILrZ/SHKSnNJerIN5wA4MmQ6hrny+eUuYjX3fFcU80Sm9koVmQYLrGWJ1rwK+frXcuvSWUm7d0ciTuC5RiXt9oGP2RyrW1Wny//KSMO23Dh/eBwLBHjvHKYGdt456EJPJ5Jn/HDhPtLtHs3SeLhv7jokhv4oQ0xsYccopfKTm56ZlErsLtuehlMLg//5O7xqABxo3MPk6qdSrwSB0H46dzQXCmJeLUGR8RiqN78ffx4YZ/9E=
   on:
     tags: true
