@@ -5,3 +5,5 @@ public
 client/bower_components
 dist
 /config/config.yml
+
+config/config.yml
