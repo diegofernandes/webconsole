@@ -125,7 +125,7 @@ angular.module('meccanoAdminApp')
         $timeout.cancel(statusTimeout);
       }
       if (angular.isDefined(intervalCharts)) {
-        $interval.cancel(intervalCharts)
+        $interval.cancel(intervalCharts);
       }
     });
   });

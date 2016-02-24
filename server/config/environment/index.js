@@ -57,7 +57,7 @@ var all = {
     uri: undefined,
     username: undefined,
     password: undefined,
-    database: 'IOTDB',
+    database: undefined,
     options: {
       dialect: 'mysql',
       logging: false,
