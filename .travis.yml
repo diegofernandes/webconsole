@@ -18,12 +18,12 @@ notifications:
   slack:
     secure: ty70itzBMqk0hUp9YBOrPAekXRYuKqDbXNVZ2VfIhGUcWh002G8YlF9PpkkhIgEuXhjmCCh2vyHDt3fVdH+YYJFQmNRts6irf5UCELbR/V22Ubb2rV3aoB1KKPEv+l2ZVsk0U8clomUX2eCf3+os3/QQnuI+4F9uKpvAa0lXwzElyivLH0kq3sEzIMTb8xmVASuTxoVPhORqklHq9I+EVr1DyAgZ/OmeJJTm0ZAYx6YfBbt3osoZuNqbhBKXoXSN+GqOh5fCkCEYoB2sbRuEiH0ZPYNYTFTWZbO/6vB3Eyxlc3Tid+4JnCXpUaJikBXKddCljFbirHy0shj46lxAgujdoI5RaNsS8rTXbeky45yk6KWTQEHH4KJozAmgak9Kb193BaMgfqhF8wdzBBUX+wxGNMBo9qbIfEa5y8oMMb2QHOov42qY5XDIB/3yLE6T2ip6KbEJvVR2OiF2pQUO0v7CzeOfn9L/2X98A5y7+vt3ajRdDmTwYD96Q9Wp/YUCfwpLP3OxOXZDviWC7bfgqNOT9ZiDqgF+IkUkRz+9kkD2kd42xnnm1kDAKN74dji902RQq7M+HKzduFnqf8mXO5Xuhrjz7jLqdJ8bkpeNjH5I7Ta/15amx7AsMP2efTsb6MkJhF2Azc1R0C+PwsSaFtBEsEU8oDGcFgIPmhG1a60=
 before_deploy:
-- test $TRAVIS_TEST_RESULT = 0 \#
-  && grunt build \
-  && cd dist \
-  && npm install --prod \
-  && cd $TRAVIS_BUILD_DIR \
-  && tar -zcvf meccano-webconsole-$TRAVIS_TAG.tar.gz dist
+  - test $TRAVIS_TEST_RESULT = 0 \
+    && grunt build \
+    && cd dist \
+    && npm install --prod \
+    && cd $TRAVIS_BUILD_DIR \
+    && tar -zcvf meccano-webconsole-$TRAVIS_TAG.tar.gz dist
 deploy:
   provider: releases
   file: 'meccano-webconsole-$TRAVIS_TAG.tar.gz'
