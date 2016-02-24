@@ -11,4 +11,4 @@ before_script:
 services: mysql
 env:
   - NODE_ENV=travis
-  - MYSQL_URI=mysql://travis@127.0.0.1:3306/IOTDB_TEST
+  - MYSQL_URI=mysql://travis:@127.0.0.1:3306/IOTDB_TEST
