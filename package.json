@@ -17,7 +17,6 @@
     "jsonwebtoken": "^5.7.0",
     "lodash": "^4.5.0",
     "method-override": "^2.3.5",
-    "morgan": "^1.7.0",
     "mysql": "^2.10.2",
     "node-yaml-config": "0.0.4",
     "passport": "^0.3.2",
