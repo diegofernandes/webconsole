@@ -1,4 +1,5 @@
 # About Meccano IoT Project
+![](https://david-dm.org/meccano-iot/webconsole.svg) [![Build Status](https://travis-ci.org/meccano-iot/webconsole.svg?branch=master)](https://travis-ci.org/meccano-iot/webconsole) [![Coverage Status](https://coveralls.io/repos/github/meccano-iot/webconsole/badge.svg?branch=master)](https://coveralls.io/github/meccano-iot/webconsole?branch=master)
 
 Meccano project is a multi-purpose IoT (Internet of Things) board and software platform created by Luciano Kadoya, Rogério Biondi, Diego Osse and Talita Paschoini. Its development started in early 2014 as a closed R&D project in the Software Architecture Division, with the aim of creating a board which is robust, based on a modern microprocessor (ESP8266), cheap, easy to implement and deploy through the 750 retail stores to perform several functions, such as:
 
@@ -15,8 +16,6 @@ The project is still in its early stages and will evolve in the future. Magazine
 
 
 # Meccano IoT Web Console
-
-![](https://david-dm.org/meccano-iot/meccano-webconsole.svg)
 
 Meccano IoT Web Console is a web console to administrate the devices. With this admin you can:
 - Register new devices.
