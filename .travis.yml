@@ -12,8 +12,6 @@ before_script:
 services:
   - mysql
   - docker
-after_success:
-- coveralls
 env:
   global:
   - NODE_ENV: travis
