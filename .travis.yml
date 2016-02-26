@@ -10,6 +10,7 @@ services:
   - mysql
 sudo: required
 before_install:
+  - sudo service mysql stop
   - sudo apt-get install mysql-server -y
   - sudo service mysql start
 before_script:
