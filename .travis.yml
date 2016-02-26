@@ -12,6 +12,11 @@ before_script:
 services:
   - mysql
   - docker
+sudo: required
+
+before_install:
+  - sudo apt-get install mysql-server
+  - sudo service mysql start
 env:
   global:
   - NODE_ENV: travis
