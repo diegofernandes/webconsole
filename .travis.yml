@@ -4,18 +4,18 @@ cache:
   - node_modules
   - client/bower_components
 node_js:
-- 4.3.1
+  - 4.3.1
+services:
+  - docker
+  - mysql
+sudo: required
+before_install:
+  - sudo apt-get install mysql-server -y
+  - sudo service mysql start
 before_script:
 - npm install -g bower grunt-cli
 - bower install
 - mysql -e 'create database if not exists IOTDB_TEST;'
-services:
-  - mysql
-sudo: required
-
-before_install:
-  - sudo apt-get install docker-engine -y
-  - sudo service docker start
 env:
   global:
   - NODE_ENV: travis
