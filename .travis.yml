@@ -11,12 +11,11 @@ before_script:
 - mysql -e 'create database if not exists IOTDB_TEST;'
 services:
   - mysql
-  - docker
 sudo: required
 
 before_install:
-  - sudo apt-get install mysql-server
-  - sudo service mysql start
+  - sudo apt-get install docker-engine
+  - sudo service docker start
 env:
   global:
   - NODE_ENV: travis
