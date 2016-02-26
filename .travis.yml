@@ -14,7 +14,7 @@ services:
 sudo: required
 
 before_install:
-  - sudo apt-get install docker-engine
+  - sudo apt-get install docker-engine -y
   - sudo service docker start
 env:
   global:
