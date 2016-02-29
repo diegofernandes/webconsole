@@ -128,7 +128,7 @@ angular.module('meccanoAdminApp')
   };
 })
 
-.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal) {
+.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal, Messages,Auth, Modal,alertsPanel) {
   $scope.series = ['Updates'];
 
   $scope.onClick = function (points, evt) {
@@ -162,6 +162,17 @@ angular.module('meccanoAdminApp')
   $scope.toggleAnimation = function () {
     $scope.animationsEnabled = !$scope.animationsEnabled;
   };
+
+  $scope.sendCommand = Modal.confirm.command(function(message) {
+      Messages.save({
+        device : $scope.Devices.selected.device,
+        message:message,
+        sender: Auth.getCurrentUser().email,
+        delivery_type: 'TRANSIENT'
+      },function() {
+          alertsPanel.addSuccess('Command sent with success.');
+      });
+    });
 
 
 })
