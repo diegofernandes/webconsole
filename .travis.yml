@@ -12,11 +12,11 @@ matrix:
   allow_failures:
     - node_js: 5.1.1
 before_install:
-  - sudo apt-get install -y docker mysql-server mysql-client 
+  - sudo apt-get install -y docker mysql-server mysql-client
+  - mysql -u root -e 'create database if not exists IOTDB_TEST;'
 before_script:
 - npm install -g bower grunt-cli
 - bower install
-- mysql -e 'create database if not exists IOTDB_TEST;'
 env:
   global:
   - NODE_ENV: travis
