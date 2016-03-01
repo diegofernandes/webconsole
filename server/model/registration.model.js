@@ -25,7 +25,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: false
+      autoIncrement: false,
+      validate:{
+        is:{
+          args: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/i,
+          msg: 'The device should be a Mac Address valid.'
+        }
+      }
     },
     device_group: DataTypes.STRING,
     memo: DataTypes.STRING,
