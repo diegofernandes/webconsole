@@ -38,12 +38,12 @@ deploy:
     tags: true
   api-key:
     secure: RUkJmY14tMpk/3npqbAYNowm7R0dbuRGHCfMmXKuZHj+6i0WBDRZLTZEn4MmLv1wpl1f/qOg35eDVJnXOahELfb/TbBDhnAb/uUIvgWJ4BqDzOQ6ibI9DjH6vPNjsBXt2dO/3wli8hPTN5GGSyaJl/M1foxEHDicW7SvoOBKnCorFfAF9nJSv8Sqj2hAC8JDM4VfNuiLaIqnpr1nB0WznWjQEg/8jj8YPCsMJggBHk7wJas8GRymtkC9FcnUkrwX6cFlowqqEnc1WfXADWTG9pdqehFS5EtYk1jqL8Xt82wTInaQJoJ1bVBHHdx/6bhtwSZAbcjlhajKU+YZFA2lD5lSGlpLMnDbDDJbROwjULKkuXh3NNTL8IeaJiBOjy5GQGhO0czyAbXvap1JL/Nj5F4J9+j+R8C2AsYFx6RdxeKzSulLIm84FRPu+B4EDMKSpXUoL+y6X71LoCVHkeyx2M7yE0rWVxqAvj0fqD+pLB/wEDIWtYFKXNJJ0M2XnkUPexaobWcdZh3xROBsOcw9SbJoZl3iJSMKYdteCMxpnt/Dl/C6/n1xc01SCXRcFXQo4NhUkL6sSONz86zX0FIMosN7evI8hHJzsWoHUL9VnyMEsPSZE4QChNMC804kVllnz0kaq1+huwJZfIs3EgpaOWfy5qSi0rBg3MNIshXq5io=
-after_success:
+after_deploy:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=meccano/webconsole
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f docker/Dockerfile -t $REPO:$COMMIT .
   - docker images
   - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker tag $REPO:$COMMIT $REPO:$TRAVIS_TAG
   - docker push $REPO
