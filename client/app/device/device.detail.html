@@ -42,24 +42,29 @@
           <form class="form-inline">
 
             <!-- Button to restart the device -->
-            <button class="btn btn-default glyphicon glyphicon-refresh"
+            <button class="btn btn-default"
                     ng-disabled="Devices.selected == null"
-                    uib-tooltip="Restart device">
+                    ria-label="Restart device"
+                    uib-tooltip="Restart device"
+                    ng-click="sendCommand('REBOOT')">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </button>
 
             <!-- Button to send alert to the device -->
-            <button class="btn btn-default glyphicon glyphicon-play-circle"
+            <button class="btn btn-default"
                     ng-disabled="Devices.selected == null"
-                    uib-tooltip="Blink">
+                    aria-label="Blink"
+                    uib-tooltip="Blink"
+                    ng-click="sendCommand('BLINK')">
+                    <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
             </button>
 
-            <!-- Button to turn of device -->
-<!--             <button type="button"
-                    class="btn glyphicon glyphicon-off"
-                    ng-class="{'btn-success': !alterButton, 'btn-danger': alterButton}"
-                    ng-click="alterButton = !alterButton"
-                    uib-tooltip="Turn on/off">
-            </button> -->
+            <button type="button" class="btn btn-default" aria-label="Force sync" uib-tooltip="Force sync" ng-click="sendCommand('FORCE_SYNC')">
+              <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Purge data files" uib-tooltip="Purge data files" ng-click="sendCommand('PURGE')">
+              <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+            </button>
           </form>
         </div>
       </div>
