@@ -31,8 +31,11 @@ var DeviceHistoryStatus = db.DeviceHistoryStatus;
  **  Filter devices by status
  **/
 exports.index = function(req, res) {
-  var size = parseInt(req.query.size || 20);
-  delete  req.query.size
-  DeviceHistoryStatus.findAll({where:req.query,limit:size}).then(util.respondWithResult(res))
+  var time = req.query.time;
+  delete req.query.time;
+  req.query.creationDate = {
+    $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
+  };
+  DeviceHistoryStatus.findAll({where:req.query}).then(util.respondWithResult(res))
     .catch(util.handleError(res));
 }

@@ -12,7 +12,7 @@ angular.module('meccanoAdminApp')
     		},
     		selectedDevice: null,
         history: function () {
-          return $resource('api/deviceStatus/history?size=:size',{},{'get': {isArray:true}});
+          return $resource('api/deviceStatus/history',{},{'get': {isArray:true}});
         }
     	};
 
