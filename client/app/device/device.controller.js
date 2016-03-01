@@ -93,13 +93,24 @@ angular.module('meccanoAdminApp')
 .controller('DeviceRegisterCtrl', function($scope, $state, $stateParams, Devices) {
 
   $scope.Devices = Devices;
+  $scope.errors = {};
 
-  $scope.save = function() {
-    Devices.devices().post($scope.Device.selected, function (){
-      $state.go('device.list', {}, {reload: true});
-    }, function (err){
-      console.log(err);
-    });
+  $scope.save = function(form) {
+    Devices.devices().post($scope.Device.selected).$promise
+      .then(function() {
+        $state.go('device.list', {}, {
+          reload: true
+        });
+      }).catch(function(err) {
+        err = err.data;
+        // Update validity of form fields that match the sequelize errors
+        if (err.name) {
+          angular.forEach(err.errors, error => {
+            form[error.path].$setValidity('serverError', false);
+            $scope.errors[error.path] = error.message;
+          });
+        }
+      });
   };
 })
 
