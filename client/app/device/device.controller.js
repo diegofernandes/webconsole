@@ -112,6 +112,9 @@ angular.module('meccanoAdminApp')
         }
       });
   };
+  $scope.cancel = function() {
+    $state.go('device.list');
+  };
 })
 
 .controller('DeviceEditCtrl', function($scope, Devices, $state, $stateParams, $http) {

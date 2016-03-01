@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
 
-      <form name="deviceForm">
+      <form name="deviceForm" novalidate>
         <div class="form-group" ng-class="{'has-error has-feedback': deviceForm.device.$invalid && !deviceForm.device.$pristine}">
           <label class="control-label" for="inputMac">MAC address</label>
           <input type="text"
@@ -15,7 +15,7 @@
                  name="device"
                  placeholder="FF:FF:FF:FF:FF:FF"
                  ng-disabled="inputDisabled"
-                 required server-error focus
+                 ng-required="true" server-error focus
                  ng-pattern="/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/i" />
 
           <span ng-show="deviceForm.device.$invalid && !deviceForm.device.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
@@ -32,7 +32,7 @@
                  ng-model="Device.selected.device_group"
                  name="device_group"
                  placeholder="Device Group"
-                 required="">
+                 ng-required="true">
           <span ng-show="deviceForm.device_group.$invalid && !deviceForm.device_group.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
           <span ng-show="deviceForm.device_group.$invalid && !deviceForm.device_group.$pristine" class="sr-only">(error)</span>
           <p class="help-block" ng-show="deviceForm.device_group.$error.serverError">
