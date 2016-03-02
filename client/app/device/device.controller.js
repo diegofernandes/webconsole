@@ -105,7 +105,7 @@ angular.module('meccanoAdminApp')
         err = err.data;
         // Update validity of form fields that match the sequelize errors
         if (err.name) {
-          angular.forEach(err.errors, error => {
+          angular.forEach(err.errors,function(error) {
             form[error.path].$setValidity('serverError', false);
             $scope.errors[error.path] = error.message;
           });
