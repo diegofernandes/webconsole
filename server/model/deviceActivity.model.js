@@ -26,7 +26,10 @@ module.exports = function(sequelize, DataTypes) {
     updates:DataTypes.INTEGER
   },{
     freezeTableName: true,
-    timestamps:false
+    timestamps:false,
+    defaultScope:{
+      order:'hour DESC'
+    }
   });
 
   model.removeAttribute('id');
