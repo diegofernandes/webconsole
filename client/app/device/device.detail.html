@@ -46,7 +46,7 @@
                     ng-disabled="Devices.selected == null"
                     ria-label="Restart device"
                     uib-tooltip="Restart device"
-                    ng-click="sendCommand('REBOOT')">
+                    ng-click="sendCommand('Restart', 'REBOOT')">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </button>
 
@@ -55,14 +55,14 @@
                     ng-disabled="Devices.selected == null"
                     aria-label="Blink"
                     uib-tooltip="Blink"
-                    ng-click="sendCommand('BLINK')">
+                    ng-click="sendCommand('Blink','BLINK')">
                     <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
             </button>
 
-            <button type="button" class="btn btn-default" aria-label="Force sync" uib-tooltip="Force sync" ng-click="sendCommand('FORCE_SYNC')">
+            <button type="button" class="btn btn-default" aria-label="Force sync" uib-tooltip="Force sync" ng-click="sendCommand('Force sync','FORCE_SYNC')">
               <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-default" aria-label="Purge data files" uib-tooltip="Purge data files" ng-click="sendCommand('PURGE')">
+            <button type="button" class="btn btn-default" aria-label="Purge data files" uib-tooltip="Purge data files" ng-click="sendCommand('Purge','PURGE')">
               <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
             </button>
           </form>
