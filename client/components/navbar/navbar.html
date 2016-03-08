@@ -36,13 +36,20 @@
           <ul class="dropdown-menu">
             <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}">
               <a href="/admin">
-                <span class="glyphicon glyphicon-off pull-right"></span> Admin
+                <span class="glyphicon glyphicon-off pull-right"></span>
+                Admin
               </a>
             </li>
             <li role="separator" class="divider"></li>
+            <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}">
+              <a ui-sref="settings">
+                <span class="glyphicon glyphicon-cog pull-right"></span> My password
+              </a>
+            </li>
             <li ng-click="logout()">
               <a href="">
-                <span class="glyphicon glyphicon-off pull-right"></span> Log out
+                <span class="glyphicon glyphicon-off pull-right"></span>
+                Log out
               </a>
             </li>
           </ul>
