@@ -42,9 +42,8 @@ deploy:
 after_deploy:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=meccano/webconsole
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f docker/Dockerfile -t $REPO:$COMMIT .
   - docker images
-  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:latest
   - docker tag $REPO:$COMMIT $REPO:$TRAVIS_TAG
   - docker push $REPO
