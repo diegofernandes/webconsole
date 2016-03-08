@@ -15,8 +15,7 @@
                  name="device"
                  placeholder="FF:FF:FF:FF:FF:FF"
                  ng-disabled="inputDisabled"
-                 ng-required="true" server-error focus
-                 ng-pattern="/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/i" />
+                 ng-required="true" server-error focus/>
 
           <span ng-show="deviceForm.device.$invalid && !deviceForm.device.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
           <span ng-show="deviceForm.device.$invalid && !deviceForm.device.$pristine" class="sr-only">(error)</span>
