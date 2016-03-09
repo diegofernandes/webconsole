@@ -30,10 +30,10 @@ var router = express.Router();
 // Routes for /api/devices/
 router.get('/',auth.isAuthenticated(),deviceController.index);
 router.get('/:device', auth.isAuthenticated(),deviceController.show);
-router.post('/', auth.isAuthenticated(),deviceController.create);
-router.delete('/:device', auth.isAuthenticated(),deviceController.destroy);
-router.put('/:device', auth.isAuthenticated(),deviceController.update);
-router.patch('/:device', auth.isAuthenticated(),deviceController.update);
+router.post('/', auth.hasRole('user'),deviceController.create);
+router.delete('/:device', auth.hasRole('user'),deviceController.destroy);
+router.put('/:device', auth.hasRole('user'),deviceController.update);
+router.patch('/:device', auth.hasRole('user'),deviceController.update);
 
 router.get('/:device/statistics',auth.isAuthenticated(),statisticController.index);
 router.get('/:device/activity',auth.isAuthenticated(),activityController.index);

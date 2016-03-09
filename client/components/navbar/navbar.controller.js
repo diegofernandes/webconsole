@@ -13,8 +13,6 @@ angular.module('meccanoAdminApp')
     }];
 
     $scope.isCollapsed = true;
-    $scope.isLoggedIn = Auth.isLoggedIn;
-    $scope.isAdmin = Auth.isAdmin;
     $scope.getCurrentUser = Auth.getCurrentUser;
 
     $scope.logout = function() {
