@@ -132,6 +132,12 @@ angular.module('meccanoAdminApp')
       isAdmin: function() {
         return currentUser.role === 'admin';
       },
+      isUser: function() {
+        return currentUser.role === 'user';
+      },
+      isGuest: function() {
+        return currentUser.role === 'guest';
+      },
 
       /**
        * Get auth token

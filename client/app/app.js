@@ -87,11 +87,16 @@ angular.module('meccanoAdminApp', [
     });
     //back button function called from back button's ng-click="back()"
     $rootScope.back = function() {
-      if($rootScope.previousState_name){
+      if ($rootScope.previousState_name) {
         $state.go($rootScope.previousState_name, $rootScope.previousState_params);
-      }else{
+      } else {
         $location.path('/');
       }
-
     };
+
+    $rootScope.isLoggedIn = Auth.isLoggedIn;
+    $rootScope.isAdmin = Auth.isAdmin;
+    $rootScope.isUser = Auth.isUser;
+    $rootScope.isGuest = Auth.isGuest;
+
   });

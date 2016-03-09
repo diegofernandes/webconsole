@@ -97,7 +97,7 @@ describe('Message API Router:', function() {
 
     it('should route to device.controller.create', function() {
       routerStub.post
-        .withArgs('/','authService.isAuthenticated', 'deviceCtrl.create')
+        .withArgs('/','authService.hasRole.user', 'deviceCtrl.create')
         .should.have.been.calledOnce;
     });
 
@@ -107,7 +107,7 @@ describe('Message API Router:', function() {
 
     it('should route to device.controller.update', function() {
       routerStub.put
-        .withArgs('/:device','authService.isAuthenticated', 'deviceCtrl.update')
+        .withArgs('/:device','authService.hasRole.user', 'deviceCtrl.update')
         .should.have.been.calledOnce;
     });
 
@@ -117,7 +117,7 @@ describe('Message API Router:', function() {
 
     it('should route to device.controller.update', function() {
       routerStub.patch
-        .withArgs('/:device','authService.isAuthenticated', 'deviceCtrl.update')
+        .withArgs('/:device','authService.hasRole.user', 'deviceCtrl.update')
         .should.have.been.calledOnce;
     });
 
@@ -127,7 +127,7 @@ describe('Message API Router:', function() {
 
     it('should route to device.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:device','authService.isAuthenticated', 'deviceCtrl.destroy')
+        .withArgs('/:device','authService.hasRole.user', 'deviceCtrl.destroy')
         .should.have.been.calledOnce;
     });
 

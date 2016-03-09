@@ -83,7 +83,7 @@ exports.show = function(req, res, next) {
  */
 exports.destroy = function(req, res) {
   User.destroy({
-      ID: req.params.id
+    where:{ID: req.params.id}
     })
     .then(function() {
       res.status(204).end();
