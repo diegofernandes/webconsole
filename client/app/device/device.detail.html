@@ -4,10 +4,10 @@
     <legend>Activity</legend>
     <canvas id="line" class="chart chart-line" chart-data="Devices.selected.activity.data" chart-labels="Devices.selected.activity.labels" chart-legend="true" chart-series="series"></canvas>
 
-    <legend ng-hide="isGuest">Actions
+    <legend ng-hide="isGuest()">Actions
       <span class="glyphicon glyphicon-cog"></span>
     </legend>
-    <div ng-hide="isGuest" class="panel panel-default">
+    <div ng-hide="isGuest()" class="panel panel-default">
       <div class="panel-body">
         <form class="form-inline">
 
@@ -22,10 +22,10 @@
       </div>
     </div>
 
-    <legend ng-hide="isGuest">Commands
+    <legend ng-hide="isGuest()">Commands
       <span class="glyphicon glyphicon-wrench"></span>
     </legend>
-    <div ng-hide="isGuest" class="panel panel-default">
+    <div ng-hide="isGuest()" class="panel panel-default">
       <div class="panel-body">
         <form class="form-inline">
 

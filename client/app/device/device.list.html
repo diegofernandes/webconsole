@@ -42,10 +42,9 @@
         <button class="btn btn-default" type="submit" aria-label="Register new device">
           <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         </button>
-
         <!-- Add new device button -->
         <div class="btn-group pull-right" role="group" aria-label="...">
-          <button ng-hide="isGuest" ui-sref="device.register" class="btn btn-success" aria-label="Register new device">
+          <button ng-hide="isGuest()" ui-sref="device.register" class="btn btn-success" aria-label="Register new device">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           </button>
         </div>
