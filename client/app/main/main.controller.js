@@ -5,9 +5,9 @@ angular.module('meccanoAdminApp')
     $scope.lastAnnouncements = [];
     $scope.statusResults = [];
     $scope.status = {
-      NORMAL: false,
+      NORMAL: true,
       FAIL: true,
-      WAITING_APPROVE: false,
+      WAITING_APPROVE: true,
       WARNING: true
     };
 
@@ -48,7 +48,6 @@ angular.module('meccanoAdminApp')
       };
 
       DeviceStatus.history().get({
-        size: ($scope.statusResults.length || 1) * 16,
         status: $scope.statusResults
       }, function(resp) {
         var creationDateDefault = _.chain(resp).uniqBy('creationDate').reduce(function(result, item) {
@@ -125,7 +124,7 @@ angular.module('meccanoAdminApp')
         $timeout.cancel(statusTimeout);
       }
       if (angular.isDefined(intervalCharts)) {
-        $interval.cancel(intervalCharts)
+        $interval.cancel(intervalCharts);
       }
     });
   });

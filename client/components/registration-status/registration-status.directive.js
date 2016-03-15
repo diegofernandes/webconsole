@@ -16,7 +16,7 @@ angular.module('meccanoAdminApp')
         }
         if ($scope.registration.status === 'WAITING_APPROVE') {
           $scope.icon = 'glyphicon-time text-info';
-          $scope.tooltip = 'Device Resgistred but watting for acknowledgement';
+          $scope.tooltip = 'Device Resgistred but watting for authorization';
         }
         if (($scope.registration.status === 'FAIL')) {
           $scope.icon = 'glyphicon glyphicon-ban-circle text-danger';

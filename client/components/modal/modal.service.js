@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .factory('Modal', function ($rootScope, $modal) {
+  .factory('Modal', function ($rootScope, $uibModal) {
     /**
      * Opens a modal
      * @param  {Object} scope      - an object to be merged with modal's scope
@@ -15,7 +15,7 @@ angular.module('meccanoAdminApp')
 
       angular.extend(modalScope, scope);
 
-      return $modal.open({
+      return $uibModal.open({
         templateUrl: 'components/modal/modal.html',
         windowClass: modalClass,
         scope: modalScope
@@ -27,7 +27,6 @@ angular.module('meccanoAdminApp')
 
       /* Confirmation modals */
       confirm: {
-
         /**
          * Create a function to open a delete confirmation modal (ex. ng-click='myModalFn(name, arg1, arg2...)')
          * @param  {Function} del - callback, ran when delete is confirmed
@@ -69,6 +68,45 @@ angular.module('meccanoAdminApp')
 
             deleteModal.result.then(function(event) {
               del.apply(event, args);
+            });
+          };
+        },
+        command: function (command) {
+          command = command || angular.noop;
+
+          /**
+           * Open a delete confirmation modal
+           * @param  {String} name   - name or info to show on modal
+           * @param  {All}           - any additional args are passed staight to del callback
+           */
+          return function() {
+            var args = Array.prototype.slice.call(arguments),
+                name = args.shift(),
+                commandModal;
+
+            commandModal = openModal({
+              modal: {
+                dismissable: true,
+                title: 'Confirm Your Command',
+                html: '<p>Are you sure you want to send the comand <strong>' + name + '</strong> ?</p>',
+                buttons: [{
+                  classes: 'btn-danger',
+                  text: 'Send',
+                  click: function(e) {
+                    commandModal.close(e);
+                  }
+                }, {
+                  classes: 'btn-default',
+                  text: 'Cancel',
+                  click: function(e) {
+                    commandModal.dismiss(e);
+                  }
+                }]
+              }
+            }, 'modal-danger');
+
+            commandModal.result.then(function(event) {
+              command.apply(event, args);
             });
           };
         }

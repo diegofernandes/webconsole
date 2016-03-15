@@ -1,94 +1,79 @@
 <div class="panel panel-default" ng-show="Devices.selected.device">
-    <div class="panel-heading">Details</div>
-    <div class="panel-body">
-      <legend>Activity</legend>
-      <canvas id="line"
-              class="chart chart-line"
-              chart-data="Devices.selected.activity.data"
-              chart-labels="Devices.selected.activity.labels"
-              chart-legend="true"
-              chart-series="series">
-      </canvas>
+  <div class="panel-heading">Details</div>
+  <div class="panel-body">
+    <legend>Activity</legend>
+    <canvas id="line" class="chart chart-line" chart-data="Devices.selected.activity.data" chart-labels="Devices.selected.activity.labels" chart-legend="true" chart-series="series"></canvas>
 
-      <legend>Actions <span class="glyphicon glyphicon-cog"></span></legend>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <form class="form-inline">
+    <legend ng-hide="isGuest()">Actions
+      <span class="glyphicon glyphicon-cog"></span>
+    </legend>
+    <div ng-hide="isGuest()" class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-inline">
 
+          <!-- Button to Edit infomations of device -->
+          <button class="btn btn-default glyphicon glyphicon-ok" uib-tooltip="Authorize" ng-disabled="Devices.selected == null" ng-class="{ 'btn-warning': Devices.selected.status === 'WAITING_APPROVE',
+                                'btn-success': Devices.selected.status === 'NORMAL'}" ui-sref="device.edit({deviceId: Devices.selected.device})"></button>
 
-            <!-- Button to Edit infomations of device -->
-            <button class="btn btn-default glyphicon glyphicon-ok"
-                    uib-tooltip="Authorize"
-                    ng-disabled="Devices.selected == null"
-                    ng-class="{ 'btn-warning': Devices.selected.status === 'WAITING_APPROVE',
-                                'btn-success': Devices.selected.status === 'NORMAL'}"
-                    ui-sref="device.edit({deviceId: Devices.selected.device})">
-            </button>
+          <!-- Button to Edit infomations of device -->
+          <button class="btn btn-default glyphicon glyphicon-remove" uib-tooltip="Disallow" ng-disabled="Devices.selected == null" ng-click="destroy(Devices.selected)"></button>
 
-            <!-- Button to Edit infomations of device -->
-            <button class="btn btn-default glyphicon glyphicon-remove"
-                    uib-tooltip="Disallow"
-                    ng-disabled="Devices.selected == null"
-                    ng-click="destroy(Devices.selected)">
-            </button>
-
-          </form>
-        </div>
+        </form>
       </div>
-
-      <legend>Commands <span class="glyphicon glyphicon-wrench"></span></legend>
-            <div class="panel panel-default">
-        <div class="panel-body">
-          <form class="form-inline">
-
-            <!-- Button to restart the device -->
-            <button class="btn btn-default glyphicon glyphicon-refresh"
-                    ng-disabled="Devices.selected == null"
-                    uib-tooltip="Restart device">
-            </button>
-
-            <!-- Button to send alert to the device -->
-            <button class="btn btn-default glyphicon glyphicon-play-circle"
-                    ng-disabled="Devices.selected == null"
-                    uib-tooltip="Blink">
-            </button>
-
-            <!-- Button to turn of device -->
-<!--             <button type="button"
-                    class="btn glyphicon glyphicon-off"
-                    ng-class="{'btn-success': !alterButton, 'btn-danger': alterButton}"
-                    ng-click="alterButton = !alterButton"
-                    uib-tooltip="Turn on/off">
-            </button> -->
-          </form>
-        </div>
-      </div>
-      <legend>Infomations of the device</legend>
     </div>
-    <table class="table table-hover table-bordered">
-      <tr>
-        <th class="active"># device</th>
-        <td>{{ Devices.selected.device }}</td>
-      </tr>
-      <tr>
-        <th class="active">Group</th>
-        <td>{{ Devices.selected.device_group }}</td>
-      </tr>
-      <tr>
-        <th class="active">Registration</th>
-        <td>{{ Devices.selected.registrationDate | date : 'short' }}</td>
-      </tr>
-      <tr>
-        <th class="active">Creation</th>
-        <td>{{ Devices.selected.creationDate | date : 'short' }}</td>
-      </tr>
-      <tr>
-        <th class="active">Memo</th>
-        <td>{{ Devices.selected.memo }}</td>
-      </tr>
-      <tr>
-        <th class="active">Status</th>
-        <td>{{ Devices.selected.status | lowercase }}</td>
-      </tr>
-    </table>
+
+    <legend ng-hide="isGuest()">Commands
+      <span class="glyphicon glyphicon-wrench"></span>
+    </legend>
+    <div ng-hide="isGuest()" class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-inline">
+
+          <!-- Button to restart the device -->
+          <button class="btn btn-default" ria-label="Restart device" uib-tooltip="Restart device" ng-click="sendCommand('Restart', 'REBOOT')">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+          </button>
+
+          <!-- Button to send alert to the device -->
+          <button class="btn btn-default" aria-label="Blink" uib-tooltip="Blink" ng-click="sendCommand('Blink','BLINK')">
+            <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+          </button>
+
+          <button type="button" class="btn btn-default" aria-label="Force sync" uib-tooltip="Force sync" ng-click="sendCommand('Force sync','FORCE_SYNC')">
+            <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default" aria-label="Purge data files" uib-tooltip="Purge data files" ng-click="sendCommand('Purge','PURGE')">
+            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <legend>Infomations of the device</legend>
   </div>
+  <table class="table table-hover table-bordered">
+    <tr>
+      <th class="active"># device</th>
+      <td>{{ Devices.selected.device }}</td>
+    </tr>
+    <tr>
+      <th class="active">Group</th>
+      <td>{{ Devices.selected.device_group }}</td>
+    </tr>
+    <tr>
+      <th class="active">Registration</th>
+      <td>{{ Devices.selected.registrationDate | date : 'short' }}</td>
+    </tr>
+    <tr>
+      <th class="active">Creation</th>
+      <td>{{ Devices.selected.creationDate | date : 'short' }}</td>
+    </tr>
+    <tr>
+      <th class="active">Memo</th>
+      <td>{{ Devices.selected.memo }}</td>
+    </tr>
+    <tr>
+      <th class="active">Status</th>
+      <td>{{ Devices.selected.status | lowercase }}</td>
+    </tr>
+  </table>
+</div>

@@ -9,28 +9,28 @@
         <div class="form-group">
           <label>Current Password</label>
 
-          <input type="password" name="password" class="form-control" ng-model="user.oldPassword"
-                 server-error/>
+          <input type="password" name="password" class="form-control" ng-model="user.oldPassword" server-error/>
           <p class="help-block" ng-show="form.password.$error.mongoose">
-              {{ errors.other }}
+            {{ errors.other }}
           </p>
         </div>
 
         <div class="form-group">
           <label>New Password</label>
 
-          <input type="password" name="newPassword" class="form-control" ng-model="user.newPassword"
-                 ng-minlength="3"
-                 required/>
-          <p class="help-block"
-             ng-show="(form.newPassword.$error.minlength || form.newPassword.$error.required) && (form.newPassword.$dirty || submitted)">
+          <input type="password" name="newPassword" class="form-control" ng-model="user.newPassword" ng-minlength="3" required/>
+          <p class="help-block" ng-show="(form.newPassword.$error.minlength || form.newPassword.$error.required) && (form.newPassword.$dirty || submitted)">
             Password must be at least 3 characters.
           </p>
         </div>
 
-        <p class="help-block"> {{ message }} </p>
-
-        <button class="btn btn-lg btn-primary" type="submit">Save changes</button>
+        <p class="help-block">
+          {{ message }}
+        </p>
+        <button ng-click="back()" class="btn btn-default">
+          <span class="glyphicon glyphicon-arrow-left"></span>
+          Cancel</button>
+        <button class="btn btn-primary" type="submit">Save changes</button>
       </form>
     </div>
   </div>

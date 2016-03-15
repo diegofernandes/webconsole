@@ -93,13 +93,27 @@ angular.module('meccanoAdminApp')
 .controller('DeviceRegisterCtrl', function($scope, $state, $stateParams, Devices) {
 
   $scope.Devices = Devices;
+  $scope.errors = {};
 
-  $scope.save = function() {
-    Devices.devices().post($scope.Device.selected, function (){
-      $state.go('device.list', {}, {reload: true});
-    }, function (err){
-      console.log(err);
-    });
+  $scope.save = function(form) {
+    Devices.devices().post($scope.Device.selected).$promise
+      .then(function() {
+        $state.go('device.list', {}, {
+          reload: true
+        });
+      }).catch(function(err) {
+        err = err.data;
+        // Update validity of form fields that match the sequelize errors
+        if (err.name) {
+          angular.forEach(err.errors,function(error) {
+            form[error.path].$setValidity('serverError', false);
+            $scope.errors[error.path] = error.message;
+          });
+        }
+      });
+  };
+  $scope.cancel = function() {
+    $state.go('device.list');
   };
 })
 
@@ -128,7 +142,7 @@ angular.module('meccanoAdminApp')
   };
 })
 
-.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal) {
+.controller('DeviceDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal, Messages,Auth, Modal,alertsPanel) {
   $scope.series = ['Updates'];
 
   $scope.onClick = function (points, evt) {
@@ -162,6 +176,17 @@ angular.module('meccanoAdminApp')
   $scope.toggleAnimation = function () {
     $scope.animationsEnabled = !$scope.animationsEnabled;
   };
+
+  $scope.sendCommand = Modal.confirm.command(function(message) {
+      Messages.save({
+        device : $scope.Devices.selected.device,
+        message:message,
+        sender: Auth.getCurrentUser().email,
+        delivery_type: 'TRANSIENT'
+      },function() {
+          alertsPanel.addSuccess('Command sent with success.');
+      });
+    });
 
 
 })

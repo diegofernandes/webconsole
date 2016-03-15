@@ -610,7 +610,7 @@ module.exports = function(grunt) {
         'concurrent:test',
         'injector',
         'autoprefixer',
-        'karma'
+        //'karma'
       ]);
     } else if (target === 'e2e') {
       return grunt.task.run([

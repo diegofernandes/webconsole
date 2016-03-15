@@ -68,7 +68,7 @@ describe('Message API Router:', function() {
 
     it('should route to messages.controller.create', function() {
       routerStub.post
-        .withArgs('/','authService.isAuthenticated', 'messagesCtrl.create')
+        .withArgs('/','authService.hasRole.user', 'messagesCtrl.create')
         .should.have.been.calledOnce;
     });
 
@@ -78,7 +78,7 @@ describe('Message API Router:', function() {
 
     it('should route to messages.controller.update', function() {
       routerStub.put
-        .withArgs('/:id','authService.isAuthenticated', 'messagesCtrl.update')
+        .withArgs('/:id','authService.hasRole.user', 'messagesCtrl.update')
         .should.have.been.calledOnce;
     });
 
@@ -88,7 +88,7 @@ describe('Message API Router:', function() {
 
     it('should route to messages.controller.update', function() {
       routerStub.patch
-        .withArgs('/:id','authService.isAuthenticated', 'messagesCtrl.update')
+        .withArgs('/:id','authService.hasRole.user', 'messagesCtrl.update')
         .should.have.been.calledOnce;
     });
 
@@ -98,7 +98,7 @@ describe('Message API Router:', function() {
 
     it('should route to messages.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:id','authService.isAuthenticated', 'messagesCtrl.destroy')
+        .withArgs('/:id','authService.hasRole.user', 'messagesCtrl.destroy')
         .should.have.been.calledOnce;
     });
 

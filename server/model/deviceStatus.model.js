@@ -29,6 +29,7 @@ module.exports = function(sequelize, DataTypes) {
     memo: DataTypes.STRING,
     registrationDate: DataTypes.DATE,
     creationDate: DataTypes.DATE,
+    type: DataTypes.STRING,
     lastAnnouncementDate: DataTypes.DATE,
     elapsedMinutes: DataTypes.INTEGER,
     status: DataTypes.STRING

@@ -1,14 +1,49 @@
 language: node_js
+cache:
+  apt: true
+  directories:
+  - node_modules
+  - client/bower_components
 node_js:
-  - 4.2.3
+  - 4.3.1
+sudo: required
+dist: trusty
 matrix:
   fast_finish: true
   allow_failures:
     - node_js: 5.1.1
+before_install:
+  - sudo apt-get install -y docker mysql-server mysql-client
+  - mysql -u root -e 'create database if not exists IOTDB_TEST;'
 before_script:
-  - npm install -g bower grunt-cli
-  - bower install
-services: mysql
+- npm install -g bower grunt-cli
+- bower install
 env:
-  - NODE_ENV=travis
-  - MYSQL_URI=mysql://travis@127.0.0.1:3306/IOTDB_TEST
+  global:
+  - NODE_ENV: travis
+  - MYSQL_URI: mysql://root@localhost:3306/IOTDB_TEST
+  - COMMIT: ${TRAVIS_COMMIT::8}
+  - secure: AZzQiIEWi9ZgpRutEFigFW1FP8ExtqPdZztuhJyyo5PpxwAjkmR/7apYzX5x3OMwDARzJRKviAa/w0yHUMeHuvD7YYbIStkAmxJE/ocBsZWa0dCL+6rzcItfADB6V43kI5DzIksClEeR9+zScFUH4z5vGTlH7fcBOkfivsaD+1LhYLmllK8OzvHK9MSWchHQLdUzQnidZrJNHlCqjP+729rSpwNEYAdCDGXf4IdmtPY15HxxiKq3Z/RvSMEqwxp/DbUnzA3DmNKMCR0ei/CtDwijVBsjk3yHKp6zy5LU+kpXNWwivISA2hbUgBVtoft3/PFL2zu2GNUgtyPbKpf7vs2zOJTSQOlFKMXBwY+oqSgM1AIbI2pbxtNFNBIDJ0Ox8UWnuxz/B774rjDwoMyVUJxapNvVg40dJ1apb/3sOaTQzRupZlZg6gmgXgiXCk62+Ojni+K8pyFgWJ3JvvoCEArgY7LtW1pRcggQsATKiEeO3KXIxJ247+WcVGAoAHnCdH8Jlyf/UfXsCtlEpuwEynDw4po0F00bKPR1taUTUXPeehgu9uK1cxzhty9+cqlRUgcSYDDwuk3HZPwlmGWQVznk2FIFTbG9+QuNtFBVq4klHN/lFzaYRv86fxuMDqUxw8tJ9gUp2dvDoS5IfD0X958AV+h9bKrGzTniTyEt4bs=
+  - secure: ao6LNUHaCiMHbVj2x8X+N7dWUI2IvJrStXMn61zuNBtL4l4Qdpy/YzSrC5TcoXEn/325e7hQ1VOW19543OT8nfun9JZUXgXW9KctzHw7JQdjlLEqbSfaQO++QZQos/82zdfkWKVYCQAc3g3327n6JMNDaGA+w1bVh6VHpun7VYWC1MFdnWq3a/JqeJzvNGBrJVE38mMbVk8X2LpXGedEcnpKNB4eerOWLmY1yhkXT/GKjxSrY9I/Gvtv6hkFpLIkPsG4APqkHF6y78kstYJgLE7Hex4YO8FsfgwuAWul1Vq07/tJpzNFh2QX5AAcTvUcI0kmQ8xfIilnp1O3FI9UycOfog7atS/5Ir0oGQbuEoRVMUMvwFqpMOgVS6eEAQ6uv79/0wm5h7iXaHaq4M4m9w/3mB5SqnKMQn0wrwViV3+hqcDSSIHhMuJi2/6RiU5DVu5H/Lcb188HFQ9ytrJOl4pXZH3Bo9qfiTGtk1ITB6S0mJmqA0HO0aWQMvsRyMMN5wnaE8PzxCuaNFIXrbJGAI8zvGB/QzDsCPxiiFKBIcIIToxMcwFfEqGH2gbQaQmmnT2cSHAroG2S0zIU5A11Ug8Qh6nFVmzK25YVW+BlL608J0cP0OINblZyR1DO92e2x3fTok+4wQFLXOXK6EzMKeCkDLdbjR5tx7qYZkn3NQM=
+  - secure: rnz727EGc7FndAF+vxT+stcErZD5TQpR0xBKSBOXnp7BHrCnM5pMfqoFKJkVkshBWCBg4NKdvujMKn30XNxyzdT9HhbyMFgN31Vl/WsiVYZzJFx4SNcvD5Ex+CmSwcVROesXIQ+GYzUzvO6Be51EVfGEWGFufIl8+T9x040so63uESShfZytzHWfa/2C1DdODFR3crT5XGd4jsyaNnpFy+PWzLLEKS6gbPtKBEAU9kRJK+17c+/teA9ci0+x8b4A8b5OM8bI9A6ngu6+i60VJBbSj4PWugdOuJh+zuRD6tZPQ84Dgkf7cOVE1FA7T92JoIbL7Zcp0S3OTP639pb4xwohMHEEq3ZGkqaxMImdFc10zdbkaEu1VOW4h2b1Hok16dMf5D2yuQJHW8jSBIuAg3AuWo8JLo58FSWTbqu41fLrbKBz4S96iXH8MrKWxvP8g6OiZ9x6J2swDFr+ICqI1EuSzAHsovh3dp3AYp+qBLFH2lHBtjTLN4cGfm9f+btblFwPaO/Pmf+nkstj/RsgDAD18UAftgyVWSqloMNABeFUuythAVmeJpXGWdxj01UebftsUE8WdI/M/ABbfDKOO9xdLEuuJNf50CWcmy/Zsann5TKeGATplPu57nRIFBy2vHUhxzkRFRkE0NY6mmSYr2yGHkVgRAKtoBcANJxHl54=
+notifications:
+  slack:
+    secure: fHSVlzSMhbsG0pXLiEASEze+s0++ZV/i1GROlTQRn6Qax7cGJu/DCat8snniyPrrWgP/4XdHN7OaV4SCtHYFZSaX/iYAzL29tDvYnH9CVpOiD6GtWH2/ObTWsZekrjvgnaAiGf41Y6ceg6pATdpsfugFj5Nu220AF6OUa+RFV3OBBW92b/SXFE1D0A2XEMPWwKs2L/TLZYLWPIRJXzqFOWyO5BQGZqu6K/nrUccc2ZTZ4PZkTtHQ9l4/UvKLQA60A4BYuMcbW9wu1a4z6oKyPqgVReNbL/75oOtOth4W5VOLXk8yrqPFTGh3jpoyev80CYAqkNS0jvW3mOoqwbat6GYCS5sV9dQmN6rJ/UDH1WvKJY9FWWbGIZNLMHpDob3SWL9/Ms77/SpK3y2VU/ExXphJnQ6sZAarChOl1VtHVJJej4Ak7S0BopNOhcXaIRqItrDHGXb8J8zdYzUV0kO4XyS0/Ai0fUnZmMiMtwqya1ouLtM3qRGpET8aIA267BYTIgsje8yP9g4IZxnHeizIQKhI7nLNBDgwCA/1Rt4m7oVcPhbeM3AyxKUprZ7iElTu2nEYbfl6/BnscLguWMnib+VymzWXVFFojTTZSkgbFaqYG9Qr51EMbzUsoZQXuiy8XyAfS8/jhUhoG3B+l7uHb7c60LzQxDrcxDf5LvaQqzE=
+before_deploy: test $TRAVIS_TEST_RESULT = 0 && grunt build && cd dist && npm install
+  --prod && cd $TRAVIS_BUILD_DIR && tar -zcvf meccano-webconsole-$TRAVIS_TAG.tar.gz
+  dist
+deploy:
+  provider: releases
+  file: meccano-webconsole-$TRAVIS_TAG.tar.gz
+  on:
+    tags: true
+  api-key:
+    secure: RUkJmY14tMpk/3npqbAYNowm7R0dbuRGHCfMmXKuZHj+6i0WBDRZLTZEn4MmLv1wpl1f/qOg35eDVJnXOahELfb/TbBDhnAb/uUIvgWJ4BqDzOQ6ibI9DjH6vPNjsBXt2dO/3wli8hPTN5GGSyaJl/M1foxEHDicW7SvoOBKnCorFfAF9nJSv8Sqj2hAC8JDM4VfNuiLaIqnpr1nB0WznWjQEg/8jj8YPCsMJggBHk7wJas8GRymtkC9FcnUkrwX6cFlowqqEnc1WfXADWTG9pdqehFS5EtYk1jqL8Xt82wTInaQJoJ1bVBHHdx/6bhtwSZAbcjlhajKU+YZFA2lD5lSGlpLMnDbDDJbROwjULKkuXh3NNTL8IeaJiBOjy5GQGhO0czyAbXvap1JL/Nj5F4J9+j+R8C2AsYFx6RdxeKzSulLIm84FRPu+B4EDMKSpXUoL+y6X71LoCVHkeyx2M7yE0rWVxqAvj0fqD+pLB/wEDIWtYFKXNJJ0M2XnkUPexaobWcdZh3xROBsOcw9SbJoZl3iJSMKYdteCMxpnt/Dl/C6/n1xc01SCXRcFXQo4NhUkL6sSONz86zX0FIMosN7evI8hHJzsWoHUL9VnyMEsPSZE4QChNMC804kVllnz0kaq1+huwJZfIs3EgpaOWfy5qSi0rBg3MNIshXq5io=
+after_deploy:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=meccano/webconsole
+  - docker build -f docker/Dockerfile -t $REPO:$COMMIT .
+  - docker images
+  - docker tag $REPO:$COMMIT $REPO:latest
+  - docker tag $REPO:$COMMIT $REPO:$TRAVIS_TAG
+  - docker push $REPO

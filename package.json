@@ -1,6 +1,6 @@
 {
-  "name": "meccano-webadmin",
-  "version": "0.0.0",
+  "name": "meccano-webconsole",
+  "version": "0.0.8",
   "main": "server/app.js",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -26,6 +26,8 @@
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
+    "babel-core": "^6.5.2",
+    "chai": "^3.5.0",
     "chai-as-promised": "^5.2.0",
     "chai-things": "^0.2.0",
     "connect-livereload": "^0.5.4",
