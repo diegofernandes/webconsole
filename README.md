@@ -17,6 +17,8 @@ The project is still in its early stages and will evolve in the future. Magazine
 
 # Meccano IoT Web Console
 
+<image src="images/webconsole.png" width=800 />
+
 Meccano IoT Web Console is a web console to administrate the devices. With this admin you can:
 - Register new devices.
 - Send commands to devices.
