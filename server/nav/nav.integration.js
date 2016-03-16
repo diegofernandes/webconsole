@@ -44,10 +44,6 @@ describe('Nav API:', function() {
     return User.destroy({ where: {} });
   });
 
-  after(function() {
-    return Nav.destroy({ where: {} });
-  });
-
 
   describe('GET /nav', function() {
     var navConfig;

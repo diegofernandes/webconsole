@@ -19,10 +19,11 @@
 
 'use strict';
 var config = require('../config/environment');
+var _ = require('lodash');
 
 exports.index = function(req, res) {
 
   res.json({
-    reports: config.servicemaneger && config.servicemaneger.url
+    reports: config.servicemaneger && _.isString(config.servicemaneger.url)
   });
 }
