@@ -123,6 +123,8 @@ This include a default admin user with credentials:
 admin@admin.con/admin
 ```
 
+ - **SERVICEMANAGER_URL**: The service maneger api url.
+
 #### Database configuration
 
 The parameters bellow control the connection and behavior of the RDBMS.

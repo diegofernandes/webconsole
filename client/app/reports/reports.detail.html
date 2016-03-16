@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="row-fuild">
+        <div class="panel panel-default">
+          <div class="panel-heading">Report</div>
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th class="active">Plugin</th>
+              <td>{{ plugin.plugin }}</td>
+            </tr>
+            <tr>
+              <th class="active">Description</th>
+              <td>{{ plugin.description }}</td>
+            </tr>
+            <tr>
+              <th class="active">Engine</th>
+              <td>{{ plugin.engine}}</td>
+            </tr>
+            <tr>
+              <th class="active">Enabled</th>
+              <td>{{ plugin.enabled}}</td>
+            </tr>
+            <tr>
+              <th class="active">Schedule</th>
+              <td>{{ plugin.schedule | prettyCron }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <img class="img-thumbnail img-responsive" ng-src="/api/reports/plugins/{{key.plugin}}/{{key.version}}/assets/output.png" alt="Output"/>
+    </div>
+  </div>
+  <div class="row">
+    <button ng-click="back()" class="btn btn-default">
+      <span class="glyphicon glyphicon-arrow-left"></span>
+      Back</button>
+  </div>
+</div>

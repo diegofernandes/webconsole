@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row-fuild">
+    <div class="panel panel-default">
+      <div class="panel-heading">Reports</div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th width="200px">Plugin</th>
+            <th>Description</th>
+            <th>Engine</th>
+            <th>Enabled</th>
+            <th>Schedule</th>
+            <th>
+              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-show="plugins.length == 0 && isLoading === false">
+            <td class="text-danger text-center" colspan="6">Reports not found.</td>
+          </tr>
+          <tr ng-show="isLoading">
+            <td colspan="6" class="text-center">
+              <img src="assets/images/loading.gif" style="height: 30px">
+            </td>
+          </tr>
+          <tr ng-repeat="plugin in plugins | filter:{type:'report'} track by plugin.plugin" ng-dblclick="open(plugin.plugin)">
+            <td>{{ plugin.plugin }}</td>
+            <td>{{ plugin.description }}</td>
+            <td>{{ plugin.engine }}</td>
+            <td>{{ plugin.enabled }}</td>
+            <td>{{ plugin.schedule | prettyCron }}</td>
+            <td>
+              <button type="button" class="btn btn-default" ng-click="open(plugin.plugin)" aria-label="Open">
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,16 +1,29 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .controller('NavbarCtrl', function($scope, $location, Auth) {
-    $scope.menu = [ {
+  .controller('NavbarCtrl', function($scope, $location, Auth, NavBar) {
+    $scope.menu = [{
       'title': 'Devices',
       'state': 'device.list',
       'icon': 'glyphicon glyphicon-list-alt'
-    },{
+    }, {
       'title': 'Activity',
       'state': 'announcements.list',
       'icon': 'glyphicon glyphicon-signal'
     }];
+
+
+     NavBar.query(function(config) {
+      console.log(config.reports);
+      if (config.reports) {
+        $scope.menu.push({
+          'title': 'Reports',
+          'state': 'reports.list',
+          'icon': 'glyphicon glyphicon-scale'
+        });
+      }
+
+    })
 
     $scope.isCollapsed = true;
     $scope.getCurrentUser = Auth.getCurrentUser;
