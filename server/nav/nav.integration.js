@@ -23,11 +23,6 @@ describe('Nav API:', function() {
     });
   });
 
-  before(function() {
-    return Nav.destroy({ where: {} });
-  });
-
-
   // Login
   before(function(done) {
     request(app)
