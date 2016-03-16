@@ -13,14 +13,17 @@ angular.module('meccanoAdminApp')
     }];
 
 
-    var config = NavBar.query();
-    if (config.reports) {
-      $scope.menu.push({
-        'title': 'Reports',
-        'state': 'reports.list',
-        'icon': 'glyphicon glyphicon-scale'
-      });
-    }
+     NavBar.query(function(config) {
+      console.log(config.reports);
+      if (config.reports) {
+        $scope.menu.push({
+          'title': 'Reports',
+          'state': 'reports.list',
+          'icon': 'glyphicon glyphicon-scale'
+        });
+      }
+
+    })
 
     $scope.isCollapsed = true;
     $scope.getCurrentUser = Auth.getCurrentUser;
