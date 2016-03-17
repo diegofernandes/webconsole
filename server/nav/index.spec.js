@@ -45,7 +45,7 @@ describe('Nav Router:', function() {
 
     it('should route to nav.controller.index', function() {
       routerStub.get
-        .withArgs('/','authService.isAuthenticated', 'navCtrl.index')
+        .withArgs('/', 'navCtrl.index')
         .should.have.been.calledOnce;
     });
   });

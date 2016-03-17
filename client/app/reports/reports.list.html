@@ -8,7 +8,6 @@
             <th width="200px">Plugin</th>
             <th>Description</th>
             <th>Engine</th>
-            <th>Enabled</th>
             <th>Schedule</th>
             <th>
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -24,11 +23,10 @@
               <img src="assets/images/loading.gif" style="height: 30px">
             </td>
           </tr>
-          <tr ng-repeat="plugin in plugins | filter:{type:'report'} track by plugin.plugin" ng-dblclick="open(plugin.plugin)">
+          <tr ng-repeat="plugin in plugins | filter:{type:'report',enabled:true} track by plugin.plugin" ng-dblclick="open(plugin.plugin)">
             <td>{{ plugin.plugin }}</td>
             <td>{{ plugin.description }}</td>
             <td>{{ plugin.engine }}</td>
-            <td>{{ plugin.enabled }}</td>
             <td>{{ plugin.schedule | prettyCron }}</td>
             <td>
               <button type="button" class="btn btn-default" ng-click="open(plugin.plugin)" aria-label="Open">
