@@ -14,7 +14,6 @@ angular.module('meccanoAdminApp')
 
 
      NavBar.query(function(config) {
-      console.log(config.reports);
       if (config.reports) {
         $scope.menu.push({
           'title': 'Reports',
@@ -22,8 +21,7 @@ angular.module('meccanoAdminApp')
           'icon': 'glyphicon glyphicon-scale'
         });
       }
-
-    })
+    });
 
     $scope.isCollapsed = true;
     $scope.getCurrentUser = Auth.getCurrentUser;

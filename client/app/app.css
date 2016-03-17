@@ -37,3 +37,19 @@
     color: #000;
     padding: 0.2em 0;
 }
+
+@keyframes rotating {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    animation: rotating 5s linear infinite;
+}
+
+.icon span.glyphicon {
+	opacity: 0;
+}
+.icon.active span.glyphicon {
+	opacity: 1;
+}

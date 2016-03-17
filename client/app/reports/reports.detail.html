@@ -18,10 +18,6 @@
               <td>{{ plugin.engine}}</td>
             </tr>
             <tr>
-              <th class="active">Enabled</th>
-              <td>{{ plugin.enabled}}</td>
-            </tr>
-            <tr>
               <th class="active">Schedule</th>
               <td>{{ plugin.schedule | prettyCron }}</td>
             </tr>
@@ -30,7 +26,16 @@
       </div>
     </div>
     <div class="col-sm-8">
-      <img class="img-thumbnail img-responsive" ng-src="/api/reports/plugins/{{key.plugin}}/{{key.version}}/assets/output.png" alt="Output"/>
+      <div class="panel panel-default">
+        <div class="panel-body ">
+          <img class="img-responsive center-block" ng-src="/api/reports/plugins/{{key.plugin}}/{{key.version}}/assets/output.png?_ts={{ts}}" alt="Output"/>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-default center-block" ng-click="reloadImg()">
+            <span class="glyphicon glyphicon-refresh spinner"></span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
