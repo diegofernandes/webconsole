@@ -17,6 +17,7 @@ module.exports = function(app) {
   app.use('/api/lastAnnouncements', require('./api/lastAnnouncement'));
   app.use('/api/messages', require('./api/message'));
   app.use('/api/users', require('./api/user'));
+  app.use('/api/releases', require('./api/release'));
 
   if (config.servicemaneger && config.servicemaneger.url) {
     app.use('/api/reports', proxy(config.servicemaneger.url, {

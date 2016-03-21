@@ -10,6 +10,11 @@ angular.module('meccanoAdminApp')
       'title': 'Activity',
       'state': 'announcements.list',
       'icon': 'glyphicon glyphicon-signal'
+    },
+    {
+      'title': 'OTA',
+      'state': 'releases.list',
+      'icon': 'glyphicon glyphicon-send'
     }];
 
 
