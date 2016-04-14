@@ -43,5 +43,8 @@ module.exports = {
       host: process.env.MYSQL_HOST,
       port: process.env.MYSQL_PORT
     }
+  },
+  servicemaneger: {
+    url: process.env.SERVICEMANAGER_URL
   }
 };

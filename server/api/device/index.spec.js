@@ -47,7 +47,7 @@ var deviceIndex = proxyquire('./index', {
   '../../auth/auth.service': authServiceStub
 });
 
-describe('Message API Router:', function() {
+describe('Device API Router:', function() {
 
   it('should return an express router instance', function() {
     deviceIndex.should.equal(routerStub);
