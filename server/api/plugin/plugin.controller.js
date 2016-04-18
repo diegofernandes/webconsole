@@ -32,10 +32,7 @@ exports.index = function(req, res) {
 
 exports.show = function(req, res) {
   Plugin.findOne({
-      where: req.params,
-      include: [
-          { model: PluginConfiguration }
-      ]
+      where: req.params
     })
     .then(util.handleEntityNotFound(res))
     .then(util.respondWithResult(res))
@@ -47,10 +44,7 @@ exports.show = function(req, res) {
  */
 exports.create = function(req, res) {
   return Plugin.create(req.body, {
-      logging: true,
-      include: [
-          { model: PluginConfiguration }
-      ]
+      logging: true
     }).then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));
 }
@@ -63,10 +57,7 @@ exports.update = function(req, res) {
   Plugin.find({
       where: {
         id: req.params.id
-      },
-      include: [
-          { model: PluginConfiguration }
-      ]
+      }
     })
     .then(util.handleEntityNotFound(res))
     .then(util.saveUpdates(req.body))
@@ -79,18 +70,74 @@ exports.destroy = function(req, res) {
   Plugin.destroy({
       where: {
         id: req.params.id
-      },
-      include: [
-          { model: PluginConfiguration }
-      ]
+      }
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.respondWithResult(res, 200))
+    .catch(util.handleError(res));
+}
+
+// Lists the keys for a configuration
+exports.indexKey = function(req, res) {
+  db.page(PluginConfiguration, req.query, {
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(util.respondWithResult(res))
+  .catch(util.handleError(res));
+}
+
+
+// Shows a configuration key
+exports.showKey = function(req, res) {
+  PluginConfiguration.findOne({
+      where: req.params
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
+}
+
+/**
+ * Saves the object to the database
+ */
+exports.createKey = function(req, res) {
+  return PluginConfiguration.create(req.body, {
+      logging: true
+    }).then(util.respondWithResult(res, 201))
+    .catch(util.handleError(res));
+}
+
+// Updates an existing Thing in the DB
+exports.updateKey = function(req, res) {
+  PluginConfiguration.find({
+      where: {
+        id: req.params.id,
+        key: req.params.key
+      }
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.saveUpdates(req.body))
+    .then(util.respondWithResult(res))
+    .catch(util.handleError(res));
+}
+
+// Deletes a Thing from the DB
+exports.destroyKey = function(req, res) {
+  PluginConfiguration.destroy({
+      where: {
+        id:  req.params.id,
+        key: req.params.key
+      }
     }).then(function() {
-      return Plugin.find({
+      return PluginConfiguration.find({
         where: {
-          id: req.params.id
+          id: req.params.id,
+          key: req.params.key
         }
       })
     })
-    .then(util.handleEntityNotFound(res))
-    .then(util.removeEntity(res))
+    .then(util.respondWithResult(res, 200))
     .catch(util.handleError(res));
 }

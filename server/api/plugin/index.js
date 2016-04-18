@@ -39,4 +39,10 @@ router.post('/', pluginController.create);
 router.delete('/:id',pluginController.destroy);
 router.put('/:id', pluginController.update);
 
+router.get('/:id', pluginController.indexKey);
+router.delete('/:id/:key', pluginController.showKey);
+router.post('/:id', pluginController.createKey);
+router.delete('/:id/:key', pluginController.destroyKey);
+router.put('/:id/:key', pluginController.updateKey);
+
 module.exports = router;
