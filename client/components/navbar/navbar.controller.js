@@ -10,8 +10,11 @@ angular.module('meccanoAdminApp')
       'title': 'Activity',
       'state': 'announcements.list',
       'icon': 'glyphicon glyphicon-signal'
+    }, {
+      'title': 'Plugins',
+      'state': 'plugin.list',
+      'icon' : 'glyphicon glyphicon-equalizer'
     }];
-
 
      NavBar.query(function(config) {
       if (config.reports) {

@@ -79,7 +79,7 @@ var config = _.merge(all, yamlConfig(), require('./env'));
 if (config.showConfig) {
   console.log();
   console.log("===================================================================");
-  console.log("*** Meccano IoT Gateway Configuration ***")
+  console.log("*** Meccano IoT Webconsole Configuration ***")
   console.log("NODE_ENV: " + process.env.NODE_ENV);
   console.log("CONFIG_FILE: " + process.env.CONFIG_FILE);
   show(config);
