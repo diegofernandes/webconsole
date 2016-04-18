@@ -20,34 +20,13 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  var model = sequelize.define('Plugin', {
-    id: {
-      type: DataTypes.STRING(40),
-      allowNull: false,
-      primaryKey: true
-    },
-    engine: {
-      type: DataTypes.STRING(20),
+  var model = sequelize.define('PluginConfiguration', {
+    key: {
+      type: DataTypes.STRING(100),
       allowNull: false
-    },
-    enabled: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    schedule: {
-      type: DataTypes.STRING(20),
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.STRING(200),
-      allowNull: false
-    },
-    type: {
-      type: DataTypes.STRING(20),
-      allowNull: false
-    },
-    executionContext: {
-      type: DataTypes.STRING(20),
+    }, 
+    value: {
+      type: DataTypes.STRING(1024),
       allowNull: false
     },
     creationDate: {

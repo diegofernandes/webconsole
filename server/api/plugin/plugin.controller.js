@@ -22,6 +22,7 @@ var _ = require('lodash');
 var util = require('../../components/util');
 var db = require('../../sqldb');
 var Plugin = db.Plugin;
+var PluginConfiguration = db.PluginConfiguration;
 
 exports.index = function(req, res) {
   db.page(Plugin, req.query)
@@ -31,7 +32,10 @@ exports.index = function(req, res) {
 
 exports.show = function(req, res) {
   Plugin.findOne({
-      where: req.params
+      where: req.params,
+      include: [
+          { model: PluginConfiguration }
+      ]
     })
     .then(util.handleEntityNotFound(res))
     .then(util.respondWithResult(res))
@@ -43,21 +47,26 @@ exports.show = function(req, res) {
  */
 exports.create = function(req, res) {
   return Plugin.create(req.body, {
-      logging: true
+      logging: true,
+      include: [
+          { model: PluginConfiguration }
+      ]
     }).then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));
 }
 
 // Updates an existing Thing in the DB
 exports.update = function(req, res) {
-  if (req.body.device) {
-    delete req.body.plugin;
+  if (req.body.id) {
+    delete req.body.id;
   }
   Plugin.find({
       where: {
-        plugin: req.params.plugin,
-        version: req.params.version
-      }
+        id: req.params.id
+      },
+      include: [
+          { model: PluginConfiguration }
+      ]
     })
     .then(util.handleEntityNotFound(res))
     .then(util.saveUpdates(req.body))
@@ -69,14 +78,15 @@ exports.update = function(req, res) {
 exports.destroy = function(req, res) {
   Plugin.destroy({
       where: {
-        plugin: req.params.plugin,
-        version: req.params.version
-      }
+        id: req.params.id
+      },
+      include: [
+          { model: PluginConfiguration }
+      ]
     }).then(function() {
       return Plugin.find({
         where: {
-          plugin: req.params.plugin,
-          version: req.params.version
+          id: req.params.id
         }
       })
     })

@@ -34,11 +34,9 @@ var router = express.Router();
 // router.patch('/:plugin/:version', auth.hasRole('user'),pluginController.update);
 
 router.get('/',pluginController.index);
-router.get('/:plugin/:version',pluginController.show);
+router.get('/:id',pluginController.show);
 router.post('/', pluginController.create);
-router.delete('/:plugin/:version',pluginController.destroy);
-router.put('/:plugin/:version', pluginController.update);
-router.patch('/:plugin/:version',pluginController.update);
-
+router.delete('/:id',pluginController.destroy);
+router.put('/:id', pluginController.update);
 
 module.exports = router;
