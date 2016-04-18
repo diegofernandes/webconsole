@@ -33,7 +33,7 @@ db.Message = db.sequelize.import('../model/message.model');
 db.User = db.sequelize.import('../model/user.model');
 db.DeviceHistoryStatus = db.sequelize.import('../model/deviceHistoryStatus.model');
 db.DeviceActivity = db.sequelize.import('../model/deviceActivity.model');
-
+db.Plugin = db.sequelize.import('../model/plugin.model');
 
 db.page = function(Model, params) {
   var size = parseInt(params.size || params.s || 10);
