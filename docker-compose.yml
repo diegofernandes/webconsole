@@ -1,0 +1,23 @@
+db_dev:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=IOTDB_DEV
+    - MYSQL_USER=iot_dev
+    - MYSQL_PASSWORD=iot_dev
+  expose:
+    - '3306'
+  ports:
+    - '3306:3306'
+
+db_test:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=IOTDB_TEST
+    - MYSQL_USER=iot_test
+    - MYSQL_PASSWORD=iot_test
+  expose:
+    - '3305'
+  ports:
+    - '3305:3306'
