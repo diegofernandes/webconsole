@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Plugins</div>
+  <table class="table table-striped table-hover">
+    <thead>
+      <th>Plugin</th>
+      <th>Description</th>
+      <th>Status</th>
+    </thead>
+    <tbody>
+      <tr ng-show="Plugins.length == 0">
+        <td class="text-danger text-center" colspan="4">No Plugin found.</td>
+      </tr>
+      <tr ng-show="isLoading">
+        <td colspan="4" class="text-center">
+          <img src="assets/images/loading.gif" style="height: 30px">
+        </td>
+      </tr>
+      <tr ng-repeat="plugin in Plugins">
+        <td>{{plugin.plugin}}</td>
+        <td>{{plugin.description}}</td>
+        <td>{{plugin.type}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
