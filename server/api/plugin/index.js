@@ -25,12 +25,14 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
+// Plugin Information
 router.get('/',pluginController.index);
 router.get('/:id',pluginController.show);
 router.post('/', pluginController.create);
 router.delete('/:id',pluginController.destroy);
 router.put('/:id', pluginController.update);
 
+// Plugin Configuration Information
 router.get('/:id/keys', pluginController.indexKey);
 router.get('/:id/keys/:key', pluginController.showKey);
 router.post('/:id/keys', pluginController.createKey);

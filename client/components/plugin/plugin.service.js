@@ -1,16 +1,19 @@
 'use strict';
 
 angular.module('meccanoAdminApp')
-  .factory('plugin', function () {
-    // Service logic
-    // ...
-
-    var meaningOfLife = 42;
-
-    // Public API here
-    return {
-      someMethod: function () {
-        return meaningOfLife;
+  .factory('Plugins', function () {
+    var self = {
+      loadPlugins: function () {
+        return $resource('api/plugins')
+      },
+      plugins: function() {
+        return $resource('api/plugins/:id', null,
+        {
+          'update': { method: 'PUT' },
+          'delete': { method: 'DELETE' },
+          'post': { method: 'POST' }
+        });
       }
-    };
+    }
+    return self;
   });

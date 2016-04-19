@@ -54,9 +54,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       defaultValue: sequelize.NOW
     }
-  },
-  {
-    timestamps: false
   });
   return model;
 }

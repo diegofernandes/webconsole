@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
     key: {
       type: DataTypes.STRING(100),
       allowNull: false
-    }, 
+    },
     value: {
       type: DataTypes.STRING(1024),
       allowNull: false
@@ -33,9 +33,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       defaultValue: sequelize.NOW
     }
-  },
-  {
-    timestamps: false
   });
   return model;
 }
