@@ -26,6 +26,22 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
+    name: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    version: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    author: {
+      type: DataTypes.STRING(80),
+      allowNull: false
+    },
+    authorEmail: {
+      type: DataTypes.STRING(80),
+      allowNull: false
+    },
     engine: {
       type: DataTypes.STRING(20),
       allowNull: false
@@ -48,6 +64,18 @@ module.exports = function(sequelize, DataTypes) {
     },
     executionContext: {
       type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    documentation: {
+      type: DataTypes.STRING(200),
+      allowNull: false
+    },
+    repository: {
+      type: DataTypes.STRING(200),
+      allowNull: false
+    },
+    release: {
+      type: DataTypes.STRING(200),
       allowNull: false
     },
     creationDate: {
