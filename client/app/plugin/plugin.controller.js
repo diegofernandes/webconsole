@@ -52,4 +52,10 @@ angular.module('meccanoAdminApp')
 .controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal, Messages,Auth, Modal,alertsPanel) {
   console.log("*** PluginDetailCtrl ***");
   $scope.Plugins = Plugins;
+  // Remove plugin
+  $scope.destroy = function() {
+  $http.delete('api/plugins/' + $scope.plugin.id).then(function() {
+      $state.go('plugin.list', $stateParams,{reload: true});
+    });
+  };
 });
