@@ -25,24 +25,16 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-// Routes for /api/devices/
-// router.get('/',auth.isAuthenticated(),pluginController.index);
-// router.get('/:plugin/:version', auth.isAuthenticated(),pluginController.show);
-// router.post('/', auth.hasRole('user'),pluginController.create);
-// router.delete('/:plugin/:version', auth.hasRole('user'),pluginController.destroy);
-// router.put('/:plugin/:version', auth.hasRole('user'),pluginController.update);
-// router.patch('/:plugin/:version', auth.hasRole('user'),pluginController.update);
-
 router.get('/',pluginController.index);
 router.get('/:id',pluginController.show);
 router.post('/', pluginController.create);
 router.delete('/:id',pluginController.destroy);
 router.put('/:id', pluginController.update);
 
-router.get('/:id', pluginController.indexKey);
-router.delete('/:id/:key', pluginController.showKey);
-router.post('/:id', pluginController.createKey);
-router.delete('/:id/:key', pluginController.destroyKey);
-router.put('/:id/:key', pluginController.updateKey);
+router.get('/:id/keys', pluginController.indexKey);
+router.get('/:id/keys/:key', pluginController.showKey);
+router.post('/:id/keys', pluginController.createKey);
+router.delete('/:id/keys/:key', pluginController.destroyKey);
+router.put('/:id/keys/:key', pluginController.updateKey);
 
 module.exports = router;

@@ -79,9 +79,10 @@ exports.destroy = function(req, res) {
 
 // Lists the keys for a configuration
 exports.indexKey = function(req, res) {
+  console.log("*** indexKey ***");
   db.page(PluginConfiguration, req.query, {
     where: {
-      id: req.params.id
+      pluginId: req.params.id
     }
   })
   .then(util.respondWithResult(res))
@@ -92,7 +93,10 @@ exports.indexKey = function(req, res) {
 // Shows a configuration key
 exports.showKey = function(req, res) {
   PluginConfiguration.findOne({
-      where: req.params
+      where: {
+        PluginId: req.params.id,
+        key: req.params.key
+      }
     })
     .then(util.handleEntityNotFound(res))
     .then(util.respondWithResult(res))
@@ -103,6 +107,7 @@ exports.showKey = function(req, res) {
  * Saves the object to the database
  */
 exports.createKey = function(req, res) {
+  req.body.PluginId = req.params.id;
   return PluginConfiguration.create(req.body, {
       logging: true
     }).then(util.respondWithResult(res, 201))
@@ -111,9 +116,10 @@ exports.createKey = function(req, res) {
 
 // Updates an existing Thing in the DB
 exports.updateKey = function(req, res) {
+  req.body.PluginId = req.params.id;
   PluginConfiguration.find({
       where: {
-        id: req.params.id,
+        PluginId: req.params.id,
         key: req.params.key
       }
     })
@@ -127,17 +133,11 @@ exports.updateKey = function(req, res) {
 exports.destroyKey = function(req, res) {
   PluginConfiguration.destroy({
       where: {
-        id:  req.params.id,
+        PluginId:  req.params.id,
         key: req.params.key
       }
-    }).then(function() {
-      return PluginConfiguration.find({
-        where: {
-          id: req.params.id,
-          key: req.params.key
-        }
-      })
     })
+    .then(util.handleEntityNotFound(res))
     .then(util.respondWithResult(res, 200))
     .catch(util.handleError(res));
 }
