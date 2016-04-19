@@ -21,5 +21,15 @@ angular.module('meccanoAdminApp')
             controller: 'PluginDetailCtrl'
           }
         }
+      })
+      .state('plugin.edit', {
+        url: '/{id}/edit',
+        authenticate: true,
+        views: {
+          'edit-plugin': {
+            templateUrl: 'app/plugin/plugin.edit.html',
+            controller: 'PluginEditCtrl'
+          }
+        }
       });
 });
