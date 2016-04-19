@@ -38,8 +38,9 @@ angular.module('meccanoAdminApp')
 
   // Edit Plugin
   $scope.edit = function(data) {
+    console.log(data.id)
     $stateParams.id = data.id;
-    $state.go('plugin.edit');
+    $state.go('plugin.edit', $stateParams);
   };
 
   // Remove plugin
