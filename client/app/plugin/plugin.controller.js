@@ -28,9 +28,15 @@ angular.module('meccanoAdminApp')
     // Load devices by the parameters from url
     getPlugins($state.params);
 
+    // Show plugin details
     $scope.showDetails = function(plugin){
       $scope.Plugins.selected = plugin;
     };
+
+    // Install new plugin in the system
+    $scope.install = function() {
+      $state.go('plugin.install');
+    }
 
 })
 .controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Plugins, $uibModal, Messages, Auth, Modal, alertsPanel) {
@@ -49,6 +55,9 @@ angular.module('meccanoAdminApp')
       $state.go('plugin.list', $stateParams,{reload: true});
     });
   };
+})
+.controller('PluginInstallCtrl', function($scope, Plugins, $state, $stateParams, $http) {
+  console.log("** PluginInstallCtrl **");
 })
 .controller('PluginEditCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginEditCtrl **");
