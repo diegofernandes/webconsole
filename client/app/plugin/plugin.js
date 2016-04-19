@@ -22,11 +22,4 @@ angular.module('meccanoAdminApp')
           }
         }
       });
-})
-.controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Plugins, $uibModal, Messages,Auth, Modal,alertsPanel) {
-  $scope.series = ['Updates'];
-  $scope.onClick = function (points, evt) {
-    console.log(points, evt);
-  };
-  $scope.Plugins = Plugins;
 });

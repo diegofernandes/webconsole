@@ -44,17 +44,21 @@ angular.module('meccanoAdminApp')
       */
     $scope.showDetails = function(plugin){
       $scope.Plugins.selected = plugin;
-      $scope.Plugins.plugins().detail( { plugin: plugin.id }, function (res){
-      });
+      console.log("SELECIONADO: ");
+      console.log($scope.Plugins.selected);
     };
 
 })
-.controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal, Messages,Auth, Modal,alertsPanel) {
+.controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Plugins, $uibModal, Messages, Auth, Modal, alertsPanel) {
   console.log("*** PluginDetailCtrl ***");
   $scope.Plugins = Plugins;
+  console.log("PLUGINS:");
+  console.log($scope.Plugins);
   // Remove plugin
   $scope.destroy = function() {
-  $http.delete('api/plugins/' + $scope.plugin.id).then(function() {
+    console.log("*** Destroy ***");
+    console.log($scope.Plugins);
+    $http.delete('api/plugins/' + $scope.Plugins.selected.id).then(function() {
       $state.go('plugin.list', $stateParams,{reload: true});
     });
   };
