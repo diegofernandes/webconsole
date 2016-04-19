@@ -7,26 +7,19 @@ angular.module('meccanoAdminApp')
     $scope.pageNumber = 1;
     $scope.parametersFilter = $state.params;
     $scope.Plugins = Plugins;
-
-    function getPlugins (parameters) {
-      // Start load gif
-      $scope.isLoading = true;
-      $scope.Plugins.loadPlugins().get(parameters, function (res) {
-        // Total Items to pagination
-        $scope.totalItems = res.page.totalElements;
-        $scope.Plugins.data = res.data;
-        // Stop load gif
-        $scope.isLoading = false;
-      }, function (err){
-        // Erase plugins array if no plugin was found
-        if (err.status === 404) {
-          $scope.plugins.data = [];
-          $scope.isLoading = false;
-        }
-      });
-    }
-    // Load devices by the parameters from url
-    getPlugins($state.params);
+    $scope.Plugins.query($state.params, function (res) {
+           // Total Items to pagination
+           $scope.totalItems = res.page.totalElements;
+           $scope.data = res.data;
+           // Stop load gif
+           $scope.isLoading = false;
+         }, function (err){
+           // Erase plugins array if no plugin was found
+           if (err.status === 404) {
+             $scope.data = [];
+             $scope.isLoading = false;
+           }
+    });
 
     // Show plugin details
     $scope.showDetails = function(plugin){
@@ -61,6 +54,11 @@ angular.module('meccanoAdminApp')
 })
 .controller('PluginEditCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginEditCtrl **");
+  console.log($stateParams);
+  $http.get('api/plugins/' + $stateParams.id).then(function(res) {
+    $scope.data = res.data;
+  });
+  // console.log(Plugins);
 //  $scope.Plugins = Plugins;
   /*
   $scope.inputDisabled = true;

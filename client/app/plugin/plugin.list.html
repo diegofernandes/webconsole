@@ -25,7 +25,7 @@
           <img src="assets/images/loading.gif" style="height: 30px">
         </td>
       </tr>
-      <tr ng-repeat="plugin in Plugins.data"
+      <tr ng-repeat="plugin in data"
           ng-click="showDetails(plugin)"
           ng-class="{ 'selected-line': Plugins.selected.id === plugin.id }">
         <td>{{plugin.name}}</td>
