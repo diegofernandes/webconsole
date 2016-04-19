@@ -20,16 +20,16 @@ angular.module('meccanoAdminApp')
     function getPlugins (parameters) {
       // Start load gif
       $scope.isLoading = true;
-      $scope.Devices.loadPlugins().get(parameters, function (res) {
+      $scope.Plugins.loadPlugins().get(parameters, function (res) {
         // Total Items to pagination
         $scope.totalItems = res.page.totalElements;
-        $scope.registeredDevices.data = res.data;
+        $scope.Plugins.data = res.data;
         // Stop load gif
         $scope.isLoading = false;
       }, function (err){
         // Erase registeredDevices array if no device was found
         if (err.status === 404) {
-          $scope.registeredDevices.data = [];
+          $scope.plugins.data = [];
           $scope.isLoading = false;
         }
       });
@@ -37,31 +37,19 @@ angular.module('meccanoAdminApp')
 
     // Load devices by the parameters from url
     getPlugins($state.params);
-    console.log($scope);
+
+    /**
+      * Show Details in a lateral panel
+      * @param plugin {object}
+      */
+    $scope.showDetails = function(plugin){
+      $scope.Plugins.selected = plugin;
+      $scope.Plugins.plugins().detail( { plugin: plugin.id }, function (res){
+      });
+    };
+
 })
 .controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Devices, $uibModal, Messages,Auth, Modal,alertsPanel) {
-
   console.log("*** PluginDetailCtrl ***");
-  // $scope.Plugins = Plugins;
-
-  $scope.Plugins = {[
-    {
-      "plugin" : "dataFilter:1.0",
-      "engine" : "R",
-      "enabled" : true,
-      "schedule" : "15 * * * *",
-      "description" : "Filter data of the sensors (version 1.0)",
-      "type" : "worker",
-      "executionContext" : "both"
-    },
-    {
-      "plugin" : "deviceAvgTime:1.0",
-      "engine" : "R",
-      "enabled" : true,
-      "schedule" : "*/15 * * * *",
-      "description" : "Device Average Response Time",
-      "type" : "report",
-      "executionContext" : "both"
-    }
-  ]};
+  $scope.Plugins = Plugins;
 });

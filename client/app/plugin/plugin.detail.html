@@ -1,4 +1,4 @@
-<div class="panel panel-default" ng-show="Plugins.selected.plugin">
+<div class="panel panel-default" ng-show="Plugins.selected.id">
   <div class="panel-heading">Details</div>
   <div class="panel-body">
     <legend ng-hide="isGuest()">Plugin Actions
@@ -22,8 +22,8 @@
   </div>
   <table class="table table-hover table-bordered">
     <tr>
-      <th class="active">Plugin</th>
-      <td>{{ Plugins.selected.plugin }}</td>
+      <th class="active">Id</th>
+      <td>{{ Plugins.selected.id }}</td>
     </tr>
     <tr>
       <th class="active">Engine</th>
