@@ -52,6 +52,22 @@ angular.module('meccanoAdminApp')
 .controller('PluginInstallCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginInstallCtrl **");
   $http.get('api/plugins/database').then(function(res) {
+    var databasePlugins = res.data;
+    $http.get('api/plugins').then(function(res) {
+      var localPlugins = res.data.data;
+      // console.log(databasePlugins);
+      // console.log(localPlugins);
+      for(var d=0; d<databasePlugins.length; d++) {
+        for(var l=0; l<localPlugins.length; l++) {
+          if(databasePlugins[d].name == localPlugins[d].name) {
+            databasePlugins[d].status = "INSTALLED";
+          } else {
+            databasePlugins[d].status = "AVAILABLE";
+          }
+        }
+      }
+      $scope.data = databasePlugins;
+    });
     /* var dadosDb = db.data;
     // Compute the status of the existing plugins
     $http.get('api/plugins').then(function(local) {
