@@ -27,6 +27,7 @@ var router = express.Router();
 
 // Plugin Catalog
 router.get('/database', pluginController.database);
+router.get('/database/:id', pluginController.database_details);
 
 // Plugin Information
 router.get('/',pluginController.index);

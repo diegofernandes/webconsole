@@ -55,11 +55,9 @@ angular.module('meccanoAdminApp')
     var databasePlugins = res.data;
     $http.get('api/plugins').then(function(res) {
       var localPlugins = res.data.data;
-      // console.log(databasePlugins);
-      // console.log(localPlugins);
       for(var d=0; d<databasePlugins.length; d++) {
         for(var l=0; l<localPlugins.length; l++) {
-          if(databasePlugins[d].name == localPlugins[d].name) {
+          if(databasePlugins[d].id == localPlugins[d].id) {
             databasePlugins[d].status = "INSTALLED";
           } else {
             databasePlugins[d].status = "AVAILABLE";
@@ -68,22 +66,26 @@ angular.module('meccanoAdminApp')
       }
       $scope.data = databasePlugins;
     });
-    /* var dadosDb = db.data;
-    // Compute the status of the existing plugins
-    $http.get('api/plugins').then(function(local) {
-      // console.log(local.data.data);
-      var localData = local.data;
-      // console.log(dadosDb);
-      // console.log(dadosLocais.data);
-      for(var ddb in dadosDb) {
-        for(var dlo in localData.data) {
-          console.log(ddb);
-          console.log(dlo);
-        }
-      }
-    });
-    */
     $scope.data = res.data;
+    // Install Plugin to local database
+    $scope.installPlugin = function(id) {
+      // Load the plugin definition and insert to the plugin local database
+      var o = _.findKey($scope.data,  { "id" : id });
+      // Get details of plugin
+      $http.get('/api/plugins/database/' + id).then(function(res) {
+        var pluginDataDetails = res.data;
+        // Insert data to the database
+        $http.post('api/plugins/', pluginDataDetails)
+          .success(function (data, status, headers, config) {
+            console.log("SUCESS");
+            console.log($scope.data[o]);
+          })
+          .error(function (data, status, header, config) {
+            console.log("ERROR");
+        });
+        $state.go('plugin.list', $stateParams,{reload: true});
+      });
+    };
   });
 })
 .controller('PluginEditCtrl', function($scope, Plugins, $state, $stateParams, $http) {

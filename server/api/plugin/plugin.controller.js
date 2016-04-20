@@ -44,7 +44,7 @@ exports.show = function(req, res) {
  * Saves the object to the database
  */
 exports.create = function(req, res) {
-  req.body.status = "NEW";
+  req.body.status = "WAINTING_INSTALL";
   return Plugin.create(req.body, {
       logging: true
     }).then(util.respondWithResult(res, 201))
@@ -147,9 +147,27 @@ exports.destroyKey = function(req, res) {
 
 // Load the plugin database
 exports.database = function(req, res) {
-  http.get("http://raw.githubusercontent.com/meccano-iot/plugin-index/master/plugin-index.json", function(data){
+  http.get("http://raw.githubusercontent.com/meccano-iot/plugin-index/master/plugin-index.json?d=" + Math.random(), function(data){
     if(data) {
       res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "no-cache");
+      res.status(200).send(data);
+    } else {
+      res.status(503).send("503 Service Unavailable");
+    }
+  });
+}
+
+// Load the plugin database details
+exports.database_details = function(req, res) {
+  var id = req.params.id;
+  var pluginData = id.split(":");
+  var url = "https://raw.githubusercontent.com/meccano-iot/plugin-" + pluginData[0] + "/master/plugin.json?d=" + Math.random();
+  console.log("url: " + url);
+  http.get(url, function(data){
+    if(data) {
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "no-cache");
       res.status(200).send(data);
     } else {
       res.status(503).send("503 Service Unavailable");
