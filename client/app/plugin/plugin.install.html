@@ -23,7 +23,11 @@
         <td>{{plugin.description}}</td>
         <td>{{plugin.version}}</td>
         <td>{{plugin.status}}</td>
-        <td></td>
+        <td><form class="form-inline" align="right" valign="top">
+          <button ng-hide="plugin.status === 'INSTALLED'" class="btn btn-default" aria-label="Install Plugin" uib-tooltip="Install Plugin" ng-click="installPlugin(plugin.name, plugin.version)">
+            <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+          </button>
+        </form></td>
       </tr>
     </tbody>
   </table>
