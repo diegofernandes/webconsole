@@ -19,6 +19,7 @@
 
 'use strict';
 var _ = require('lodash');
+var http = require('client-http');
 var util = require('../../components/util');
 var db = require('../../sqldb');
 var Plugin = db.Plugin;
@@ -43,6 +44,7 @@ exports.show = function(req, res) {
  * Saves the object to the database
  */
 exports.create = function(req, res) {
+  req.body.status = "NEW";
   return Plugin.create(req.body, {
       logging: true
     }).then(util.respondWithResult(res, 201))
@@ -51,6 +53,7 @@ exports.create = function(req, res) {
 
 // Updates an existing Thing in the DB
 exports.update = function(req, res) {
+  req.body.status = "RELOAD";
   if (req.body.id) {
     delete req.body.id;
   }
@@ -140,4 +143,16 @@ exports.destroyKey = function(req, res) {
     .then(util.handleEntityNotFound(res))
     .then(util.respondWithResult(res, 200))
     .catch(util.handleError(res));
+}
+
+// Load the plugin database
+exports.database = function(req, res) {
+  http.get("http://raw.githubusercontent.com/meccano-iot/plugin-index/master/plugin-index.json", function(data){
+    if(data) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).send(data);
+    } else {
+      res.status(503).send("503 Service Unavailable");
+    }
+  });
 }

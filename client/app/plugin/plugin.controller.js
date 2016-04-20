@@ -51,6 +51,24 @@ angular.module('meccanoAdminApp')
 })
 .controller('PluginInstallCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginInstallCtrl **");
+  $http.get('api/plugins/database').then(function(res) {
+    /* var dadosDb = db.data;
+    // Compute the status of the existing plugins
+    $http.get('api/plugins').then(function(local) {
+      // console.log(local.data.data);
+      var localData = local.data;
+      // console.log(dadosDb);
+      // console.log(dadosLocais.data);
+      for(var ddb in dadosDb) {
+        for(var dlo in localData.data) {
+          console.log(ddb);
+          console.log(dlo);
+        }
+      }
+    });
+    */
+    $scope.data = res.data;
+  });
 })
 .controller('PluginEditCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginEditCtrl **");
@@ -58,26 +76,4 @@ angular.module('meccanoAdminApp')
   $http.get('api/plugins/' + $stateParams.id).then(function(res) {
     $scope.data = res.data;
   });
-  // console.log(Plugins);
-//  $scope.Plugins = Plugins;
-  /*
-  $scope.inputDisabled = true;
-  if ($scope.Plugin.selected === null || $scope.Plugin.selected === undefined) {
-    Plugins.get({ id : $state.params.pluginId }, function (res){
-      $scope.Plugin.selected = res;
-    });
-  }
-  $scope.save = function() {
-    Plugins.plugins().update({plugin: $state.params.pluginId}, $scope.Plugin.selected);
-    $state.go('plugin.list', {}, {reload: true});
-  };
-  $scope.destroy = function() {
-    $http.delete('api/plugins/' + $scope.plugin.plugin).then(function() {
-      $state.go('plugin.list', $stateParams,{reload: true});
-    });
-  };
-  $scope.cancel = function() {
-    $state.go('plugin.list', $stateParams);
-  };
-  */
 });

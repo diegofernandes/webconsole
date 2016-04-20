@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(80),
       allowNull: false
     },
-    authorEmail: {
+    authorContact: {
       type: DataTypes.STRING(80),
       allowNull: false
     },
@@ -59,6 +59,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     type: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    status: {
       type: DataTypes.STRING(20),
       allowNull: false
     },

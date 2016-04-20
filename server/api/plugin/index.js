@@ -25,6 +25,9 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
+// Plugin Catalog
+router.get('/database', pluginController.database);
+
 // Plugin Information
 router.get('/',pluginController.index);
 router.get('/:id',pluginController.show);
@@ -38,5 +41,6 @@ router.get('/:id/keys/:key', pluginController.showKey);
 router.post('/:id/keys', pluginController.createKey);
 router.delete('/:id/keys/:key', pluginController.destroyKey);
 router.put('/:id/keys/:key', pluginController.updateKey);
+
 
 module.exports = router;
