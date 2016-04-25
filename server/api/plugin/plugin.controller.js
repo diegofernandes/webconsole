@@ -90,6 +90,7 @@ exports.update = function(req, res) {
 
 // Deletes a Thing from the DB
 exports.destroy = function(req, res) {
+  /*
   Plugin.destroy({
       where: {
         id: req.params.id
@@ -97,6 +98,20 @@ exports.destroy = function(req, res) {
     })
     .then(util.handleEntityNotFound(res))
     .then(util.respondWithResult(res, 200))
+    .catch(util.handleError(res));
+  */
+  req.body.status = "RETIRED";
+  if (req.body.id) {
+    delete req.body.id;
+  }
+  Plugin.find({
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(util.handleEntityNotFound(res))
+    .then(util.saveUpdates(req.body))
+    .then(util.respondWithResult(res))
     .catch(util.handleError(res));
 }
 

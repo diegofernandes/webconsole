@@ -62,6 +62,11 @@ angular.module('meccanoAdminApp')
 })
 .controller('PluginInstallCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginInstallCtrl **");
+  // --- Cancel Button
+  $scope.cancel = function() {
+    $state.go('plugin.list', $stateParams, { reload: true});
+  }
+  // -- Load the plugin database
   $http.get('api/plugins/database').then(function(res) {
     var databasePlugins = res.data;
     $http.get('api/plugins').then(function(res) {
