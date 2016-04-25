@@ -83,15 +83,11 @@ exports.destroy = function(req, res) {
 // Lists the keys for a configuration
 exports.indexKey = function(req, res) {
   console.log("*** indexKey ***");
-  db.page(PluginConfiguration, req.query, {
-    where: {
-      pluginId: req.params.id
-    }
-  })
+  console.log("pluginId: " + req.params.id);
+  db.page(PluginConfiguration, { PluginId: req.params.id })
   .then(util.respondWithResult(res))
   .catch(util.handleError(res));
 }
-
 
 // Shows a configuration key
 exports.showKey = function(req, res) {

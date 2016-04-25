@@ -91,10 +91,10 @@ angular.module('meccanoAdminApp')
 .controller('PluginEditCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   // Load plugin details and configuration keys
   $http.get('api/plugins/' + $stateParams.id).then(function(res) {
+    delete $scope.data;
     $scope.data = res.data;
     $http.get('api/plugins/' + $stateParams.id + "/keys/").then(function(config) {
       $scope.data.config = config.data;
-      console.log($scope.data.config);
       // Select domains
       $scope.enabledOptions = [{ name: "Yes", id: true }, { name: "No", id: false }];
       $scope.enabledSelected = $scope.data.enabled ? $scope.enabledOptions[0] : $scope.enabledOptions[1];
@@ -105,6 +105,8 @@ angular.module('meccanoAdminApp')
       };
       // --- Save
       $scope.save = function(data) {
+        console.log("*** SAVE *** ");
+        console.log(data);
         $state.go('plugin.list', $stateParams, { reload: true });
       }
     });

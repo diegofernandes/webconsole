@@ -8,7 +8,7 @@
       <div class="panel-body">
         <form class="form-inline">
           <!-- Button to Edit infomations of device -->
-          <button class="btn btn-default glyphicon glyphicon-ok" uib-tooltip="Save" ng-class="btn-success" ui-sref="save({'data': data})"></button>
+          <button class="btn btn-default glyphicon glyphicon-ok" uib-tooltip="Save" ng-class="btn-success" ng-click="save( { plugin: data } )"></button>
           <!-- Button to Edit infomations of device -->
           <button class="btn btn-default glyphicon glyphicon-remove" uib-tooltip="Cancel" ng-click="cancel()"></button>
         </form>
@@ -103,7 +103,7 @@
   </table>
 </div>
 <!-- Configuration Keys -->
-<div class="panel panel-default" ng-show="data">
+<div class="panel panel-default" ng-hide="data.config.data.length == 0">
   <div class="panel-heading">Configuration Keys</div>
   <div class="panel-body">
   <table class="table table-hover table-bordered">
