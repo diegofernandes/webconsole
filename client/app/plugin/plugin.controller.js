@@ -122,14 +122,29 @@ angular.module('meccanoAdminApp')
       // --- Save
       $scope.save = function(data) {
         console.log("*** SAVE *** ");
-        console.log(data);
         data.plugin.enabled = ($scope.enabledSelected.id == true);
         $http.put('api/plugins/' + data.plugin.id, data.plugin)
           .success(function (data, status, headers, config) {
-            console.log("SUCESS");
+            console.log(data.id + ": SUCESS");
           })
           .error(function (data, status, header, config) {
-            console.log("ERROR");
+            console.log(data.id + ": ERROR");
+        }).then( function () {
+          // Updates the plugins
+          var keyCfg = data.plugin.config.data;
+          for(var p = 0; p < keyCfg.length; p++) {
+            var keyValue = keyCfg[p];
+            if(keyValue) {
+              $http.put('api/plugins/' + data.plugin.id + '/keys/' + keyValue.key, keyValue)
+                .success(function (data, status, headers, config) {
+                  console.log(keyValue.key + ": SUCESS");
+                })
+                .error(function (data, status, header, config) {
+                  console.log(keyValue.key + ": ERROR");
+              });
+            }
+          }
+          return true;
         });
         $state.go('plugin.list', $stateParams, { reload: true });
       }
