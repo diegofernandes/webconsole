@@ -89,9 +89,24 @@ angular.module('meccanoAdminApp')
   });
 })
 .controller('PluginEditCtrl', function($scope, Plugins, $state, $stateParams, $http) {
-  console.log("** PluginEditCtrl **");
-  console.log($stateParams);
+  // Load plugin details and configuration keys
   $http.get('api/plugins/' + $stateParams.id).then(function(res) {
     $scope.data = res.data;
+    $http.get('api/plugins/' + $stateParams.id + "/keys/").then(function(config) {
+      $scope.data.config = config.data;
+      console.log($scope.data.config);
+      // Select domains
+      $scope.enabledOptions = [{ name: "Yes", id: true }, { name: "No", id: false }];
+      $scope.enabledSelected = $scope.data.enabled ? $scope.enabledOptions[0] : $scope.enabledOptions[1];
+      // Functions
+      // --- Cancel
+      $scope.cancel = function() {
+        $state.go('plugin.list', $stateParams, { reload: true });
+      };
+      // --- Save
+      $scope.save = function(data) {
+        $state.go('plugin.list', $stateParams, { reload: true });
+      }
+    });
   });
 });

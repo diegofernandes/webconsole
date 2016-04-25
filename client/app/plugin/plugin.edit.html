@@ -1,3 +1,123 @@
-<div class="col-sm-12">
-  {{data}}
+<div class="panel panel-default" ng-show="data">
+  <div class="panel-heading">Details of Plugin</div>
+  <div class="panel-body">
+    <legend ng-hide="isGuest()">Actions
+      <span class="glyphicon glyphicon-cog"></span>
+    </legend>
+    <div ng-hide="isGuest()" class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-inline">
+          <!-- Button to Edit infomations of device -->
+          <button class="btn btn-default glyphicon glyphicon-ok" uib-tooltip="Save" ng-class="btn-success" ui-sref="save({'data': data})"></button>
+          <!-- Button to Edit infomations of device -->
+          <button class="btn btn-default glyphicon glyphicon-remove" uib-tooltip="Cancel" ng-click="cancel()"></button>
+        </form>
+      </div>
+    </div>
+    <legend>Infomation of the plugin</legend>
+  </div>
+  <table class="table table-hover table-bordered">
+    <tr>
+      <th class="active">id</th>
+      <td>{{ data.id }}</td>
+    </tr>
+    <tr>
+      <th class="active">Name</th>
+      <td>{{ data.name }}</td>
+    </tr>
+    <tr>
+      <th class="active">Version</th>
+      <td>{{ data.version }}</td>
+    </tr>
+    <tr>
+      <th class="active">Description</th>
+      <td>{{ data.description }}</td>
+    </tr>
+    <tr>
+      <th class="active">Author</th>
+      <td>{{ data.author }}</td>
+    </tr>
+    <tr>
+      <th class="active">Author Contact Information</th>
+      <td>{{ data.authorContact }}</td>
+    </tr>
+    <tr>
+      <th class="active">Engine</th>
+      <td>{{ data.engine }}</td>
+    </tr>
+    <tr>
+      <th class="active">Type</th>
+      <td>{{ data.type }}</td>
+    </tr>
+    <tr>
+      <th class="active">Execution Context</th>
+      <td>{{ data.executionContext }}</td>
+    </tr>
+    <tr>
+      <th class="active">Schedule</th>
+      <td>
+        <form class="form-inline">
+          <input type="text"
+             class="form-control"
+             id="schedule"
+             ng-model="data.schedule"
+             name="schedule"
+             placeholder="Schedule"
+             ng-required="true">
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <th class="active">Repository</th>
+      <td>{{ data.repository }}</td>
+    </tr>
+    <tr>
+      <th class="active">Documentation</th>
+      <td>{{ data.documentation }}</td>
+    </tr>
+    <tr>
+      <th class="active">Release</th>
+      <td>{{ data.release }}</td>
+    </tr>
+    <tr>
+      <th class="active">Last Update</th>
+      <td>{{ data.updatedAt | date : 'short' }}</td>
+    </tr>
+    <tr>
+      <th class="active">Status</th>
+      <td>{{ data.status | uppercase }}</td>
+    </tr>
+    <tr>
+      <th class="active">Enabled</th>
+      <td>
+        <div class="col-xs-5 selectContainer">
+          <form class="form-inline">
+            <select class="form-control"
+              ng-model="enabledSelected"
+              ng-options="o.name for o in enabledOptions">
+            </select>
+          </form>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<!-- Configuration Keys -->
+<div class="panel panel-default" ng-show="data">
+  <div class="panel-heading">Configuration Keys</div>
+  <div class="panel-body">
+  <table class="table table-hover table-bordered">
+    <tr ng-repeat="item in data.config.data">
+      <th class="active">{{ item.key }}</th>
+      <td>
+        <form class="form-inline">
+          <input type="text"
+             class="form-control"
+             ng-model="item.value"
+             ng-required="false"
+          />
+        </form>
+      </td>
+    </tr>
+  </table>
 </div>

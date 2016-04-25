@@ -44,7 +44,7 @@ exports.show = function(req, res) {
  * Saves the object to the database
  */
 exports.create = function(req, res) {
-  req.body.status = "WAINTING_INSTALL";
+  req.body.status = "WAITING_INSTALL";
   return Plugin.create(req.body, {
       logging: true
     }).then(util.respondWithResult(res, 201))
