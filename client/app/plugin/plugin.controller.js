@@ -35,19 +35,30 @@ angular.module('meccanoAdminApp')
 .controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Plugins, $uibModal, Messages, Auth, Modal, alertsPanel) {
   $scope.Plugins = Plugins;
 
-  // Edit Plugin
+  // --- Edit Plugin
   $scope.edit = function(data) {
     console.log(data.id)
     $stateParams.id = data.id;
     $state.go('plugin.edit', $stateParams);
   };
-
-  // Remove plugin
+  // --- Remove plugin
   $scope.destroy = function() {
     $http.delete('api/plugins/' + $scope.Plugins.selected.id).then(function() {
       $state.go('plugin.list', $stateParams,{reload: true});
     });
   };
+  // --- Change Plugin status
+  $scope.enablePlugin = function(data) {
+    data.plugin.enabled = ! data.plugin.enabled;
+    $http.put('api/plugins/' + data.plugin.id, data.plugin)
+      .success(function (data, status, headers, config) {
+        console.log("SUCESS");
+      })
+      .error(function (data, status, header, config) {
+        console.log("ERROR");
+    });
+    $state.go('plugin.list', $stateParams, { reload: true });
+  }
 })
 .controller('PluginInstallCtrl', function($scope, Plugins, $state, $stateParams, $http) {
   console.log("** PluginInstallCtrl **");
@@ -107,6 +118,14 @@ angular.module('meccanoAdminApp')
       $scope.save = function(data) {
         console.log("*** SAVE *** ");
         console.log(data);
+        data.plugin.enabled = ($scope.enabledSelected.id == true);
+        $http.put('api/plugins/' + data.plugin.id, data.plugin)
+          .success(function (data, status, headers, config) {
+            console.log("SUCESS");
+          })
+          .error(function (data, status, header, config) {
+            console.log("ERROR");
+        });
         $state.go('plugin.list', $stateParams, { reload: true });
       }
     });

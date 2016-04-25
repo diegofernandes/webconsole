@@ -82,6 +82,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(200),
       allowNull: false
     },
+    parameters: {
+      type: DataTypes.STRING(1024),
+      allowNull: true
+    },
     creationDate: {
       type: DataTypes.DATE,
       defaultValue: sequelize.NOW

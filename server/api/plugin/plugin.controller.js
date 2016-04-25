@@ -47,7 +47,27 @@ exports.create = function(req, res) {
   req.body.status = "WAITING_INSTALL";
   return Plugin.create(req.body, {
       logging: true
-    }).then(util.respondWithResult(res, 201))
+    }).then(function() {
+      // Parse and insert parameters
+      if(req.body.parameters) {
+        var parameters = req.body.parameters.split(",");
+        for(var p=0; p<parameters.length; p++) {
+            var keyValue = parameters[p].split(":");
+            console.log("key: " + keyValue[0]);
+            console.log("value: " + keyValue[1]);
+            var cfgKey = {
+              PluginId: req.body.id,
+              key: keyValue[0],
+              value: keyValue[1],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }
+            PluginConfiguration.create(cfgKey, { logging : true });
+        }
+      }
+      return true;
+    })
+    .then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));
 }
 
