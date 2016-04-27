@@ -1,0 +1,66 @@
+<div class="col-sm-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Release
+    </div>
+    <div class="panel-body">
+      <form name="releaseForm" novalidate>
+        <div class="form-group" ng-class="{'has-error has-feedback': releaseForm.version.$invalid && !releaseForm.version.$pristine}">
+          <label class="control-label" for="inputVersion">Version</label>
+          <input type="text" class="form-control" id="inputVersion" ng-model="release.version" name="version" placeholder="0.0.0" ng-disabled="inputDisabled" ng-required="true" ng-pattern="/\d+\.\d+\.\d+/" server-error focus/>
+          <span ng-show="releaseForm.version.$invalid && !releaseForm.version.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+          <span ng-show="releaseForm.version.$invalid && !releaseForm.version.$pristine" class="sr-only">(error)</span>
+          <p class="help-block" ng-show="releaseForm.version.$error.serverError">
+            {{ errors.version }}
+          </p>
+        </div>
+        <div class="form-group" ng-class="{'has-error has-feedback': releaseForm.type.$invalid}">
+          <label class="control-label" for="inputType">Device Type</label>
+          <input type="hidden" ng-model="release.type" name="type"/>
+          <div class="btn-group">
+            <label class="btn btn-default" ng-model="release.type" uib-btn-radio="'ESP8266'">esp8266</label>
+            <label class="btn btn-default disabled" ng-model="release.type" uib-btn-radio="'PI2'">Raspberry 2</label>
+            <label class="btn btn-default disabled" ng-model="release.type" uib-btn-radio="'YUM'">Arduino Yum</label>
+            <label class="btn btn-default disabled" ng-model="release.type" uib-btn-radio="'Nodemcu'">Nodemcu</label>
+          </div>
+          <span ng-show="releaseForm.type.$invalid && !releaseForm.type.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+          <span ng-show="releaseForm.type.$invalid && !releaseForm.type.$pristine" class="sr-only">(error)</span>
+          <p class="help-block" ng-show="releaseForm.type.$error.serverError">
+            {{ errors.type }}
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="inputDesc">Descripition</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <textarea class="form-control" name="description" ng-model="release.description" rows="3"></textarea>
+            </div>
+            <div class="col-xs-6">
+              <div class="well" ng-bind-html="release.description | markdown"></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="form-group" ng-class="{'has-error has-feedback': releaseForm.firmware.$invalid && !releaseForm.firmware.$pristine}">
+          <label class="control-label" for="inputType">Firmware</label>
+          <div class="well">
+            <div class="row">
+              <input type="file" file-model="release.firmware" name="firmware" ng-required="true" id="inputFirmware"/>
+            </div>
+          </div>
+        </div>
+
+        <button ng-click="back()" class="btn btn-default">
+          <span class="glyphicon glyphicon-arrow-left"></span>
+          Cancel</button>
+        <button ng-click="save(releaseForm)" ng-disabled="releaseForm.$invalid" class="btn btn-primary">
+          <span class="glyphicon glyphicon-floppy-disk"></span>
+          Save</button>
+        <button ng-click="destroy()" ng-show="release.id" class="btn btn-danger">
+          <span class="glyphicon glyphicon-trash"></span>
+          Delete</button>
+      </form>
+
+    </div>
+  </div>
+</div>
