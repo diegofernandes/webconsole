@@ -30,6 +30,10 @@ angular.module('meccanoAdminApp')
     $scope.install = function() {
       $state.go('plugin.install');
     }
+
+    $scope.refresh = function() {
+      $state.go('plugin.list', $stateParams,{reload: true});
+    }
 })
 .controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Plugins, $uibModal, Messages, Auth, Modal, alertsPanel) {
   $scope.Plugins = Plugins;
