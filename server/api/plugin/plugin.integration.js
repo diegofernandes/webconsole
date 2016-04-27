@@ -144,14 +144,12 @@ describe('Plugin API:', function() {
 
   });
 
-  /*
-
   describe('GET /api/plugins/:id', function() {
     var plugin;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/plugins/' + newplugin.id)
+        .get('/api/plugins/' + newPlugin.id)
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -223,6 +221,9 @@ describe('Plugin API:', function() {
     });
 
     it('should respond with 404 when plugin does not exist', function(done) {
+      // Destroy the plugin to the database, since the delete method does
+      // not remove the record, just mark it as 'RETIRED'... 
+      Plugin.destroy({ where: { id : newPlugin.id } });
       request(app)
         .delete('/api/plugins/' + newPlugin.id)
         .set('authorization', 'Bearer ' + token)
@@ -233,8 +234,7 @@ describe('Plugin API:', function() {
           }
           done();
         });
-
     });
+
   });
-*/
 });

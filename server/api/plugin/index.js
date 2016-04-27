@@ -32,9 +32,9 @@ router.get('/database/:id', auth.isAuthenticated(), pluginController.database_de
 // Plugin Information
 router.get('/', auth.isAuthenticated(), pluginController.index);
 router.get('/:id', auth.isAuthenticated(), pluginController.show);
-router.post('/', auth.isAuthenticated(), pluginController.create);
-router.delete('/:id', auth.isAuthenticated(), pluginController.destroy);
-router.put('/:id', auth.isAuthenticated(), pluginController.update);
+router.post('/', auth.hasRole('user'), pluginController.create);
+router.delete('/:id', auth.hasRole('user'), pluginController.destroy);
+router.put('/:id', auth.hasRole('user'), pluginController.update);
 
 // Plugin Configuration Information
 router.get('/:id/keys', auth.isAuthenticated(), pluginController.indexKey);
