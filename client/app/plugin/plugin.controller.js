@@ -30,7 +30,6 @@ angular.module('meccanoAdminApp')
     $scope.install = function() {
       $state.go('plugin.install');
     }
-
 })
 .controller('PluginDetailCtrl', function($scope, $http, $state, $stateParams, $rootScope, Plugins, $uibModal, Messages, Auth, Modal, alertsPanel) {
   $scope.Plugins = Plugins;
@@ -50,6 +49,30 @@ angular.module('meccanoAdminApp')
   // --- Change Plugin status
   $scope.enablePlugin = function(data) {
     data.plugin.enabled = ! data.plugin.enabled;
+    $http.put('api/plugins/' + data.plugin.id, data.plugin)
+      .success(function (data, status, headers, config) {
+        console.log("SUCESS");
+      })
+      .error(function (data, status, header, config) {
+        console.log("ERROR");
+    });
+    $state.go('plugin.list', $stateParams, { reload: true });
+  }
+  // --- Stop Plugin
+  $scope.stopPlugin = function(data) {
+    data.plugin.status = 'STOPPING';
+    $http.put('api/plugins/' + data.plugin.id, data.plugin)
+      .success(function (data, status, headers, config) {
+        console.log("SUCESS");
+      })
+      .error(function (data, status, header, config) {
+        console.log("ERROR");
+    });
+    $state.go('plugin.list', $stateParams, { reload: true });
+  }
+  // --- Stop Plugin
+  $scope.startPlugin = function(data) {
+    data.plugin.status = 'RELOAD';
     $http.put('api/plugins/' + data.plugin.id, data.plugin)
       .success(function (data, status, headers, config) {
         console.log("SUCESS");

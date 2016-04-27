@@ -71,7 +71,9 @@ exports.create = function(req, res) {
 
 // Updates an existing Thing in the DB
 exports.update = function(req, res) {
-  req.body.status = "RELOAD";
+  if(req.body.status != "STOPPING") {
+    req.body.status = "RELOAD";
+  }
   if (req.body.id) {
     delete req.body.id;
   }
