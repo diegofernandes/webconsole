@@ -1,0 +1,19 @@
+<div class="col-sm-12">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h1 class="text-success">{{release.version}}</h1>
+      <p class="text-muted"> {{release.type}}
+        -
+        {{ release.createdAt | date: 'short' }}</p>
+      <div class="well" ng-bind-html="release.description | markdown">
+      </div>
+      <p>
+        <a ng-href="/api/releases/{{release.id}}/download">meccano-{{release.type | lowercase}}-{{release.version}}.bin</a> - <small>{{release.size | fileSize}}</small>
+      </p>
+      <button ng-click="back()" class="btn btn-default">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Cancel</button>
+
+    </div>
+  </div>
+</div>
