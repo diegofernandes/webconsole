@@ -33,7 +33,7 @@ The project was built using [Angular Fullstack](https://github.com/angular-fulls
 
 Dev Tools
 ```
-npm install -g grunt yo bower
+sudo npm install -g grunt yo bower grunt-cli
 ```
 
 Install

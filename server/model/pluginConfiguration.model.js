@@ -19,19 +19,20 @@
 
 'use strict';
 
-var express = require('express');
-var controller = require('./message.controller');
-var auth = require('../../auth/auth.service');
-
-
-var router = express.Router();
-
-// Routes for /api/messages/
-router.get('/', auth.isAuthenticated(),controller.index);
-router.get('/:id', auth.isAuthenticated(),controller.show);
-router.post('/', auth.hasRole('user'),controller.create);
-router.put('/:id', auth.hasRole('user'),controller.update);
-router.patch('/:id', auth.hasRole('user'),controller.update);
-router.delete('/:id', auth.hasRole('user'),controller.destroy);
-
-module.exports = router;
+module.exports = function(sequelize, DataTypes) {
+  var model = sequelize.define('PluginConfiguration', {
+    key: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    value: {
+      type: DataTypes.STRING(1024),
+      allowNull: false
+    },
+    creationDate: {
+      type: DataTypes.DATE,
+      defaultValue: sequelize.NOW
+    }
+  });
+  return model;
+}
