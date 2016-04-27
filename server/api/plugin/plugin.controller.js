@@ -64,8 +64,8 @@ exports.create = function(req, res) {
             }
             PluginConfiguration.create(cfgKey, { logging : true });
         }
+        return req.body;
       }
-      return true;
     })
     .then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));

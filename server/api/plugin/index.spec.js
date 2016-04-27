@@ -86,10 +86,18 @@ describe('Plugin API Router:', function() {
         .should.have.been.calledOnce;
     });
   });
-
+/*
   describe('PUT /api/plugins/:id', function() {
     it('should route to plugin.controller.update', function() {
       routerStub.put
+        .withArgs('/:id','authService.hasRole.user', 'pluginCtrl.update')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('PATCH /api/plugins/:id', function() {
+    it('should route to plugin.controller.update', function() {
+      routerStub.patch
         .withArgs('/:id','authService.hasRole.user', 'pluginCtrl.update')
         .should.have.been.calledOnce;
     });
@@ -102,4 +110,5 @@ describe('Plugin API Router:', function() {
         .should.have.been.calledOnce;
     });
   });
+  */
 });
