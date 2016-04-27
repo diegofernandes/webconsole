@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Plugins Available for Installation</div>
+  <table class="table table-striped table-hover">
+    <thead>
+      <th>Plugin</th>
+      <th>Description</th>
+      <th>Version</th>
+      <th>Status</th>
+      <th>Action</th>
+    </thead>
+    <tbody>
+      <!-- Plugin List -->
+      <tr ng-show="data.length == 0">
+        <td class="text-danger text-center" colspan="4">No Plugin found for installation.</td>
+      </tr>
+      <tr ng-show="isLoading">
+        <td colspan="4" class="text-center">
+          <img src="assets/images/loading.gif" style="height: 30px">
+        </td>
+      </tr>
+      <tr ng-repeat="plugin in data">
+        <td>{{plugin.name}}</td>
+        <td>{{plugin.description}}</td>
+        <td>{{plugin.version}}</td>
+        <td>{{plugin.status}}</td>
+        <td><form class="form-inline" align="center" valign="center">
+          <button ng-hide="plugin.status === 'INSTALLED'" class="btn btn-default" aria-label="Install Plugin" uib-tooltip="Install Plugin" ng-click="installPlugin(plugin.id)">
+            <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+          </button>
+        </form></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<button ng-click="cancel()" class="btn btn-default">
+  <span class="glyphicon glyphicon-arrow-left"></span>
+  Cancel</button>
