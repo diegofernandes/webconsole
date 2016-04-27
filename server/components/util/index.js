@@ -20,10 +20,12 @@ module.exports.handleError = function(res, statusCode) {
 
 module.exports.saveUpdates = function(updates) {
   return function(entity) {
-    return entity.updateAttributes(updates)
-      .then(function(updated) {
-        return updated;
-      });
+    if (entity) {
+      return entity.updateAttributes(updates)
+        .then(function(updated) {
+          return updated;
+        });
+    }
   };
 }
 
