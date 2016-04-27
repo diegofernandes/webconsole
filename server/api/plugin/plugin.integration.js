@@ -27,6 +27,8 @@ var User = sqldb.User;
 var request = require('supertest');
 
 var newPlugin;
+var newKey;
+
 var user;
 var token;
 
@@ -144,6 +146,91 @@ describe('Plugin API:', function() {
 
   });
 
+  describe('GET /api/plugins/:id/keys', function() {
+    var keys;
+
+    beforeEach(function(done) {
+      request(app)
+        .get('/api/plugins/' + newPlugin.id + '/keys')
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          keys = res.body;
+          done();
+        });
+    });
+
+    it('should respond with JSON array', function() {
+      keys.should.be.instanceOf(Object);
+      keys.data.should.be.instanceOf(Array);
+    });
+
+  });
+
+  describe('POST /api/plugins/:id/keys', function() {
+      beforeEach(function(done) {
+        request(app)
+          .post('/api/plugins/' + newPlugin.id + '/keys')
+          .set('authorization', 'Bearer ' + token)
+          .send({
+              "key": "PARAMETER_C",
+              "value": "MIDDLE"
+          })
+          .expect(201)
+          .expect('Content-Type', /json/)
+          .end((err, res) => {
+            if (err) {
+              return done(err);
+            }
+            newKey = res.body;
+            done();
+          });
+      });
+
+    it('should respond with the newly created plugin key', function() {
+      newKey.should.be.instanceOf(Object);
+      newKey.should.have.property('key');
+      newKey.key.should.equal('PARAMETER_C');
+      newKey.value.should.equal('MIDDLE');
+      newKey.PluginId.should.equal(newPlugin.id);
+    });
+
+  });
+
+  describe('GET /api/plugins/:id/keys/:key', function() {
+    var key;
+
+    beforeEach(function(done) {
+      request(app)
+        .get('/api/plugins/' + newPlugin.id + "/keys/" + newKey.key)
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          key = res.body;
+          done();
+        });
+    });
+
+    afterEach(function() {
+      key = {};
+    });
+
+    it('should respond with the requested Plugin Key', function() {
+      key.PluginId.should.equal(newPlugin.id);
+      key.key.should.equal('PARAMETER_C');
+      key.value.should.equal('MIDDLE');
+    });
+
+  });
+
   describe('GET /api/plugins/:id', function() {
     var plugin;
 
@@ -170,6 +257,67 @@ describe('Plugin API:', function() {
       plugin.id.should.equal('test');
       plugin.version.should.equal('1.0.0');
       plugin.author.should.equal('Meccano-IoT');
+    });
+
+  });
+
+  describe('PUT /api/plugins/:id/keys/:key', function() {
+    var updatedKey;
+
+    beforeEach(function(done) {
+      request(app)
+        .put('/api/plugins/' + newPlugin.id + '/keys/' + newKey.key)
+        .set('authorization', 'Bearer ' + token)
+        .send({
+            value : 'MIDWAY'
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          updatedKey = res.body;
+          done();
+        });
+    });
+
+    afterEach(function() {
+      updatedKey = {};
+    });
+
+    it('should respond with the updated plugin key', function() {
+      updatedKey.value.should.equal('MIDWAY');
+    });
+
+  });
+
+  describe('DELETE /api/plugins/:id/keys/:key', function() {
+
+    it('should respond with 204 on successful removal', function(done) {
+      request(app)
+        .delete('/api/plugins/' + newPlugin.id + '/keys/' + newKey.key)
+        .set('authorization', 'Bearer ' + token)
+        .expect(204)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+
+    it('should respond with 404 when plugin does not exist', function(done) {
+      request(app)
+        .delete('/api/plugins/' + newPlugin.i + '/keys'+ newKey.key)
+        .set('authorization', 'Bearer ' + token)
+        .expect(404)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
     });
 
   });
@@ -222,7 +370,7 @@ describe('Plugin API:', function() {
 
     it('should respond with 404 when plugin does not exist', function(done) {
       // Destroy the plugin to the database, since the delete method does
-      // not remove the record, just mark it as 'RETIRED'... 
+      // not remove the record, just mark it as 'RETIRED'...
       Plugin.destroy({ where: { id : newPlugin.id } });
       request(app)
         .delete('/api/plugins/' + newPlugin.id)

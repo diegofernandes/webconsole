@@ -39,9 +39,8 @@ router.put('/:id', auth.hasRole('user'), pluginController.update);
 // Plugin Configuration Information
 router.get('/:id/keys', auth.isAuthenticated(), pluginController.indexKey);
 router.get('/:id/keys/:key', auth.isAuthenticated(), pluginController.showKey);
-router.post('/:id/keys', auth.isAuthenticated(), pluginController.createKey);
-router.delete('/:id/keys/:key', auth.isAuthenticated(), pluginController.destroyKey);
-router.put('/:id/keys/:key', auth.isAuthenticated(), pluginController.updateKey);
-
+router.post('/:id/keys', auth.hasRole('user'), pluginController.createKey);
+router.delete('/:id/keys/:key', auth.hasRole('user'), pluginController.destroyKey);
+router.put('/:id/keys/:key', auth.hasRole('user'), pluginController.updateKey);
 
 module.exports = router;

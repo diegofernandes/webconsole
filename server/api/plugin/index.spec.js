@@ -26,7 +26,12 @@ var pluginCtrlStub = {
   show : 'pluginCtrl.show',
   create : 'pluginCtrl.create',
   update : 'pluginCtrl.update',
-  destroy : 'pluginCtrl.destroy'
+  destroy : 'pluginCtrl.destroy',
+  indexKey : 'pluginCtrl.indexKey',
+  showKey : 'pluginCtrl.showKey',
+  createKey : 'pluginCtrl.createKey',
+  updateKey : 'pluginCtrl.updateKey',
+  destroyKey : 'pluginCtrl.destroyKey'
 };
 
 var routerStub = {
@@ -83,6 +88,46 @@ describe('Plugin API Router:', function() {
     it('should route to plugin.controller.create', function() {
       routerStub.post
         .withArgs('/','authService.hasRole.user', 'pluginCtrl.create')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /api/plugins/:id/keys', function() {
+    it('should route to plugin.controller.indexKey', function() {
+      routerStub.get
+        .withArgs('/:id/keys','authService.isAuthenticated', 'pluginCtrl.indexKey')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('POST /api/plugins/:id/keys', function() {
+    it('should route to plugin.controller.createKey', function() {
+      routerStub.post
+        .withArgs('/:id/keys','authService.hasRole.user', 'pluginCtrl.createKey')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /api/plugins/:id/keys/:key', function() {
+    it('should route to plugin.controller.showKey', function() {
+      routerStub.get
+        .withArgs('/:id/keys/:key','authService.isAuthenticated', 'pluginCtrl.showKey')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('PUT /api/plugins/:id/keys/:key', function() {
+    it('should route to plugin.controller.updateKey', function() {
+      routerStub.put
+        .withArgs('/:id/keys/:key','authService.hasRole.user', 'pluginCtrl.updateKey')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('DELETE /api/plugins/:id/keys/:key', function() {
+    it('should route to plugin.controller.destroyKey', function() {
+      routerStub.delete
+        .withArgs('/:id/keys/:key','authService.hasRole.user', 'pluginCtrl.destroyKey')
         .should.have.been.calledOnce;
     });
   });

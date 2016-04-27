@@ -46,15 +46,13 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   req.body.status = "WAITING_INSTALL";
   return Plugin.create(req.body, {
-      logging: true
+      logging: false
     }).then(function() {
       // Parse and insert parameters
       if(req.body.parameters) {
         var parameters = req.body.parameters.split(",");
         for(var p=0; p<parameters.length; p++) {
             var keyValue = parameters[p].split(":");
-            console.log("key: " + keyValue[0]);
-            console.log("value: " + keyValue[1]);
             var cfgKey = {
               PluginId: req.body.id,
               key: keyValue[0],
@@ -62,7 +60,7 @@ exports.create = function(req, res) {
               createdAt: new Date(),
               updatedAt: new Date()
             }
-            PluginConfiguration.create(cfgKey, { logging : true });
+            PluginConfiguration.create(cfgKey, { logging : false });
         }
         return req.body;
       }
@@ -117,8 +115,6 @@ exports.destroy = function(req, res) {
 
 // Lists the keys for a configuration
 exports.indexKey = function(req, res) {
-  console.log("*** indexKey ***");
-  console.log("pluginId: " + req.params.id);
   db.page(PluginConfiguration, { PluginId: req.params.id })
   .then(util.respondWithResult(res))
   .catch(util.handleError(res));
@@ -143,7 +139,7 @@ exports.showKey = function(req, res) {
 exports.createKey = function(req, res) {
   req.body.PluginId = req.params.id;
   return PluginConfiguration.create(req.body, {
-      logging: true
+      logging: false
     }).then(util.respondWithResult(res, 201))
     .catch(util.handleError(res));
 }
@@ -172,7 +168,7 @@ exports.destroyKey = function(req, res) {
       }
     })
     .then(util.handleEntityNotFound(res))
-    .then(util.respondWithResult(res, 200))
+    .then(util.respondWithResult(res, 204))
     .catch(util.handleError(res));
 }
 
@@ -194,7 +190,6 @@ exports.database_details = function(req, res) {
   var id = req.params.id;
   var pluginData = id.split(":");
   var url = "https://raw.githubusercontent.com/meccano-iot/plugin-" + pluginData[0] + "/master/plugin.json?d=" + Math.random();
-  console.log("url: " + url);
   http.get(url, function(data){
     if(data) {
       res.setHeader("Content-Type", "application/json");
