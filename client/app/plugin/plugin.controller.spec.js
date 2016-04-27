@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Component: PluginComponent', function () {
+describe('Component: PluginCtrl', function () {
 
   // load the controller's module
   beforeEach(module('meccanoAdminApp'));
@@ -10,11 +10,12 @@ describe('Component: PluginComponent', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($componentController, $rootScope) {
     scope = $rootScope.$new();
-    PluginComponent = $componentController('PluginComponent', {
+    PluginComponent = $componentController('PluginCtrl', {
       $scope: scope
     });
   }));
 
   it('should ...', function () {
+    expect(1).toEqual(1);
   });
 });

@@ -26,22 +26,22 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 // Plugin Catalog
-router.get('/database', pluginController.database);
-router.get('/database/:id', pluginController.database_details);
+router.get('/database', auth.isAuthenticated(), pluginController.database);
+router.get('/database/:id', auth.isAuthenticated(), pluginController.database_details);
 
 // Plugin Information
-router.get('/',pluginController.index);
-router.get('/:id',pluginController.show);
-router.post('/', pluginController.create);
-router.delete('/:id',pluginController.destroy);
-router.put('/:id', pluginController.update);
+router.get('/', auth.isAuthenticated(), pluginController.index);
+router.get('/:id', auth.isAuthenticated(), pluginController.show);
+router.post('/', auth.isAuthenticated(), pluginController.create);
+router.delete('/:id', auth.isAuthenticated(), pluginController.destroy);
+router.put('/:id', auth.isAuthenticated(), pluginController.update);
 
 // Plugin Configuration Information
-router.get('/:id/keys', pluginController.indexKey);
-router.get('/:id/keys/:key', pluginController.showKey);
-router.post('/:id/keys', pluginController.createKey);
-router.delete('/:id/keys/:key', pluginController.destroyKey);
-router.put('/:id/keys/:key', pluginController.updateKey);
+router.get('/:id/keys', auth.isAuthenticated(), pluginController.indexKey);
+router.get('/:id/keys/:key', auth.isAuthenticated(), pluginController.showKey);
+router.post('/:id/keys', auth.isAuthenticated(), pluginController.createKey);
+router.delete('/:id/keys/:key', auth.isAuthenticated(), pluginController.destroyKey);
+router.put('/:id/keys/:key', auth.isAuthenticated(), pluginController.updateKey);
 
 
 module.exports = router;

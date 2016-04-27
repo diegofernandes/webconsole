@@ -21,15 +21,16 @@
 
 var app = require('../../app');
 var sqldb = require('../../sqldb');
-var Registration = sqldb.Registration;
+var Plugin = sqldb.Plugin;
+var PluginConfiguration = sqldb.PluginConfiguration;
 var User = sqldb.User;
 var request = require('supertest');
 
-var newDevice;
+var newPlugin;
 var user;
 var token;
 
-describe('Device API:', function() {
+describe('Plugin API:', function() {
 
   // Mock users before testing
   before(function() {
@@ -45,7 +46,7 @@ describe('Device API:', function() {
   });
 
   before(function() {
-    return Registration.destroy({ where: {} });
+    return Plugin.destroy({ where: {} });
   });
 
 
@@ -71,16 +72,17 @@ describe('Device API:', function() {
   });
 
   after(function() {
-    return Registration.destroy({ where: {} });
+    var deleted = PluginConfiguration.destroy({ where: {} }) &&
+                Plugin.destroy({ where: {} });
+    return deleted;
   });
 
-
-  describe('GET /api/devices', function() {
-    var devices;
+  describe('GET /api/plugins', function() {
+    var plugins;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/devices')
+        .get('/api/plugins')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -88,28 +90,38 @@ describe('Device API:', function() {
           if (err) {
             return done(err);
           }
-          devices = res.body;
+          plugins = res.body;
           done();
         });
     });
 
     it('should respond with JSON array', function() {
-      devices.should.be.instanceOf(Object);
-      devices.data.should.be.instanceOf(Array);
+      plugins.should.be.instanceOf(Object);
+      plugins.data.should.be.instanceOf(Array);
     });
 
   });
 
-  describe('POST /api/devices', function() {
+  describe('POST /api/plugins', function() {
     beforeEach(function(done) {
       request(app)
-        .post('/api/devices')
+        .post('/api/plugins')
         .set('authorization', 'Bearer ' + token)
         .send({
-          device: 'FF:FF:FF:FF:FF:FF',
-          device_group: '666',
-          memo: 'Memo'
-
+                "id": "test",
+                "name": "Automated Test Plugin",
+                "version": "1.0.0",
+                "engine": "R",
+                "enabled": true,
+                "schedule": "*/1 * * * *",
+                "description": "Automated test for plugin API (version 1.0)",
+                "type": "worker",
+                "executionContext": "both",
+                "author": "Meccano-IoT",
+                "authorContact": "http://www.meccano-iot.com",
+                "documentation": "https://github.com/meccano-iot/docs/blob/master/README.md",
+                "repository": "https://github.com/meccano-iot/docs/",
+                "release": "https://github.com/meccano-iot/docs/releases/download/v1.0.0/meccano-docs-v1.0.0.zip"
         })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -117,27 +129,26 @@ describe('Device API:', function() {
           if (err) {
             return done(err);
           }
-          newDevice = res.body;
+          newPlugin = res.body;
           done();
         });
     });
 
-    it('should respond with the newly created device', function() {
-
-      newDevice.should.be.instanceOf(Object);
-      newDevice.device.should.equal('FF:FF:FF:FF:FF:FF');
-      newDevice.device_group.should.equal('666');
-      newDevice.memo.should.equal('Memo');
+    it('should respond with the newly created plugin', function() {
+      newPlugin.should.be.instanceOf(Object);
+      newPlugin.id.should.equal('test');
+      newPlugin.version.should.equal('1.0.0');
+      newPlugin.author.should.equal('Meccano-IoT');
     });
 
   });
 
-  describe('GET /api/devices/:device', function() {
-    var device;
+  describe('GET /api/plugins/:plugin', function() {
+    var plugin;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/devices/' + newDevice.device)
+        .get('/api/plugins/' + newplugin.id)
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -145,32 +156,32 @@ describe('Device API:', function() {
           if (err) {
             return done(err);
           }
-          device = res.body;
+          plugin = res.body;
           done();
         });
     });
 
     afterEach(function() {
-      device = {};
+      plugin = {};
     });
 
-    it('should respond with the requested Device', function() {
-      device.device.should.equal('FF:FF:FF:FF:FF:FF');
-      device.device_group.should.equal('666');
-      device.memo.should.equal('Memo');
+    it('should respond with the requested Plugin', function() {
+      plugin.id.should.equal('test');
+      plugin.version.should.equal('1.0.0');
+      plugin.author.should.equal('Meccano-IoT');
     });
 
   });
 
-  describe('PUT /api/devices/:device', function() {
-    var updatedDevice;
+  describe('PUT /api/plugins/:plugin', function() {
+    var updatedPlugin;
 
     beforeEach(function(done) {
       request(app)
-        .put('/api/devices/' + newDevice.device)
+        .put('/api/plugins/' + newPlugin.id)
         .set('authorization', 'Bearer ' + token)
         .send({
-            device_group: '999'
+            engine: 'Python'
         })
         .expect(200)
         .expect('Content-Type', /json/)
@@ -178,27 +189,26 @@ describe('Device API:', function() {
           if (err) {
             return done(err);
           }
-          updatedDevice = res.body;
+          updatedPlugin = res.body;
           done();
         });
     });
 
     afterEach(function() {
-      updatedDevice = {};
+      updatedPlugin = {};
     });
 
-    it('should respond with the updated device', function() {
-
-      updatedDevice.device_group.should.equal('999');
+    it('should respond with the updated plugin', function() {
+      updatedPlugin.engine.should.equal('Python');
     });
 
   });
 
-  describe('DELETE /api/devices/:device', function() {
+  describe('DELETE /api/plugins/:plugin', function() {
 
     it('should respond with 204 on successful removal', function(done) {
       request(app)
-        .delete('/api/devices/' + newDevice.device)
+        .delete('/api/plugins/' + newPlugin.id)
         .set('authorization', 'Bearer ' + token)
         .expect(204)
         .end((err, res) => {
@@ -209,9 +219,9 @@ describe('Device API:', function() {
         });
     });
 
-    it('should respond with 404 when device does not exist', function(done) {
+    it('should respond with 404 when plugin does not exist', function(done) {
       request(app)
-        .delete('/api/devices/' + newDevice.device)
+        .delete('/api/plugins/' + newPlugin.id)
         .set('authorization', 'Bearer ' + token)
         .expect(404)
         .end((err, res) => {
@@ -221,7 +231,6 @@ describe('Device API:', function() {
           done();
         });
     });
-
   });
 
 });

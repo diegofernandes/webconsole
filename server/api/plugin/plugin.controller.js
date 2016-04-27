@@ -111,7 +111,7 @@ exports.destroy = function(req, res) {
     })
     .then(util.handleEntityNotFound(res))
     .then(util.saveUpdates(req.body))
-    .then(util.respondWithResult(res))
+    .then(util.respondWithResult(res, 204))
     .catch(util.handleError(res));
 }
 
