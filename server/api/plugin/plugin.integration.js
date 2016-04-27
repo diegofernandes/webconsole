@@ -22,7 +22,6 @@
 var app = require('../../app');
 var sqldb = require('../../sqldb');
 var Plugin = sqldb.Plugin;
-var PluginConfiguration = sqldb.PluginConfiguration;
 var User = sqldb.User;
 var request = require('supertest');
 
@@ -103,6 +102,7 @@ describe('Plugin API:', function() {
   });
 
   describe('POST /api/plugins', function() {
+    console.log("A###A");
     beforeEach(function(done) {
       request(app)
         .post('/api/plugins')
@@ -121,7 +121,8 @@ describe('Plugin API:', function() {
                 "authorContact": "http://www.meccano-iot.com",
                 "documentation": "https://github.com/meccano-iot/docs/blob/master/README.md",
                 "repository": "https://github.com/meccano-iot/docs/",
-                "release": "https://github.com/meccano-iot/docs/releases/download/v1.0.0/meccano-docs-v1.0.0.zip"
+                "release": "https://github.com/meccano-iot/docs/releases/download/v1.0.0/meccano-docs-v1.0.0.zip",
+                "parameters": "PARAMETER_A:ALL,PARAMETER_B:NONE"
         })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -143,7 +144,7 @@ describe('Plugin API:', function() {
 
   });
 
-  describe('GET /api/plugins/:plugin', function() {
+  describe('GET /api/plugins/:id', function() {
     var plugin;
 
     beforeEach(function(done) {
@@ -173,7 +174,7 @@ describe('Plugin API:', function() {
 
   });
 
-  describe('PUT /api/plugins/:plugin', function() {
+  describe('PUT /api/plugins/:id', function() {
     var updatedPlugin;
 
     beforeEach(function(done) {
@@ -204,7 +205,7 @@ describe('Plugin API:', function() {
 
   });
 
-  describe('DELETE /api/plugins/:plugin', function() {
+  describe('DELETE /api/plugins/:id', function() {
 
     it('should respond with 204 on successful removal', function(done) {
       request(app)

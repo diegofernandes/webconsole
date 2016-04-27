@@ -22,11 +22,11 @@
 var proxyquire = require('proxyquire').noPreserveCache();
 
 var pluginCtrlStub = {
-  index: 'pluginCtrl.index',
-  show: 'pluginCtrl.show',
-  create: 'pluginCtrl.create',
-  update: 'pluginCtrl.update',
-  destroy: 'pluginCtrl.destroy'
+  index : 'pluginCtrl.index',
+  show : 'pluginCtrl.show',
+  create : 'pluginCtrl.create',
+  update : 'pluginCtrl.update',
+  destroy : 'pluginCtrl.destroy'
 };
 
 var routerStub = {
@@ -47,7 +47,7 @@ var authServiceStub = {
 };
 
 // require the index with our stubbed out modules
-var deviceIndex = proxyquire('./index', {
+var pluginIndex = proxyquire('./index', {
     'express': {
       Router: function() {
           return routerStub;
@@ -57,13 +57,13 @@ var deviceIndex = proxyquire('./index', {
   '../../auth/auth.service': authServiceStub
 });
 
-describe('Device API Router:', function() {
+describe('Plugin API Router:', function() {
 
   it('should return an express router instance', function() {
     pluginIndex.should.equal(routerStub);
   });
 
-  describe('GET /api/plugin', function() {
+  describe('GET /api/plugins', function() {
     it('should route to plugin.controller.index', function() {
       routerStub.get
         .withArgs('/','authService.isAuthenticated', 'pluginCtrl.index')
@@ -71,34 +71,34 @@ describe('Device API Router:', function() {
     });
   });
 
-  describe('GET /api/plugin/:plugin', function() {
+  describe('GET /api/plugins/:id', function() {
     it('should route to plugin.controller.show', function() {
       routerStub.get
-        .withArgs('/:plugin','authService.isAuthenticated', 'pluginCtrl.show')
+        .withArgs('/:id','authService.isAuthenticated', 'pluginCtrl.show')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('POST /api/plugin`', function() {
-    it('should route to device.controller.create', function() {
+  describe('POST /api/plugins', function() {
+    it('should route to plugin.controller.create', function() {
       routerStub.post
         .withArgs('/','authService.hasRole.user', 'pluginCtrl.create')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PUT /api/plugin/:plugin', function() {
+  describe('PUT /api/plugins/:id', function() {
     it('should route to plugin.controller.update', function() {
       routerStub.put
-        .withArgs('/:plugin','authService.hasRole.user', 'pluginCtrl.update')
+        .withArgs('/:id','authService.hasRole.user', 'pluginCtrl.update')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('DELETE /api/plugin/:plugin', function() {
+  describe('DELETE /api/plugins/:id', function() {
     it('should route to plugin.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:plugin','authService.hasRole.user', 'pluginCtrl.destroy')
+        .withArgs('/:id','authService.hasRole.user', 'pluginCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });
