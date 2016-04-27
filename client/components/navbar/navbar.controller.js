@@ -10,13 +10,20 @@ angular.module('meccanoAdminApp')
       'title': 'Activity',
       'state': 'announcements.list',
       'icon': 'glyphicon glyphicon-signal'
+
+    }, {
+      'title': 'OTA',
+      'state': 'releases.list',
+      'icon': 'glyphicon glyphicon-send'
+
     }, {
       'title': 'Plugins',
       'state': 'plugin.list',
-      'icon' : 'glyphicon glyphicon-equalizer'
+      'icon': 'glyphicon glyphicon-equalizer'
+
     }];
 
-     NavBar.query(function(config) {
+    NavBar.query(function(config) {
       if (config.reports) {
         $scope.menu.push({
           'title': 'Reports',

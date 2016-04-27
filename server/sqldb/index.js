@@ -15,10 +15,10 @@ var db = {
 };
 
 function initSequelize() {
-  if(util.isNullOrUndefined(config.mysql.uri)){
-    return new Sequelize(config.mysql.database,config.mysql.username,config.mysql.password,config.mysql.options)
-  }else{
-    return new Sequelize(config.mysql.uri,config.mysql.options);
+  if (util.isNullOrUndefined(config.mysql.uri)) {
+    return new Sequelize(config.mysql.database, config.mysql.username, config.mysql.password, config.mysql.options)
+  } else {
+    return new Sequelize(config.mysql.uri, config.mysql.options);
   }
 
 }
@@ -33,12 +33,13 @@ db.Message = db.sequelize.import('../model/message.model');
 db.User = db.sequelize.import('../model/user.model');
 db.DeviceHistoryStatus = db.sequelize.import('../model/deviceHistoryStatus.model');
 db.DeviceActivity = db.sequelize.import('../model/deviceActivity.model');
+db.Release = db.sequelize.import('../model/release.model');
 // Plugin and PluginConfiguration
 db.Plugin = db.sequelize.import('../model/plugin.model');
 db.PluginConfiguration = db.sequelize.import('../model/pluginConfiguration.model');
 db.Plugin.hasMany(db.PluginConfiguration);
 
-db.page = function(Model, params) {
+db.page = function(Model, params, attributes) {
   var size = parseInt(params.size || params.s || 10);
   delete params.size;
   delete params.s;
@@ -47,23 +48,19 @@ db.page = function(Model, params) {
   delete params.p;
   var offset = (page - 1) * size;
 
-  return P.join(
-
-    Model.findAll({
-      where: params,
-      offset: offset,
-      limit: size
-    }),
-    Model.count({
-      where: params
-    }),
-    function(data, total) {
+  return Model.findAndCountAll({
+    where: params,
+    offset: offset,
+    limit: size,
+    attributes: attributes
+  }).then(
+    function(result) {
       return {
-        data: data,
+        data: result.rows,
         page: {
           'size': size,
-          'totalElements': total,
-          'totalPages': Math.ceil(total / size),
+          'totalElements': result.count,
+          'totalPages': Math.ceil(result.count / size),
           'number': page
         }
       };
