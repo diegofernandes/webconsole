@@ -147,7 +147,6 @@ describe('Release API:', function() {
       release.id.should.equal(newRelease.id);
       release.version.should.equal('0.0.1');
       release.type.should.equal('ESP8266');
-      release.type.should.have.property('size');
     });
 
   });
