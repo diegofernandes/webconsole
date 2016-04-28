@@ -21,10 +21,14 @@
 
 module.exports = function(sequelize, DataTypes) {
   var model = sequelize.define('PluginLog', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     pluginId: {
       type: DataTypes.STRING(40),
-      allowNull: false,
-      primaryKey: true
+      allowNull: false
     },
     log: {
       type: DataTypes.STRING(1024),
