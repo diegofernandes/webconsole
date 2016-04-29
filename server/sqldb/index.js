@@ -38,7 +38,7 @@ db.Release = db.sequelize.import('../model/release.model');
 db.Plugin = db.sequelize.import('../model/plugin.model');
 db.PluginConfiguration = db.sequelize.import('../model/pluginConfiguration.model');
 db.Plugin.hasMany(db.PluginConfiguration);
-db.PluginLog = db.sequelize.import('../model/PluginLog.model');
+db.PluginLog = db.sequelize.import('../model/pluginLog.model');
 
 db.page = function(Model, params, attributes) {
   var size = parseInt(params.size || params.s || 10);
