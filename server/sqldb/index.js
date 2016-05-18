@@ -34,7 +34,10 @@ db.User = db.sequelize.import('../model/user.model');
 db.DeviceHistoryStatus = db.sequelize.import('../model/deviceHistoryStatus.model');
 db.DeviceActivity = db.sequelize.import('../model/deviceActivity.model');
 db.Release = db.sequelize.import('../model/release.model');
-
+// Plugin and PluginConfiguration
+db.Plugin = db.sequelize.import('../model/plugin.model');
+db.PluginConfiguration = db.sequelize.import('../model/pluginConfiguration.model');
+db.Plugin.hasMany(db.PluginConfiguration);
 
 db.page = function(Model, params, attributes) {
   var size = parseInt(params.size || params.s || 10);
