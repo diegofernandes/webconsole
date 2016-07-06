@@ -1,6 +1,6 @@
 {
   "name": "meccano-webconsole",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "main": "server/app.js",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
